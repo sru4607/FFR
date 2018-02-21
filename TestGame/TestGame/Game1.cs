@@ -6,11 +6,13 @@ namespace TestGame
 {
     /// <summary>
     /// Jonathan Mura here (I promise I didn't break anything)
+    /// "Don't you have to go be stupid somewhere else?" - Squidward "Not until 4." -Patrick
     /// </summary>
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        object RyanMadeAnObject;
 
         public Game1()
         {
