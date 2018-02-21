@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 namespace TestGame
 {
     /// <summary>
-    /// This is the main type for your game.
+    /// "Don't you have to go be stupid somewhere else?" - Squidward "Not until 4." -Patrick
     /// </summary>
     public class Game1 : Game
     {
