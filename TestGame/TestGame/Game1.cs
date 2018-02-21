@@ -11,6 +11,7 @@ namespace TestGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        object RyanMadeAnObject;
 
         public Game1()
         {
