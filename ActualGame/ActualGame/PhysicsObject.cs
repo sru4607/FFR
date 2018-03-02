@@ -8,19 +8,19 @@ namespace ActualGame
 {
     class PhysicsObject
     {
-        int x;
-        int y;
-        int velX;
-        int velY;
+        double x;
+        double y;
+        double velX;
+        double velY;
 
-        void Move(int x, int y)
+        void Move(double x, double y)
         {
             x = x + velX;
             y = y + velY;
         }
-        void Gravity()
+        void Gravity(double time)
         {
-            velY + 9.8*
+            velY += 9.8 * time;
         }
 
 

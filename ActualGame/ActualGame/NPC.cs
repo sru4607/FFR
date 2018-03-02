@@ -8,5 +8,9 @@ namespace ActualGame
 {
     class NPC : Character
     {
+        public NPC()
+        {
+
+        }
     }
 }

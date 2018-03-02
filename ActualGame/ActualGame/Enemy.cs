@@ -8,5 +8,9 @@ namespace ActualGame
 {
     class Enemy : Character
     {
+        public Enemy()
+        {
+
+        }
     }
 }

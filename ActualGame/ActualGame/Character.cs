@@ -8,5 +8,9 @@ namespace ActualGame
 {
     class Character : PhysicsObject
     {
+        public Character()
+        {
+
+        }
     }
 }
