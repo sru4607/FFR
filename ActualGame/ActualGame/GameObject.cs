@@ -17,7 +17,7 @@ namespace ActualGame
         Texture2D texture;
 
 
-        private void Move(double x, double y)
+        private void Move()
         {
             X = (int)(X + velX);
             Y = (int)(Y + velY);
@@ -28,6 +28,9 @@ namespace ActualGame
         }
         virtual public void Update()
         {
+            Move();
+            Collision();
+
 
         }
         virtual public void Draw(SpriteBatch sb)
@@ -77,6 +80,10 @@ namespace ActualGame
             {
                 rect = new Rectangle(X, Y, Width, value);
             }
+        }
+        private void Collision()
+        {
+
         }
 
 
