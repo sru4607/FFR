@@ -11,17 +11,36 @@ namespace ActualGame
 {
     class GameObject
     {
-        //fields
-        Rectangle rect;
-        double velX;
-        double velY;
-        Texture2D texture;
+        #region Fields
+        // Fields
+        protected Rectangle rect;
+        protected double velX;
+        protected double velY;
+        protected Texture2D texture;
+        #endregion
 
-        //To Do:
-        //Make an initialization method - Rectangle, Texture, Velocities
+        #region Initialization
+        public GameObject()
+        {
+            // TODO Update these fields (possibly have GameObject() take parameters)
+            rect = new Rectangle();
+            velX = 0.0;
+            velY = 0.0;
+        }
+        #endregion
 
+        #region LoadTexture
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="texture">Content.Load&lt;Texture2D&gt;("INSERTLOCATION")</param>
+        public void LoadTexture(Texture2D texture)
+        {
+            this.texture = texture;
+        }
+        #endregion
 
-
+        #region Methods
         /// <summary>
         /// 
         /// </summary>
@@ -43,6 +62,16 @@ namespace ActualGame
         /// <summary>
         /// 
         /// </summary>
+        private void Collision()
+        {
+
+        }
+        #endregion
+
+        #region Update
+        /// <summary>
+        /// 
+        /// </summary>
         virtual public void Update()
         {
             Move();
@@ -50,7 +79,9 @@ namespace ActualGame
 
             
         }
+        #endregion
 
+        #region Draw
         /// <summary>
         /// 
         /// </summary>
@@ -59,20 +90,16 @@ namespace ActualGame
         {
             sb.Draw(texture, rect, Color.White);
         }
-        
+        #endregion
+
+        #region Properties
         /// <summary>
         /// 
         /// </summary>
         public int X
         {
-            get
-            {
-                return rect.X;
-            }
-            set
-            {
-                rect = new Rectangle(value, Y, Width, Height);
-            }
+            get { return rect.X; }
+            set { rect = new Rectangle(value, Y, Width, Height); }
         }
 
         /// <summary>
@@ -80,14 +107,8 @@ namespace ActualGame
         /// </summary>
         public int Y
         {
-            get
-            {
-                return rect.X;
-            }
-            set
-            {
-                rect = new Rectangle(X, value, Width, Height);
-            }
+            get {  return rect.X; }
+            set { rect = new Rectangle(X, value, Width, Height); }
         }
 
         /// <summary>
@@ -95,14 +116,8 @@ namespace ActualGame
         /// </summary>
         public int Width
         {
-            get
-            {
-                return rect.X;
-            }
-            set
-            {
-                rect = new Rectangle(X, Y, value, Height);
-            }
+            get { return rect.X; }
+            set { rect = new Rectangle(X, Y, value, Height); }
         }
 
         /// <summary>
@@ -110,24 +125,20 @@ namespace ActualGame
         /// </summary>
         public int Height
         {
-            get
-            {
-                return rect.Height;
-            }
-            set
-            {
-                rect = new Rectangle(X, Y, Width, value);
-            }
+            get { return rect.Height; }
+            set { rect = new Rectangle(X, Y, Width, value); }
         }
 
         /// <summary>
-        /// 
+        /// Interacts with all parameters of rect
         /// </summary>
-        private void Collision()
+        public Rectangle Rect
         {
-
+            get { return rect; }
+            set { rect = value; }
         }
+        #endregion
 
-
+        // Moved Collision() to the Methods region
     }
 }
