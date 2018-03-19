@@ -11,16 +11,26 @@ namespace ActualGame
 {
     class BoundingCircle
     {
+        //fields
         Point center;
         double radius;
         
-
+        /// <summary>
+        /// Creates a bounding circle
+        /// </summary>
+        /// <param name="x">the center's X position</param>
+        /// <param name="y">The center's Y position</param>
+        /// <param name="radius">the circle's radius</param>
         public BoundingCircle(int x, int y, double radius)
         {
             center = new Point(x, y);
             this.radius = radius;
         }
-
+        /// <summary>
+        /// Checks collisions between two circles
+        /// </summary>
+        /// <param name="other">the other object</param>
+        /// <returns>returns if colliding</returns>
         public bool CheckCollision(BoundingCircle other)
         {
             double totalDist = Radius + other.Radius;
@@ -28,15 +38,20 @@ namespace ActualGame
             return (currentDist < totalDist);
 
         }
-        public bool CheckCollision(Rectangle other)
-        {
-            if()
-            return false;
-        }
+
+        //Will work on this method later
+
+        // bool CheckCollision(Rectangle other)
+        //{
+        //    if()
+        //    return false;
+        //}
         public double DistTo(Point other)
         {
-
+            return (Math.Sqrt((Center.X - other.X) ^ 2 + (Center.Y - other.Y) ^ 2));
         }
+
+        //Property for the Radius
         public double Radius
         {
             get
@@ -48,6 +63,7 @@ namespace ActualGame
                 radius = value;
             }
         }
+        //Property for the Center
         public Point Center
         {
             get
