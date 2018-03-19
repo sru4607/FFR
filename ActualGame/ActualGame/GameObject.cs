@@ -11,6 +11,7 @@ namespace ActualGame
 {
     class GameObject
     {
+        //fields
         Rectangle rect;
         double velX;
         double velY;
@@ -31,7 +32,7 @@ namespace ActualGame
             Move();
             Collision();
 
-
+            
         }
         virtual public void Draw(SpriteBatch sb)
         {
