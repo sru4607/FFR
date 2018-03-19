@@ -9,15 +9,30 @@ namespace ActualGame
 {
     class Character : GameObject
     {
+        //Fields
+        int hp;
+
+        //Properties
+        int HP
+        {
+            get { return hp; }
+            set { hp = value; }
+        }
+
+
         public Character()
             :base()
         {
             
         }
+
+
         public override void Update()
         {
             base.Update();
         }
+
+
         public override void Draw(SpriteBatch sb)
         {
             base.Draw(sb);
