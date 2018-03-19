@@ -17,16 +17,27 @@ namespace ActualGame
         double velY;
         Texture2D texture;
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         private void Move()
         {
             X = (int)(X + velX);
             Y = (int)(Y + velY);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="time"></param>
         private void Gravity(double time)
         {
             velY += 9.8 * time;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         virtual public void Update()
         {
             Move();
@@ -34,10 +45,19 @@ namespace ActualGame
 
             
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sb"></param>
         virtual public void Draw(SpriteBatch sb)
         {
             sb.Draw(texture, rect, Color.White);
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public int X
         {
             get
@@ -49,6 +69,10 @@ namespace ActualGame
                 rect = new Rectangle(value, Y, Width, Height);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public int Y
         {
             get
@@ -60,6 +84,10 @@ namespace ActualGame
                 rect = new Rectangle(X, value, Width, Height);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public int Width
         {
             get
@@ -71,6 +99,10 @@ namespace ActualGame
                 rect = new Rectangle(X, Y, value, Height);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public int Height
         {
             get
@@ -82,6 +114,10 @@ namespace ActualGame
                 rect = new Rectangle(X, Y, Width, value);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         private void Collision()
         {
 
