@@ -17,6 +17,11 @@ namespace ActualGame
         double velY;
         Texture2D texture;
 
+        //To Do:
+        //Make an initialization method - Rectangle, Texture, Velocities
+
+
+
         /// <summary>
         /// 
         /// </summary>
