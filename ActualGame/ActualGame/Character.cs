@@ -11,11 +11,11 @@ namespace ActualGame
     class Character : GameObject, ICombat
     {
         //Fields
-        int hp;
-        Rectangle mBox;
+        protected int hp;
+        protected Rectangle mBox;
 
         //Properties
-        int HP
+        protected int HP
         {
             get { return hp; }
             set { hp = value; }
