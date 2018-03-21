@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Input;
 namespace TestGame
 {
     /// <summary>
-    /// Jonathan Mura here (I promise I didn't break anything)
     /// Dark Souls is best game
     /// "Don't you have to go be stupid somewhere else?" - Squidward "Not until 4." -Patrick
     /// This is the main type for your game. These are extra words.
