@@ -13,6 +13,9 @@ namespace ActualGame
         //Fields
         protected int hp;
         protected Rectangle mBox;
+        protected Rectangle hurtBox;
+        protected int mDamage;
+        protected int rDamage;
         protected int stunFrames;
 
         //Properties
@@ -20,6 +23,16 @@ namespace ActualGame
         {
             get { return hp; }
             set { hp = value; }
+        }
+        protected Rectangle MBox
+        {
+            get { return mBox; }
+            set { mBox = value; }
+        }
+        protected Rectangle HurtBox
+        {
+            get { return hurtBox; }
+            set { hurtBox = value; }
         }
 
         /// <summary>
@@ -30,14 +43,20 @@ namespace ActualGame
         {
             hp = 1;
             mBox = new Rectangle();
+            hurtBox = new Rectangle();
+            mDamage = 0;
+            rDamage = 0;
         }
 
         /// <summary>
-        /// the Character makes a melee attack
+        /// used to check if another character is hit by a melee attack
         /// </summary>
-        public void MAttack()
+        public void MAttack(Character c)
         {
-            
+            if (mBox.Intersects(c.hurtBox))
+            {
+                c.TakeDamage(mDamage);
+            }
         }
 
         /// <summary>
@@ -45,7 +64,7 @@ namespace ActualGame
         /// </summary>
         public void RAttack()
         {
-
+            //to be implemented later
         }
 
         /// <summary>
