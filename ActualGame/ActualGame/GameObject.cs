@@ -11,19 +11,38 @@ namespace ActualGame
 {
     class GameObject
     {
-        //fields
-        Rectangle rect;
-        double velX;
-        double velY;
-        Texture2D texture;
+        #region Fields
+        // Fields
+        protected Rectangle rect;
+        protected double velX;
+        protected double velY;
+        protected Texture2D texture;
+        #endregion
 
-        //To Do:
-        //Make an initialization method - Rectangle, Texture, Velocities
+        #region Initialization
+        public GameObject()
+        {
+            // TODO Update these fields (possibly have GameObject() take parameters)
+            rect = new Rectangle();
+            velX = 0.0;
+            velY = 0.0;
+        }
+        #endregion
 
-
-
+        #region LoadTexture
         /// <summary>
-        /// Adjusts X and Y for the velocities
+        /// 
+        /// </summary>
+        /// <param name="texture">Content.Load&lt;Texture2D&gt;("INSERTLOCATION")</param>
+        public void LoadTexture(Texture2D texture)
+        {
+            this.texture = texture;
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// 
         /// </summary>
         private void Move()
         {
@@ -32,7 +51,7 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// Applies Gravity
+        /// 
         /// </summary>
         /// <param name="time"></param>
         private void Gravity(double time)
@@ -41,7 +60,17 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// Moves and checks for collisions mean to be overwritten
+        /// 
+        /// </summary>
+        private void Collision()
+        {
+
+        }
+        #endregion
+
+        #region Update
+        /// <summary>
+        /// 
         /// </summary>
         virtual public void Update()
         {
@@ -50,84 +79,66 @@ namespace ActualGame
 
             
         }
+        #endregion
 
+        #region Draw
         /// <summary>
-        /// Draws the object with the texture, at the set position, with the color white
+        /// 
         /// </summary>
         /// <param name="sb"></param>
         virtual public void Draw(SpriteBatch sb)
         {
             sb.Draw(texture, rect, Color.White);
         }
-        
+        #endregion
+
+        #region Properties
         /// <summary>
-        /// returns or sets the X coordinate of the object
+        /// 
         /// </summary>
         public int X
         {
-            get
-            {
-                return rect.X;
-            }
-            set
-            {
-                rect = new Rectangle(value, Y, Width, Height);
-            }
+            get { return rect.X; }
+            set { rect = new Rectangle(value, Y, Width, Height); }
         }
 
         /// <summary>
-        /// returns/sets the Y cordinate of the object
+        /// 
         /// </summary>
         public int Y
         {
-            get
-            {
-                return rect.X;
-            }
-            set
-            {
-                rect = new Rectangle(X, value, Width, Height);
-            }
+            get {  return rect.X; }
+            set { rect = new Rectangle(X, value, Width, Height); }
         }
 
         /// <summary>
-        /// gets or sets the width
+        /// 
         /// </summary>
         public int Width
         {
-            get
-            {
-                return rect.X;
-            }
-            set
-            {
-                rect = new Rectangle(X, Y, value, Height);
-            }
+            get { return rect.X; }
+            set { rect = new Rectangle(X, Y, value, Height); }
         }
 
         /// <summary>
-        /// Gets or sets height
+        /// 
         /// </summary>
         public int Height
         {
-            get
-            {
-                return rect.Height;
-            }
-            set
-            {
-                rect = new Rectangle(X, Y, Width, value);
-            }
+            get { return rect.Height; }
+            set { rect = new Rectangle(X, Y, Width, value); }
         }
 
         /// <summary>
-        /// Checks for collisions
+        /// Interacts with all parameters of rect
         /// </summary>
-        private bool Collision()
+        public Rectangle Rect
         {
-            return false;
+            get { return rect; }
+            set { rect = value; }
         }
+        #endregion
 
-
+        // Moved Collision() to the Methods region
     }
 }

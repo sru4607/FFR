@@ -11,6 +11,7 @@ namespace ActualGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Enemy testEnemy;
 
         public Game1()
         {
@@ -27,6 +28,7 @@ namespace ActualGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            testEnemy = new Enemy();
 
             base.Initialize();
         }
@@ -39,6 +41,8 @@ namespace ActualGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            testEnemy.LoadTexture(Content.Load<Texture2D>("missingtexture"));
 
             // TODO: use this.Content to load your game content here
         }
