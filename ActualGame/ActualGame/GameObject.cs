@@ -23,7 +23,7 @@ namespace ActualGame
 
 
         /// <summary>
-        /// 
+        /// Adjusts X and Y for the velocities
         /// </summary>
         private void Move()
         {
@@ -32,7 +32,7 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// 
+        /// Applies Gravity
         /// </summary>
         /// <param name="time"></param>
         private void Gravity(double time)
@@ -41,7 +41,7 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// 
+        /// Moves and checks for collisions mean to be overwritten
         /// </summary>
         virtual public void Update()
         {
@@ -52,7 +52,7 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// 
+        /// Draws the object with the texture, at the set position, with the color white
         /// </summary>
         /// <param name="sb"></param>
         virtual public void Draw(SpriteBatch sb)
@@ -61,7 +61,7 @@ namespace ActualGame
         }
         
         /// <summary>
-        /// 
+        /// returns or sets the X coordinate of the object
         /// </summary>
         public int X
         {
@@ -76,7 +76,7 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// 
+        /// returns/sets the Y cordinate of the object
         /// </summary>
         public int Y
         {
@@ -91,7 +91,7 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// 
+        /// gets or sets the width
         /// </summary>
         public int Width
         {
@@ -106,7 +106,7 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets height
         /// </summary>
         public int Height
         {
@@ -121,11 +121,11 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// 
+        /// Checks for collisions
         /// </summary>
-        private void Collision()
+        private bool Collision()
         {
-
+            return false;
         }
 
 
