@@ -41,11 +41,19 @@ namespace ActualGame
 
         //Will work on this method later
 
-        // bool CheckCollision(Rectangle other)
-        //{
-        //    if()
-        //    return false;
-        //}
+        bool CheckCollision(Rectangle other)
+        {
+            if (other.Contains(Center))
+            {
+                return true;
+            }
+            else
+            {
+
+            }
+                return false;
+        }
+
         public double DistTo(Point other)
         {
             return (Math.Sqrt((Center.X - other.X) ^ 2 + (Center.Y - other.Y) ^ 2));
