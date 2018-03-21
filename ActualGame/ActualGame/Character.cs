@@ -13,12 +13,25 @@ namespace ActualGame
         //Fields
         protected int hp;
         protected Rectangle mBox;
+        protected Rectangle hurtBox;
+        protected int mDamage;
+        protected int rDamage;
 
         //Properties
         protected int HP
         {
             get { return hp; }
             set { hp = value; }
+        }
+        protected Rectangle MBox
+        {
+            get { return mBox; }
+            set { mBox = value; }
+        }
+        protected Rectangle HurtBox
+        {
+            get { return hurtBox; }
+            set { hurtBox = value; }
         }
 
         /// <summary>
@@ -29,14 +42,20 @@ namespace ActualGame
         {
             hp = 1;
             mBox = new Rectangle();
+            hurtBox = new Rectangle();
+            mDamage = 0;
+            rDamage = 0;
         }
 
         /// <summary>
-        /// the Character makes a melee attack
+        /// used to check if another character is hit by a melee attack
         /// </summary>
-        public void MAttack()
+        public void MAttack(Character c)
         {
-            
+            if (mBox.Intersects(c.hurtBox))
+            {
+                c.TakeDamage(mDamage);
+            }
         }
 
         /// <summary>
@@ -44,7 +63,7 @@ namespace ActualGame
         /// </summary>
         public void RAttack()
         {
-
+            //to be implemented later
         }
 
         /// <summary>
@@ -64,30 +83,19 @@ namespace ActualGame
             base.Draw(sb);
         }
 
-        /// <summary>
-        /// The Character dies
-        /// </summary>
-        public void Die()
-        {
-
-        }
-
-        /// <summary>
-        /// The Character's hp reduces
-        /// </summary>
-        /// <param name="damageAmount">the amount of damage to take</param>
         public void TakeDamage(int damageAmount)
         {
-
+            hp -= damageAmount;
         }
 
-        /// <summary>
-        /// The character is stunned for a bit
-        /// </summary>
-        /// <param name="stunTime">the time the character is stunned</param>
-        public void Stun(double stunTime)
+        public void Die()
         {
+            return;
+        }
 
+        public void Stun(double timeToStun)
+        {
+            return;
         }
     }
 }
