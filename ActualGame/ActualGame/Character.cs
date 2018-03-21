@@ -13,6 +13,7 @@ namespace ActualGame
         //Fields
         protected int hp;
         protected Rectangle mBox;
+        protected int stunFrames;
 
         //Properties
         protected int HP
@@ -78,16 +79,24 @@ namespace ActualGame
         /// <param name="damageAmount">the amount of damage to take</param>
         public void TakeDamage(int damageAmount)
         {
+            // TODO: Add conditions on when the enemy can take damage
+            if (damageAmount > 0 && true)
+            {
+                hp -= damageAmount;
 
+                if (hp <= 0) Die();
+                else Stun(5);
+            }
         }
 
         /// <summary>
         /// The character is stunned for a bit
         /// </summary>
-        /// <param name="stunTime">the time the character is stunned</param>
-        public void Stun(double stunTime)
+        /// <param name="stunFrames">Number of frames that the character is stunned for</param>
+        public void Stun(int stunFrames)
         {
-
+            // May require more - possibly finite state change?
+            this.stunFrames = stunFrames;
         }
     }
 }

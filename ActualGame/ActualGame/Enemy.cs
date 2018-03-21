@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace ActualGame
 {
-    class Enemy : Character
+    class Enemy : Character, ICombat
     {
         // Fields
         AI mainAi;
@@ -53,6 +53,5 @@ namespace ActualGame
         }
 
         // TODO Implement ICombat TakeDamage() into combat collision detection method
-        // TODO Add combat death method
     }
 }
