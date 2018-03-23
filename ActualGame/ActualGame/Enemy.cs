@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace ActualGame
+
 {
     class Enemy : Character, ICombat
     {
@@ -33,6 +34,7 @@ namespace ActualGame
             base.Draw(sb);
         }
 
+        /*
         /// <summary>
         /// Determines whether an object on the screen is colliding with the enemy
         /// </summary>
@@ -51,7 +53,32 @@ namespace ActualGame
             }
             return false;
         }
-
+        
+         Is this really necessary? Because GameObject should handle collision*/
+        
         // TODO Implement ICombat TakeDamage() into combat collision detection method
+
+        public new void TakeDamage(int damageAmount)
+        {
+            if (damageAmount > hp)
+            {
+                hp = 0;
+                Die();
+            }
+            else
+                hp -= damageAmount;
+        }
+
+
+        public new void Die()
+        {
+
+        }
+
+
+        public new void Stun(int stunFrames)
+        {
+
+        }
     }
 }

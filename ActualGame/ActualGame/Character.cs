@@ -88,7 +88,7 @@ namespace ActualGame
         /// <summary>
         /// The Character dies
         /// </summary>
-        void ICombat.Die()
+        public void Die()
         {
             // This method won't ever be used. The method will be passed down to whatever the object is.
             return;
@@ -108,7 +108,7 @@ namespace ActualGame
         /// The character is stunned for a bit
         /// </summary>
         /// <param name="stunFrames">Number of frames that the character is stunned for</param>
-        void ICombat.Stun(int stunFrames)
+        public void Stun(int stunFrames)
         {
             // This method won't ever be used. The method will be passed down to whatever the object is.
             return;

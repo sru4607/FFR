@@ -42,13 +42,13 @@ namespace ActualGame
         }
 
         //TODO: Method to call that should update the game to signal the Player has died
-        public void Die()
+        public new void Die()
         {
 
         }
 
         //TODO: Method to stun the player for the amount of time chosen
-        public void Stun(int stunFrames)
+        public new void Stun(int stunFrames)
         {
             
         }
