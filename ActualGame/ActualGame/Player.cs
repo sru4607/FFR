@@ -7,7 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ActualGame
 {
+    //Enumeration for the FSM for the Player actions
     public enum PlayerState { Walk, Jump, Idle, MAttack}
+
     class Player : Character, ICombat
     {
         public Player()
