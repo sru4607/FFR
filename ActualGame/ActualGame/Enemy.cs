@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
+enum FSM { Docile, Search, Aggro, Damaged, Attack }
 namespace ActualGame
-
 {
     class Enemy : Character, ICombat
     {
