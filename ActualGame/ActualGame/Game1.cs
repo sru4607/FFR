@@ -7,7 +7,7 @@ namespace ActualGame
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    enum MainGameState {menu, pause, quit, inGame }
+    enum MainGameState {menu, pause, quit, inGame, gameOver }
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
@@ -36,7 +36,7 @@ namespace ActualGame
             mainDisplay = new Display(GraphicsDevice);
             base.Initialize();
             currentState = MainGameState.inGame;
-            levelOne = new World("Level One", "level1.txt");
+            //levelOne = new World("Level One", "level1.txt");
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ActualGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            levelOne.Import();
+            //levelOne.Import();
             testEnemy.LoadTexture(Content.Load<Texture2D>("missingtexture"));
 
             // TODO: use this.Content to load your game content here
@@ -118,7 +118,7 @@ namespace ActualGame
             {
                 case (MainGameState.inGame):
                     {
-
+                        testEnemy.Draw(spriteBatch);
                         break;
                     }
                 case (MainGameState.menu):
