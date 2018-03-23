@@ -16,7 +16,7 @@ namespace ActualGame
         Display mainDisplay;
         World levelOne;
         MainGameState currentState;
-
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);

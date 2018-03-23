@@ -17,6 +17,7 @@ namespace ActualGame
         protected int mDamage;
         protected int rDamage;
         protected int stunFrames;
+        protected bool right;
 
         //Properties
         public virtual int HP
@@ -34,11 +35,16 @@ namespace ActualGame
             get { return hurtBox; }
             set { hurtBox = value; }
         }
+        public virtual bool Right
+        {
+            get { return right; }
+            set { right = value; }
+        }
 
         /// <summary>
         /// Creates a new instance of the Character class
         /// </summary>
-        public Character()
+        public Character(bool right = true)
             :base()
         {
             hp = 1;
@@ -47,7 +53,10 @@ namespace ActualGame
             mDamage = 0;
             rDamage = 0;
             stunFrames = 0;
+            right = true;
         }
+
+        // TODO: add parameterized constructor
 
         /// <summary>
         /// used to check if another character is hit by a melee attack

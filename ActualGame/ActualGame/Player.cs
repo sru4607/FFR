@@ -4,23 +4,62 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
 
 namespace ActualGame
 {
     //Enumeration for the FSM for the Player actions
-    public enum PlayerState { Walk, Jump, Idle, MAttack}
+    public enum PlayerState { Walk, Jump, Idle, MAttack, Crouch, Interact, Dead}
 
     class Player : Character, ICombat
     {
-        public Player()
-            :base()
-        {
+        PlayerState state;
+        KeyboardState kbState;
+        KeyboardState prevState;
 
+        public Player(bool right = true)
+            :base(right)
+        {
+            state = PlayerState.Idle;
         }
 
         public override void Update()
         {
             base.Update();
+            prevState = kbState;
+            kbState = Keyboard.GetState();
+            switch (state)
+            {
+                case (PlayerState.Walk):
+                    {
+                        break;
+                    }
+                case (PlayerState.Jump):
+                    {
+                        break;
+                    }
+                case (PlayerState.Idle):
+                    {
+                        break;
+                    }
+                case (PlayerState.MAttack):
+                    {
+                        break;
+                    }
+                case (PlayerState.Crouch):
+                    {
+                        break;
+                    }
+                case (PlayerState.Interact):
+                    {
+                        break;
+                    }
+                case (PlayerState.Dead):
+                    {
+                        break;
+                    }
+            }
         }
 
         public override void Draw(SpriteBatch sb)
