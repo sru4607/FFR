@@ -32,7 +32,7 @@ namespace ActualGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            testEnemy = new Enemy();
+            testEnemy = new Enemy(new Rectangle(100, 100, 150, 250), new Rectangle(0, -50, 10, 250), new Rectangle(100, 100, 150, 250), 5, true, 1);
             mainDisplay = new Display(GraphicsDevice);
             base.Initialize();
             currentState = MainGameState.inGame;

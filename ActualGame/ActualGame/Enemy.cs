@@ -14,6 +14,9 @@ namespace ActualGame
         // Fields
         AI mainAi;
 
+        // TODO: Organize this class with #regions
+        // TODO: Create a more generic Enemy constructor that only requires an X, Y position (and possibly AI)
+
         /// <summary>
         /// Creates a new instance of the Enemy class
         /// </summary>

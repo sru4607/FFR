@@ -139,6 +139,6 @@ namespace ActualGame
         }
         #endregion
 
-        // Moved Collision() to the Methods region
+        // (Kevin) TODO: Update Draw() to use drawBox; move drawBox from Character.cs to GameObject.cs
     }
 }
