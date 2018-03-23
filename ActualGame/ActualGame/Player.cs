@@ -47,9 +47,9 @@ namespace ActualGame
         }
 
         //TODO: Method to stun the player for the amount of time chosen
-        public void Stun(double timeToStun)
+        public void Stun(int stunFrames)
         {
-
+            base.Stun(stunFrames);
         }
     }
 }
