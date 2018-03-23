@@ -24,7 +24,7 @@ namespace ActualGame
         }
 
         //Imports a world saved in loadedTiles with width and height all generated from a previously created binary file
-        public void Import(String path)
+        public void Import()
         {
             FileStream temp = new FileStream(path, FileMode.Open);
             BinaryReader worldReader = new BinaryReader(temp);
