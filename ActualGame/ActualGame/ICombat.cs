@@ -15,6 +15,6 @@ namespace ActualGame
         void Die();
 
         //A method to stun a Character for a specific amount of time if they take damage
-        void Stun(int timeToStun);
+        void Stun(int stunFrames);
     }
 }
