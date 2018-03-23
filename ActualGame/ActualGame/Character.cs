@@ -12,11 +12,42 @@ namespace ActualGame
     {
         //Fields
         protected int hp;
-        protected Rectangle mBox;
-        protected Rectangle hurtBox;
+        protected Rectangle mBox; // Melee attack box
+        protected Rectangle hurtBox; // Hitbox for incoming damage
+        protected Rectangle drawBox; // The size of the character to draw to the screen
         protected int mDamage;
         protected int rDamage;
+        protected bool melee;
         protected int stunFrames;
+
+        /// <summary>
+        /// Creates a new instance of the Character class
+        /// </summary>
+        /// <param name="hurtBox">The hitbox for incoming damage</param>
+        /// <param name="mBox">The hitbox of outgoing attacks (X, Y is localized from the center of the hitbox)</param>
+        /// <param name="drawBox">The Rectangle that will be used to draw the player (X, Y will be auto-updated by hurtBox)</param>
+        /// <param name="hp">Amount of health the character has</param>
+        /// <param name="melee">True if the character is melee-based, false if the character is ranged</param>
+        /// <param name="damage">The amount of damage each attack does</param>
+        public Character(Rectangle hurtBox, Rectangle mBox, Rectangle drawBox, int hp, bool melee, int damage)
+            : base()
+        {
+            // Save character-specific constants
+            this.hp = hp;
+            this.mBox = mBox;
+            this.hurtBox = hurtBox;
+            this.drawBox = drawBox;
+            this.melee = melee;
+
+            // Sets the type of damage
+            if(melee)
+                mDamage = damage;
+            else
+                rDamage = damage;
+
+            // Initialize internal variables
+            stunFrames = 0;
+        }
 
         //Properties
         public virtual int HP
@@ -33,20 +64,6 @@ namespace ActualGame
         {
             get { return hurtBox; }
             set { hurtBox = value; }
-        }
-
-        /// <summary>
-        /// Creates a new instance of the Character class
-        /// </summary>
-        public Character()
-            :base()
-        {
-            hp = 1;
-            mBox = new Rectangle();
-            hurtBox = new Rectangle();
-            mDamage = 0;
-            rDamage = 0;
-            stunFrames = 0;
         }
 
         /// <summary>
@@ -82,6 +99,7 @@ namespace ActualGame
         /// <param name="sb">the related spritebatch</param>
         public override void Draw(SpriteBatch sb)
         {
+            // TODO: Make the drawable hitbox match the player's location (How will it be mapped? Top-left corner? Centered? etc.)
             base.Draw(sb);
         }
 
