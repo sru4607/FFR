@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ActualGame
 {
+    public enum PlayerState { Walk, Jump, Idle, MAttack}
     class Player : Character, ICombat
     {
         public Player()
@@ -49,7 +50,7 @@ namespace ActualGame
         //TODO: Method to stun the player for the amount of time chosen
         public void Stun(int stunFrames)
         {
-            base.Stun(stunFrames);
+            
         }
     }
 }
