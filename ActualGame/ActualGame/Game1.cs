@@ -7,11 +7,14 @@ namespace ActualGame
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
+    enum MainGameState {menu, pause, quit, inGame }
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Enemy testEnemy;
+        Display mainDisplay;
+        MainGameState currentState;
 
         public Game1()
         {
@@ -29,8 +32,9 @@ namespace ActualGame
         {
             // TODO: Add your initialization logic here
             testEnemy = new Enemy();
-
+            mainDisplay = new Display(GraphicsDevice);
             base.Initialize();
+            currentState = MainGameState.inGame;
         }
 
         /// <summary>
@@ -67,6 +71,32 @@ namespace ActualGame
                 Exit();
 
             // TODO: Add your update logic here
+            switch (currentState)
+            {
+                case (MainGameState.inGame):
+                    {
+
+                        break;
+                    }
+                case (MainGameState.menu):
+                    {
+
+                        break;
+                    }
+                case (MainGameState.pause):
+                    {
+
+                        break;
+                    }
+                case (MainGameState.quit):
+                    {
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
 
             base.Update(gameTime);
         }
@@ -80,7 +110,35 @@ namespace ActualGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            Matrix temp = mainDisplay.MainCam.GetViewMatrix();
+            spriteBatch.Begin(transformMatrix: temp);
+            switch(currentState)
+            {
+                case (MainGameState.inGame):
+                    {
 
+                        break;
+                    }
+                case (MainGameState.menu):
+                    {
+
+                        break;
+                    }
+                case (MainGameState.pause):
+                    {
+
+                        break;
+                    }
+                case (MainGameState.quit):
+                    {
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
