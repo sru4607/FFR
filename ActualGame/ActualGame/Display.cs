@@ -12,6 +12,10 @@ namespace ActualGame
 {
     class Display
     {
+        /* 
+         * If this is causing build errors, do the following:
+         * Tools > NugetPackageManager >PackageManagerConsole > Go to the bottom of the screen near the right side and press restore 
+         */
         //This is for camera stuff
         Camera2D mainCam;
         GameObject parent;
