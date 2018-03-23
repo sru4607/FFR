@@ -14,6 +14,7 @@ namespace ActualGame
         SpriteBatch spriteBatch;
         Enemy testEnemy;
         Display mainDisplay;
+        World levelOne;
         MainGameState currentState;
 
         public Game1()
@@ -35,6 +36,7 @@ namespace ActualGame
             mainDisplay = new Display(GraphicsDevice);
             base.Initialize();
             currentState = MainGameState.inGame;
+            levelOne = new World("Level One", "level1.txt");
         }
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace ActualGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            levelOne.Import();
             testEnemy.LoadTexture(Content.Load<Texture2D>("missingtexture"));
 
             // TODO: use this.Content to load your game content here
