@@ -17,28 +17,34 @@ namespace ActualGame
         protected int mDamage;
         protected int rDamage;
         protected int stunFrames;
+        protected bool right;
 
         //Properties
-        protected int HP
+        public virtual int HP
         {
             get { return hp; }
             set { hp = value; }
         }
-        protected Rectangle MBox
+        public virtual Rectangle MBox
         {
             get { return mBox; }
             set { mBox = value; }
         }
-        protected Rectangle HurtBox
+        public virtual Rectangle HurtBox
         {
             get { return hurtBox; }
             set { hurtBox = value; }
+        }
+        public virtual bool Right
+        {
+            get { return right; }
+            set { right = value; }
         }
 
         /// <summary>
         /// Creates a new instance of the Character class
         /// </summary>
-        public Character()
+        public Character(bool right = true)
             :base()
         {
             hp = 1;
@@ -46,12 +52,16 @@ namespace ActualGame
             hurtBox = new Rectangle();
             mDamage = 0;
             rDamage = 0;
+            stunFrames = 0;
+            right = true;
         }
+
+        // TODO: add parameterized constructor
 
         /// <summary>
         /// used to check if another character is hit by a melee attack
         /// </summary>
-        public void MAttack(Character c)
+        public virtual void MAttack(Character c)
         {
             if (mBox.Intersects(c.hurtBox))
             {
@@ -62,7 +72,7 @@ namespace ActualGame
         /// <summary>
         /// the Character makes a ranged attack
         /// </summary>
-        public void RAttack()
+        public virtual void RAttack()
         {
             //to be implemented later
         }
@@ -89,7 +99,8 @@ namespace ActualGame
         /// </summary>
         public void Die()
         {
-
+            // This method won't ever be used. The method will be passed down to whatever the object is.
+            return;
         }
 
         /// <summary>
@@ -98,14 +109,8 @@ namespace ActualGame
         /// <param name="damageAmount">the amount of damage to take</param>
         public void TakeDamage(int damageAmount)
         {
-            // TODO: Add conditions on when the enemy can take damage
-            if (damageAmount > 0 && true)
-            {
-                hp -= damageAmount;
-
-                if (hp <= 0) Die();
-                else Stun(5);
-            }
+            // This method won't ever be used. The method will be passed down to whatever the object is.
+            return;
         }
 
         /// <summary>
@@ -114,8 +119,8 @@ namespace ActualGame
         /// <param name="stunFrames">Number of frames that the character is stunned for</param>
         public void Stun(int stunFrames)
         {
-            // May require more - possibly finite state change?
-            this.stunFrames = stunFrames;
+            // This method won't ever be used. The method will be passed down to whatever the object is.
+            return;
         }
     }
 }
