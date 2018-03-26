@@ -18,11 +18,21 @@ namespace ActualGame
         }
 
         //Checks Collisions between two CircleObjects
-        private bool CircleCircle (BoundingCircle other)
+        public bool CircleCircle (BoundingCircle other)
         {
             return DistancePoint(location, other.location) < radius+other.radius;
         }
 
-        
+        public float Radius
+        {
+            get
+            {
+                return radius;
+            }
+            set
+            {
+                radius = value;
+            }
+        }
     }
 }
