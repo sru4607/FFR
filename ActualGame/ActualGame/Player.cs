@@ -26,13 +26,34 @@ namespace ActualGame
 
         public override void Update()
         {
-            base.Update();
+            //base.Update();
             prevState = kbState;
             kbState = Keyboard.GetState();
+            if(kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
+            {
+                state = PlayerState.Walk;
+                if(kbState.IsKeyDown(Keys.Right))
+                {
+                    right = true;
+                }
+                if(kbState.IsKeyDown(Keys.Left))
+                {
+                    right = false;
+                }
+            }
+            else
+            {
+                state = PlayerState.Idle;
+            }
             switch (state)
             {
                 case (PlayerState.Walk):
                     {
+                        if (right)
+                            velX = 10;
+                        else
+                            velX = -10;
+                        Move();
                         break;
                     }
                 case (PlayerState.Jump):
@@ -41,6 +62,7 @@ namespace ActualGame
                     }
                 case (PlayerState.Idle):
                     {
+                       
                         break;
                     }
                 case (PlayerState.MAttack):

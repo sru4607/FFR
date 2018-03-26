@@ -17,6 +17,11 @@ namespace ActualGame
         protected double velX;
         protected double velY;
         protected Texture2D texture;
+        protected Rectangle prev;
+        protected int step;
+        static float grav = 9.8f;
+        protected bool physicsObejct = false;
+
         #endregion
 
         #region Initialization
@@ -44,10 +49,39 @@ namespace ActualGame
         /// <summary>
         /// 
         /// </summary>
-        private void Move()
+        public void Move()
         {
+            prev = rect;
+            step = 0;
             X = (int)(X + velX);
             Y = (int)(Y + velY);
+        }
+        
+        public void Step()
+        {
+            if(step < 15)
+            {
+                X = (int)(X + velX / 16);
+                Y = (int)(Y + velY / 16);
+                step++;
+            }
+
+        }
+        public bool Finished
+        {
+            get
+            {
+                return step >= 15;
+            }
+        }
+        public void StepBack()
+        {
+            X = (int)(X - velX / 16);
+            Y = (int)(Y - velY / 16);
+        }
+        public void Revert()
+        {
+            rect = prev;
         }
 
         /// <summary>
@@ -56,7 +90,7 @@ namespace ActualGame
         /// <param name="time"></param>
         private void Gravity(double time)
         {
-            velY += 9.8 * time;
+            velY += grav * time;
         }
 
         /// <summary>
@@ -74,10 +108,11 @@ namespace ActualGame
         /// </summary>
         virtual public void Update()
         {
-            Move();
-            Collision();
+            if (this is Player temp)
+                temp.Update();
+            else;
+                //this.Update();
 
-            
         }
         #endregion
 
@@ -99,7 +134,7 @@ namespace ActualGame
         public int X
         {
             get { return rect.X; }
-            set { rect = new Rectangle(value, Y, Width, Height); }
+            set { rect = new Rectangle(value, Rect.Y, Rect.Width, Rect.Height); }
         }
 
         /// <summary>
@@ -108,7 +143,7 @@ namespace ActualGame
         public int Y
         {
             get {  return rect.X; }
-            set { rect = new Rectangle(X, value, Width, Height); }
+            set { rect = new Rectangle(Rect.X, value, Rect.Width, Rect.Height); }
         }
 
         /// <summary>
@@ -117,7 +152,7 @@ namespace ActualGame
         public int Width
         {
             get { return rect.X; }
-            set { rect = new Rectangle(X, Y, value, Height); }
+            set { rect = new Rectangle(Rect.X, Rect.Y, value, Rect.Height); }
         }
 
         /// <summary>
@@ -126,7 +161,7 @@ namespace ActualGame
         public int Height
         {
             get { return rect.Height; }
-            set { rect = new Rectangle(X, Y, Width, value); }
+            set { rect = new Rectangle(Rect.X, Rect.Y, Rect.Width, value); }
         }
 
         /// <summary>
@@ -136,6 +171,12 @@ namespace ActualGame
         {
             get { return rect; }
             set { rect = value; }
+        }
+
+        public bool Physics
+        {
+            get { return physicsObejct; }
+            set { physicsObejct = value; }
         }
         #endregion
 
