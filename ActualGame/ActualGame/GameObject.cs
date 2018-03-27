@@ -68,13 +68,7 @@ namespace ActualGame
             }
 
         }
-        public bool Finished
-        {
-            get
-            {
-                return step >= 15;
-            }
-        }
+        
         public void StepBack()
         {
             X = (int)(X - velX / 16);
@@ -147,6 +141,14 @@ namespace ActualGame
         /// <summary>
         /// 
         /// </summary>
+        public bool Finished
+        {
+            get
+            {
+                return step >= 15;
+            }
+        }
+
         public int X
         {
             get { return rect.X; }
@@ -201,6 +203,5 @@ namespace ActualGame
         }
         #endregion
 
-        // Moved Collision() to the Methods region
     }
 }

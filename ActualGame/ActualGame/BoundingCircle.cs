@@ -11,28 +11,45 @@ namespace ActualGame
 {
     class BoundingCircle : BoundingShapes
     {
-        float radius;
-        protected override Point CorrectCollision()
-        {
-            throw new NotImplementedException();
-        }
+        #region Fields
+            float radius;
+        #endregion
 
-        //Checks Collisions between two CircleObjects
-        public bool CircleCircle (BoundingCircle other)
-        {
-            return DistancePoint(location, other.location) < radius+other.radius;
-        }
+        #region properties
+            public float Radius
+            {
+                get
+                {
+                    return radius;
+                }
+                set
+                {
+                    radius = value;
+                }
+            }
+        #endregion
 
-        public float Radius
-        {
-            get
+        #region Constructor
+
+        #endregion
+
+        #region Methods
+
+            protected override Point CorrectCollision()
             {
-                return radius;
+                throw new NotImplementedException();
             }
-            set
+
+            //Checks Collisions between two CircleObjects
+            public bool CircleCircle(BoundingCircle other)
             {
-                radius = value;
+                return DistancePoint(location, other.location) < radius + other.radius;
             }
-        }
+        #endregion
+
+
+
+
+
     }
 }

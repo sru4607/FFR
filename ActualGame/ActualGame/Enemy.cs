@@ -11,74 +11,76 @@ namespace ActualGame
 {
     class Enemy : Character, ICombat
     {
-        // Fields
-        AI mainAi;
+        #region Fields
+            AI mainAi;
+        #endregion
 
-        /// <summary>
-        /// Creates a generic Enemy
-        /// </summary>
-        public Enemy()
-            : base()
-        {
-            mainAi = new AI();
-        }
+        #region Properties
 
-        public override void Update()
-        {
-            // TODO Implement AI movement
+        #endregion
 
-            base.Update();
-        }
-        public override void Draw(SpriteBatch sb)
-        {
-            base.Draw(sb);
-        }
-
-        /*
-        /// <summary>
-        /// Determines whether an object on the screen is colliding with the enemy
-        /// </summary>
-        /// <param name="hitboxes">List of objects from the quad tree</param>
-        /// <returns>True if collision is present, else returns false</returns>
-        public bool IsHit(List<GameObject> objects)
-        {
-            // TODO Ensure a quad tree *and its children* are used
-            foreach (GameObject obj in objects)
+        #region Constructor
+            /// <summary>
+            /// Creates a generic Enemy
+            /// </summary>
+            public Enemy()
+                : base()
             {
-                if (Rect.Intersects(obj.Rect))
+                mainAi = new AI();
+            }
+        #endregion
+
+        #region Methods
+            public new void TakeDamage(int damageAmount)
+            {
+                if (damageAmount > hp)
                 {
-                    // TODO Implement method of selectively ignoring collision (e.g. other enemies)
-                    return true;
+                    hp = 0;
+                    Die();
                 }
+                else
+                    hp -= damageAmount;
             }
-            return false;
-        }
-        
-         Is this really necessary? Because GameObject should handle collision*/
-        
-        // TODO Implement ICombat TakeDamage() into combat collision detection method
 
-        public new void TakeDamage(int damageAmount)
-        {
-            if (damageAmount > hp)
+
+            public new void Die()
             {
-                hp = 0;
-                Die();
+
             }
-            else
-                hp -= damageAmount;
-        }
 
 
-        public new void Die()
-        {
+            public new void Stun(int stunFrames)
+            {
 
-        }
+            }
+        #endregion
+
+        #region Update
+        public override void Update()
+            {
+                // TODO Implement AI movement
+
+                base.Update();
+            }
+        #endregion
+
+        #region Draw
+            public override void Draw(SpriteBatch sb)
+            {
+                base.Draw(sb);
+            }
+        #endregion
 
 
-        public new void Stun(int stunFrames)
-        {
 
-        }
+
+
+
+
+
+
+
+
+        
     }
 }

@@ -51,13 +51,11 @@
     <Compile Include="ICombat.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="Line.cs" />
     <Compile Include="NPC.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuadTree.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
