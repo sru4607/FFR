@@ -21,6 +21,7 @@ namespace ActualGame
         protected int step;
         static float grav = 9.8f;
         protected bool physicsObejct = false;
+        public BoundingShapes hitbox;
 
         #endregion
 
@@ -96,9 +97,26 @@ namespace ActualGame
         /// <summary>
         /// 
         /// </summary>
-        private void Collision()
+        public void Collision(List<GameObject> temp)
         {
-
+            for(int i = 0; i< temp.Count; i++)
+            {
+                if(this != temp[i])
+                {
+                     if(this.hitbox.CheckCollision(temp[i].HitBox))
+                    {
+                        this.Revert();
+                        for(int j = 0; j<16; j++)
+                        {
+                            this.Step();
+                            if(this.hitbox.CheckCollision(temp[i].HitBox))
+                            {
+                                StepBack();
+                            }
+                        }
+                    }
+                }
+            }
         }
         #endregion
 
@@ -110,8 +128,6 @@ namespace ActualGame
         {
             if (this is Player temp)
                 temp.Update();
-            else;
-                //this.Update();
 
         }
         #endregion
@@ -142,7 +158,7 @@ namespace ActualGame
         /// </summary>
         public int Y
         {
-            get {  return rect.X; }
+            get {  return rect.Y; }
             set { rect = new Rectangle(Rect.X, value, Rect.Width, Rect.Height); }
         }
 
@@ -151,7 +167,7 @@ namespace ActualGame
         /// </summary>
         public int Width
         {
-            get { return rect.X; }
+            get { return rect.Width; }
             set { rect = new Rectangle(Rect.X, Rect.Y, value, Rect.Height); }
         }
 
@@ -171,6 +187,11 @@ namespace ActualGame
         {
             get { return rect; }
             set { rect = value; }
+        }
+        public BoundingShapes HitBox
+        {
+            get { return hitbox; }
+            set { hitbox = value; }
         }
 
         public bool Physics

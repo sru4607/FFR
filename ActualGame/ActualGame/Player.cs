@@ -17,10 +17,13 @@ namespace ActualGame
         PlayerState state;
         KeyboardState kbState;
         KeyboardState prevState;
+        
 
         public Player(bool right = true)
             :base(right)
         {
+            hitbox = new BoundingRectangle(this.Rect.Center, this.Rect.Width*0.95f, this.Rect.Height*0.95f);
+
             state = PlayerState.Idle;
         }
 

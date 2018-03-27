@@ -11,6 +11,11 @@ namespace ActualGame
     {
         Rectangle mainRect;
 
+        public BoundingRectangle(Point center, float width, float height)
+        {
+            mainRect = new Rectangle((center.X - (int)width / 2), (center.Y - (int)height / 2), (int)width, (int)height);
+        }
+
         protected override Point CorrectCollision()
         {
             throw new NotImplementedException();
@@ -33,6 +38,11 @@ namespace ActualGame
             {
                 return mainRect;
             }
+        }
+
+        public void MoveRect(Point center)
+        {
+            mainRect.Location = new Point(center.X - mainRect.Width / 2, center.Y - mainRect.Height / 2);
         }
     }
 }

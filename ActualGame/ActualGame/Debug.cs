@@ -40,6 +40,11 @@ namespace ActualGame
             {
                 allObjects[i].Update();
             }
+            for(int i = 0; i<allObjects.Count; i++)
+            {
+                if(allObjects[i].Physics)
+                    allObjects[i].Collision(allObjects);
+            }
         }
         public void Draw(SpriteBatch sb)
         {

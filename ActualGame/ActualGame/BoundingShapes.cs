@@ -14,6 +14,7 @@ namespace ActualGame
         protected Point location;
         protected abstract Point CorrectCollision();
 
+
         protected float DistancePoint(Point One, Point Two)
         {
             Vector2 VOne = One.ToVector2();
