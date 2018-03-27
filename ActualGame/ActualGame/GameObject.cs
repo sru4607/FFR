@@ -106,6 +106,7 @@ namespace ActualGame
                             if(this.hitbox.CheckCollision(temp[i].HitBox))
                             {
                                 StepBack();
+								break;
                             }
                         }
                     }
