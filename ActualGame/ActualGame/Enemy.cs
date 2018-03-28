@@ -56,7 +56,7 @@ namespace ActualGame
         #endregion
 
         #region Update
-        public override void Update()
+            public override void Update()
             {
                 // TODO Implement AI movement
 
@@ -70,17 +70,5 @@ namespace ActualGame
                 base.Draw(sb);
             }
         #endregion
-
-
-
-
-
-
-
-
-
-
-
-        
     }
 }
