@@ -12,8 +12,7 @@ namespace ActualGame
     {
         #region Fields
             protected int hp;
-            protected Rectangle mBox;
-            protected Rectangle hurtBox;
+            protected BoundingRectangle mBox;
             protected int mDamage;
             protected int rDamage;
             protected int stunFrames;
@@ -51,8 +50,7 @@ namespace ActualGame
                 : base()
             {
                 hp = 1;
-                mBox = new Rectangle();
-                hurtBox = new Rectangle();
+                mBox = new BoundingRectangle(new Point(HitBox.Location.X + 32, HitBox.Location.Y), 32, 56);
                 mDamage = 0;
                 rDamage = 0;
                 stunFrames = 0;
@@ -68,7 +66,7 @@ namespace ActualGame
             /// </summary>
             public virtual void MAttack(Character c)
             {
-                if (mBox.Intersects(c.hurtBox))
+                if (mBox.CheckCollision(c.HitBox))
                 {
                     c.TakeDamage(mDamage);
                 }

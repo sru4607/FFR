@@ -68,7 +68,7 @@ namespace ActualGame
         #endregion
 
         #region Property
-            public Point Location
+            public virtual Point Location
             {
                 get { return location; }
                 set { location = value; }

@@ -50,6 +50,11 @@ namespace ActualGame
                     return mainRect;
                 }
             }
+
+        public override Point Location
+        {
+            get { return GetRect.Center; }
+        }
         #endregion
 
     }
