@@ -28,22 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ScrollBar = new System.Windows.Forms.VScrollBar();
             this.SuspendLayout();
-            // 
-            // ScrollBar
-            // 
-            this.ScrollBar.Location = new System.Drawing.Point(100, 0);
-            this.ScrollBar.Name = "ScrollBar";
-            this.ScrollBar.Size = new System.Drawing.Size(17, 166);
-            this.ScrollBar.TabIndex = 0;
             // 
             // Palette
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.Controls.Add(this.ScrollBar);
             this.Name = "Palette";
             this.Size = new System.Drawing.Size(117, 166);
             this.ResumeLayout(false);
@@ -51,7 +43,5 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.VScrollBar ScrollBar;
     }
 }

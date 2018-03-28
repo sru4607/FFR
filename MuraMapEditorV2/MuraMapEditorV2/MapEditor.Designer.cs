@@ -1,6 +1,6 @@
 ﻿namespace MuraMapEditorV2
 {
-    partial class Form1
+    partial class MapEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -39,7 +39,7 @@
             this.SaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.OpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.TilePalette = new MuraMapEditorV2.Palette();
-            this.MapEditor = new MuraMapEditorV2.Map();
+            this.MapView = new MuraMapEditorV2.Map();
             this.MenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,21 +74,21 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.NotImplemented);
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
@@ -129,6 +129,7 @@
             // 
             // TilePalette
             // 
+            this.TilePalette.AutoScroll = true;
             this.TilePalette.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.TilePalette.Location = new System.Drawing.Point(679, 55);
             this.TilePalette.Name = "TilePalette";
@@ -136,15 +137,16 @@
             this.TilePalette.TabIndex = 5;
             this.TilePalette.Click += new System.EventHandler(this.TilePalette_Click);
             // 
+            // MapView
+            // 
+            this.MapView.AutoScroll = true;
+            this.MapView.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.MapView.Location = new System.Drawing.Point(12, 55);
+            this.MapView.Name = "MapView";
+            this.MapView.Size = new System.Drawing.Size(658, 498);
+            this.MapView.TabIndex = 0;
+            // 
             // MapEditor
-            // 
-            this.MapEditor.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.MapEditor.Location = new System.Drawing.Point(12, 55);
-            this.MapEditor.Name = "MapEditor";
-            this.MapEditor.Size = new System.Drawing.Size(658, 498);
-            this.MapEditor.TabIndex = 0;
-            // 
-            // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -153,10 +155,10 @@
             this.Controls.Add(this.TilePalette);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.MapEditor);
+            this.Controls.Add(this.MapView);
             this.Controls.Add(this.MenuStrip);
             this.MainMenuStrip = this.MenuStrip;
-            this.Name = "Form1";
+            this.Name = "MapEditor";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MenuStrip.ResumeLayout(false);
@@ -168,7 +170,7 @@
 
         #endregion
 
-        private Map MapEditor;
+        private Map MapView;
         private System.Windows.Forms.MenuStrip MenuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
