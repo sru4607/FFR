@@ -11,42 +11,34 @@ namespace ActualGame
 {
     class Debug
     {
+        #region fields
         Dictionary<String, Texture2D > allTexts;
         List<GameObject> allObjects = new List<GameObject>();
+        #endregion
+
+        #region constructor
         public Debug(Dictionary<String, Texture2D> temp)
         {
             allTexts = temp;
         }
+        #endregion
+
+        #region method
         public void InstantiateAll()
         {
-            allObjects.Add(new GameObject());
-            allObjects[0].Height = 20;
-            allObjects[0].Width = 800;
-            allObjects[0].Y = 400;
-            allObjects[0].HitBox = new BoundingRectangle(allObjects[0].Rect.Center, allObjects[0].Rect.Width, allObjects[0].Rect.Height);
-            allObjects[0].LoadTexture(allTexts["Floor"]);
-
-            allObjects.Add(new Player());
-            allObjects[1].Height = 150;
-            allObjects[1].Width = 50;
-            allObjects[1].Y = 200;
-            allObjects[1].X = 200;
-            allObjects[1].Physics = true;
-            allObjects[1].LoadTexture(allTexts["PenPen"]);
+           
 
         }
+        #endregion
+
+        #region Update
         public void UpdateAll()
         {
-            for(int i = 0; i<allObjects.Count; i++)
-            {
-                allObjects[i].Update();
-            }
-            for(int i = 0; i<allObjects.Count; i++)
-            {
-                if(allObjects[i].Physics)
-                    allObjects[i].Collision(allObjects);
-            }
+            
         }
+        #endregion
+
+        #region Draw
         public void Draw(SpriteBatch sb)
         {
             foreach (GameObject go in allObjects)
@@ -55,5 +47,6 @@ namespace ActualGame
             }
             
         }
+        #endregion
     }
 }

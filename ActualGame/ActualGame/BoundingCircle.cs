@@ -35,10 +35,10 @@ namespace ActualGame
 
         #region Methods
 
-            protected override Point CorrectCollision()
-            {
-                throw new NotImplementedException();
-            }
+            //protected override Point CorrectCollision()
+            //{
+            //    throw new NotImplementedException();
+            //}
 
             //Checks Collisions between two CircleObjects
             public bool CircleCircle(BoundingCircle other)

@@ -16,7 +16,7 @@ namespace ActualGame
         #endregion
 
         #region AbstractMethods
-        protected abstract Point CorrectCollision();
+        //protected abstract Point CorrectCollision();
         #endregion
 
         #region Method
@@ -29,41 +29,41 @@ namespace ActualGame
             }
 
             //Checks Collisions between two objects one rectangle and one circle
-            private bool CircleRectangle(BoundingCircle circle, BoundingRectangle rect)
-            {
-                //Credit for this code - https://yal.cc/rectangle-circle-intersection-test/
-                float DeltaX = circle.Location.X - Math.Max(rect.Location.X, Math.Min(circle.Location.X, rect.Location.X + rect.GetRect.Width));
-                float DeltaY = circle.Location.Y - Math.Max(rect.Location.Y, Math.Min(circle.Location.Y, rect.Location.Y + rect.GetRect.Height));
-                return (DeltaX * DeltaX + DeltaY * DeltaY) < (circle.Radius * circle.Radius);
-            }
+            //private bool CircleRectangle(BoundingCircle circle, BoundingRectangle rect)
+            //{
+            //    //Credit for this code - https://yal.cc/rectangle-circle-intersection-test/
+            //    float DeltaX = circle.Location.X - Math.Max(rect.Location.X, Math.Min(circle.Location.X, rect.Location.X + rect.GetRect.Width));
+            //    float DeltaY = circle.Location.Y - Math.Max(rect.Location.Y, Math.Min(circle.Location.Y, rect.Location.Y + rect.GetRect.Height));
+            //    return (DeltaX * DeltaX + DeltaY * DeltaY) < (circle.Radius * circle.Radius);
+            //}
 
             public bool CheckCollision(BoundingShapes other)
             {
-                if (this is BoundingRectangle)
-                {
-                    if (other is BoundingCircle)
-                    {
-                        return CircleRectangle((BoundingCircle)other, (BoundingRectangle)this);
-                    }
-                    else if (other is BoundingRectangle)
-                    {
+                //if (this is BoundingRectangle)
+                //{
+                //    if (other is BoundingCircle)
+                //    {
+                //        return CircleRectangle((BoundingCircle)other, (BoundingRectangle)this);
+                //    }
+                //    else if (other is BoundingRectangle)
+                //    {
                         BoundingRectangle self = (BoundingRectangle)this;
                         return self.RectangleRectangle((BoundingRectangle)other);
-                    }
-                }
-                else if (this is BoundingCircle)
-                {
-                    if (other is BoundingRectangle)
-                    {
-                        return CircleRectangle((BoundingCircle)this, (BoundingRectangle)other);
-                    }
-                    else if (other is BoundingCircle)
-                    {
-                        BoundingCircle self = (BoundingCircle)this;
-                        return self.CircleCircle((BoundingCircle)other);
-                    }
-                }
-                return false;
+                //    }
+                //}
+                //else if (this is BoundingCircle)
+                //{
+                //    if (other is BoundingRectangle)
+                //    {
+                //        return CircleRectangle((BoundingCircle)this, (BoundingRectangle)other);
+                //    }
+                //    else if (other is BoundingCircle)
+                //    {
+                //        BoundingCircle self = (BoundingCircle)this;
+                //        return self.CircleCircle((BoundingCircle)other);
+                //    }
+                //}
+                //return false;
             }
         #endregion
 

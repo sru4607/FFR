@@ -121,6 +121,10 @@ namespace ActualGame
                 step = 0;
                 X = (int)(X + velX);
                 Y = (int)(Y + velY);
+                if(hitbox != null)
+                {
+                    hitbox.Location = this.Rect.Location;
+                }
             }
         
             public void Step()

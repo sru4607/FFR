@@ -31,11 +31,6 @@ namespace ActualGame
                 get { return mBox; }
                 set { mBox = value; }
             }
-            public virtual BoundingRectangle HurtBox
-            {
-                get { return hitBox; }
-                set { hitBox = value; }
-            }
             public virtual bool Right
             {
                 get { return right; }

@@ -21,10 +21,6 @@ namespace ActualGame
         #endregion
 
         #region Methods
-            protected override Point CorrectCollision()
-            {
-                throw new NotImplementedException();
-            }
 
             public bool RectangleRectangle(BoundingRectangle other)
             {
@@ -36,7 +32,7 @@ namespace ActualGame
                 return false;
             }
 
-            public void MoveRect(Point center)
+            public void MoveHitBox(Point center)
             {
                 mainRect.Location = new Point(center.X - mainRect.Width / 2, center.Y - mainRect.Height / 2);
             }
