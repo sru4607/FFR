@@ -69,43 +69,67 @@ namespace ActualGame
                 //base.Update();
                 prevState = kbState;
                 kbState = Keyboard.GetState();
-                if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
-                {
-                    state = PlayerState.Walk;
-                    if (kbState.IsKeyDown(Keys.Right))
-                    {
-                        right = true;
-                    }
-                    if (kbState.IsKeyDown(Keys.Left))
-                    {
-                        right = false;
-                    }
-                }
-                else
-                {
-                    state = PlayerState.Idle;
-                }
                 switch (state)
                 {
                     case (PlayerState.Walk):
                     {
-                        if (right)
-                            velX = 10;
-                        else
-                            velX = -10;
-                        Gravity();
-                        Move();
+                        velX = 10;
+                        if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
+                        {
+                            state = PlayerState.Walk;
+                            if (kbState.IsKeyDown(Keys.Right))
+                            {
+                                right = true;
+                            }
+                            if (kbState.IsKeyDown(Keys.Left))
+                            {
+                                right = false;
+                            }
+                            Gravity();
+                            Move(right);
+                        }
+                        if (kbState.IsKeyDown(Keys.Up))
+                        {
+                            state = PlayerState.Jump;
+                        }
                         break;
                     }
                     case (PlayerState.Jump):
                     {
+                        velY = 10;
+                        Gravity();
+                        if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
+                        {
+                            state = PlayerState.Walk;
+                            if (kbState.IsKeyDown(Keys.Right))
+                            {
+                                right = true;
+                            }
+                            if (kbState.IsKeyDown(Keys.Left))
+                            {
+                                right = false;
+                            }
+                            Move(right);
+                        }
                         break;
                     }
                     case (PlayerState.Idle):
                     {
                         velX = 0;
                         Gravity();
-                        Move();
+                        if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
+                        {
+                            state = PlayerState.Walk;
+                            if (kbState.IsKeyDown(Keys.Right))
+                            {
+                                right = true;
+                            }
+                            if (kbState.IsKeyDown(Keys.Left))
+                            {
+                                right = false;
+                            }
+                            Move();
+                        }
                         break;
                     }
                     case (PlayerState.MAttack):

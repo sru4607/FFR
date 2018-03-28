@@ -126,6 +126,21 @@ namespace ActualGame
                     hitbox.Location = this.Rect.Location;
                 }
             }
+
+        public void Move(bool right)
+        {
+            prev = rect;
+            step = 0;
+            if (right)
+            {
+                X = (int)(X + velX);
+            }
+            else
+            {
+                X = (int)(X - velX);
+            }
+            Y = (int)(Y + velY);
+        }
         
             public void Step()
             {
