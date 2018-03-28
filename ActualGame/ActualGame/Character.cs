@@ -13,6 +13,7 @@ namespace ActualGame
         #region Fields
             protected int hp;
             protected BoundingRectangle mBox;
+            protected BoundingRectangle hitBox;
             protected int mDamage;
             protected int rDamage;
             protected int stunFrames;
@@ -25,15 +26,15 @@ namespace ActualGame
                 get { return hp; }
                 set { hp = value; }
             }
-            public virtual Rectangle MBox
+            public virtual BoundingRectangle MBox
             {
                 get { return mBox; }
                 set { mBox = value; }
             }
-            public virtual Rectangle HurtBox
+            public virtual BoundingRectangle HurtBox
             {
-                get { return hurtBox; }
-                set { hurtBox = value; }
+                get { return hitBox; }
+                set { hitBox = value; }
             }
             public virtual bool Right
             {
@@ -50,6 +51,7 @@ namespace ActualGame
                 : base()
             {
                 hp = 1;
+            hitbox = new BoundingRectangle(new Point(0, 0), 32, 64);
                 mBox = new BoundingRectangle(new Point(HitBox.Location.X + 32, HitBox.Location.Y), 32, 56);
                 mDamage = 0;
                 rDamage = 0;
@@ -81,7 +83,7 @@ namespace ActualGame
             }
 
 
-            public protected void Flip()
+            public void Flip()
         {
             if (mBox.Location.X > hitbox.Location.X)
             {

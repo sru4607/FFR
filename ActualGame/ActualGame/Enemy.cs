@@ -26,7 +26,7 @@ namespace ActualGame
             public Enemy()
                 : base()
             {
-                mainAi = new AI();
+                mainAi = new AI(PatrolType.Standing);
             }
         #endregion
 
