@@ -55,6 +55,7 @@ namespace ActualGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             allTextures.Add("Floor", Content.Load<Texture2D>("missingtexture"));
+            allTextures.Add("PenPen", Content.Load<Texture2D>("PenPen"));
             //levelOne.Import();
             testEnemy.LoadTexture(Content.Load<Texture2D>("missingtexture"));
             

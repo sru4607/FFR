@@ -23,6 +23,7 @@ namespace ActualGame
             allObjects[0].Height = 20;
             allObjects[0].Width = 800;
             allObjects[0].Y = 400;
+            allObjects[0].HitBox = new BoundingRectangle(allObjects[0].Rect.Center, allObjects[0].Rect.Width, allObjects[0].Rect.Height);
             allObjects[0].LoadTexture(allTexts["Floor"]);
 
             allObjects.Add(new Player());
@@ -31,7 +32,7 @@ namespace ActualGame
             allObjects[1].Y = 200;
             allObjects[1].X = 200;
             allObjects[1].Physics = true;
-            allObjects[1].LoadTexture(allTexts["Floor"]);
+            allObjects[1].LoadTexture(allTexts["PenPen"]);
 
         }
         public void UpdateAll()

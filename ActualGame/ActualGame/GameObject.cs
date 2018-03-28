@@ -82,10 +82,9 @@ namespace ActualGame
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="time"></param>
-        private void Gravity(double time)
+        public void Gravity()
         {
-            velY += grav * time;
+            velY += grav/60;
         }
 
         /// <summary>
@@ -98,7 +97,7 @@ namespace ActualGame
                 if(this != temp[i])
                 {
                      if(this.hitbox.CheckCollision(temp[i].HitBox))
-                    {
+                        {
                         this.Revert();
                         for(int j = 0; j<16; j++)
                         {
@@ -106,6 +105,8 @@ namespace ActualGame
                             if(this.hitbox.CheckCollision(temp[i].HitBox))
                             {
                                 StepBack();
+                                velX = 0;
+                                velY = 0;
 								break;
                             }
                         }

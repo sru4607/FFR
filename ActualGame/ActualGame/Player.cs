@@ -93,6 +93,7 @@ namespace ActualGame
                                 velX = 10;
                             else
                                 velX = -10;
+                            Gravity();
                             Move();
                             break;
                         }
@@ -102,7 +103,9 @@ namespace ActualGame
                         }
                     case (PlayerState.Idle):
                         {
-
+                            velX = 0;
+                            Gravity();
+                            Move();
                             break;
                         }
                     case (PlayerState.MAttack):
