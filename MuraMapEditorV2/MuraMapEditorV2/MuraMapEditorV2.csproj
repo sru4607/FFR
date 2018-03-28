@@ -52,17 +52,23 @@
     <Compile Include="BitmaskTile.Designer.cs">
       <DependentUpon>BitmaskTile.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="MapEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="MapEditor.Designer.cs">
+      <DependentUpon>MapEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Map.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Map.Designer.cs">
       <DependentUpon>Map.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewMapForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewMapForm.Designer.cs">
+      <DependentUpon>NewMapForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Palette.cs">
       <SubType>UserControl</SubType>
@@ -86,11 +92,14 @@
     <Compile Include="Toolstrip.Designer.cs">
       <DependentUpon>Toolstrip.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="MapEditor.resx">
+      <DependentUpon>MapEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Map.resx">
       <DependentUpon>Map.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewMapForm.resx">
+      <DependentUpon>NewMapForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Palette.resx">
       <DependentUpon>Palette.cs</DependentUpon>
