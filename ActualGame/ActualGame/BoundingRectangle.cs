@@ -51,7 +51,7 @@ namespace ActualGame
                 }
             }
 
-        public override Point Location
+        public Point Center
         {
             get { return GetRect.Center; }
         }

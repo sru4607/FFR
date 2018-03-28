@@ -81,7 +81,13 @@ namespace ActualGame
             }
 
 
-
+            public protected void Flip()
+        {
+            if (mBox.Location.X > hitbox.Location.X)
+            {
+                //Flip to left side
+            } 
+        }
 
 
             /// <summary>
