@@ -88,42 +88,42 @@ namespace ActualGame
                 switch (state)
                 {
                     case (PlayerState.Walk):
-                        {
-                            if (right)
-                                velX = 10;
-                            else
-                                velX = -10;
-                            Gravity();
-                            Move();
-                            break;
-                        }
+                    {
+                        if (right)
+                            velX = 10;
+                        else
+                            velX = -10;
+                        Gravity();
+                        Move();
+                        break;
+                    }
                     case (PlayerState.Jump):
-                        {
-                            break;
-                        }
+                    {
+                        break;
+                    }
                     case (PlayerState.Idle):
-                        {
-                            velX = 0;
-                            Gravity();
-                            Move();
-                            break;
-                        }
+                    {
+                        velX = 0;
+                        Gravity();
+                        Move();
+                        break;
+                    }
                     case (PlayerState.MAttack):
-                        {
-                            break;
-                        }
+                    {
+                        break;
+                    }
                     case (PlayerState.Crouch):
-                        {
-                            break;
-                        }
+                    {
+                        break;
+                    }
                     case (PlayerState.Interact):
-                        {
-                            break;
-                        }
+                    {
+                        break;
+                    }
                     case (PlayerState.Dead):
-                        {
-                            break;
-                        }
+                    {
+                        break;
+                    }
                 }
             }
         #endregion
@@ -131,6 +131,37 @@ namespace ActualGame
         #region Draw
             public override void Draw(SpriteBatch sb)
             {
+                switch (state)
+                {
+                    case (PlayerState.Walk):
+                    {
+                        break;
+                    }
+                    case (PlayerState.Jump):
+                    {
+                        break;
+                    }
+                    case (PlayerState.Idle):
+                    {
+                        break;
+                    }
+                    case (PlayerState.MAttack):
+                    {
+                        break;
+                    }
+                    case (PlayerState.Crouch):
+                    {
+                        break;
+                    }
+                    case (PlayerState.Interact):
+                    {
+                        break;
+                    }
+                    case (PlayerState.Dead):
+                    {
+                        break;
+                    }
+                }
                 base.Draw(sb);
             }
         #endregion
