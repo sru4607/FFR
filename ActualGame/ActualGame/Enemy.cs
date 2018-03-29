@@ -26,6 +26,7 @@ namespace ActualGame
         public Enemy()
             : base()
         {
+            noClip = true;
             mainAi = new AI(PatrolType.Standing);
         }
         #endregion

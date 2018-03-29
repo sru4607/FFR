@@ -22,12 +22,18 @@ namespace ActualGame
         static float grav = 9.8f;
         protected bool physicsObject = false;
         public BoundingShapes hitbox;
+        public bool noClip = false;
         #endregion
 
         #region Properties
         /// <summary>
         /// 
         /// </summary>
+        public bool NoClip
+        {
+            get { return noClip; }
+            set { noClip = value; }
+        }
         public bool Finished
         {
             get
@@ -179,18 +185,18 @@ namespace ActualGame
         {
             for(int i = 0; i< temp.Count; i++)
             {
-                if(this != temp[i])
+                if(this != temp[i] && !temp[i].noClip)
                 {
-                        if(this.hitbox.CheckCollision(temp[i].HitBox))
+                        if(this.rect.Intersects(temp[i].Rect))
                         {
                         this.Revert();
                         for(int j = 0; j<16; j++)
                         {
                             this.Step();
-                            if(this.hitbox.CheckCollision(temp[i].HitBox))
+                            if(this.rect.Intersects(temp[i].Rect))
                             {
-                                StepBack();
-                                velX = 0;
+                                //StepBack();
+                                //velX = 0;
                                 velY = 0;
 								break;
                             }

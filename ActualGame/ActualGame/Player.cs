@@ -73,22 +73,26 @@ namespace ActualGame
             {
                 case (PlayerState.Walk):
                 {
-                    velX = 10;
-                    velY = 0;
+                    Gravity();
+                    
                     if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
                     {
+                        velX = 3;
                         state = PlayerState.Walk;
                         if (kbState.IsKeyDown(Keys.Right))
                         {
+                             
                             right = true;
                         }
                         if (kbState.IsKeyDown(Keys.Left))
                         {
                             right = false;
                         }
-                        Gravity();
-                        Move(right);
+                        
+                        
                     }
+                    Move(right);
+
                     if (kbState.IsKeyDown(Keys.Up))
                     {
                         state = PlayerState.Jump;
@@ -97,7 +101,8 @@ namespace ActualGame
                 }
                 case (PlayerState.Jump):
                 {
-                    velY = -10;
+                    Gravity();
+                    velY = -5;
                     Gravity();
                     if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
                     {
@@ -110,14 +115,18 @@ namespace ActualGame
                         {
                             right = false;
                         }
-                        Move(right);
                     }
+                    else
+                    {
+                        state = PlayerState.Idle;
+                    }
+                    Move(right);
                     break;
                 }
                 case (PlayerState.Idle):
                 {
                     velX = 0;
-                    velY = 0;
+                    //velY = 0;
                     Gravity();
                     if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
                     {
@@ -125,18 +134,25 @@ namespace ActualGame
                         if (kbState.IsKeyDown(Keys.Right))
                         {
                             right = true;
+                            state = PlayerState.Walk;
                         }
                         if (kbState.IsKeyDown(Keys.Left))
                         {
                             right = false;
+                            state = PlayerState.Walk;
                         }
                         if (kbState.IsKeyDown(Keys.Up))
                         {
                             state = PlayerState.Jump;
                         }
-                        Gravity();
-                        Move(right);
+                        
+                       
                     }
+                    if (kbState.IsKeyDown(Keys.Up))
+                    {
+                        state = PlayerState.Jump;
+                    }
+                        Move(right);
                     break;
                 }
                 case (PlayerState.MAttack):
