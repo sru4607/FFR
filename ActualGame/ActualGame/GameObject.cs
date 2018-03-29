@@ -187,21 +187,13 @@ namespace ActualGame
             {
                 if(this != temp[i] && !temp[i].noClip)
                 {
-                        if(this.rect.Intersects(temp[i].Rect))
-                        {
-                        this.Revert();
-                        for(int j = 0; j<16; j++)
-                        {
-                            this.Step();
-                            if(this.rect.Intersects(temp[i].Rect))
-                            {
-                                //StepBack();
-                                //velX = 0;
-                                velY = 0;
-								break;
-                            }
-                        }
+                    if (this.rect.Intersects(temp[i].Rect))
+                    {
+                        //this.Revert();
+                        velY = 0;
                     }
+                        
+                    
                 }
             }
         }

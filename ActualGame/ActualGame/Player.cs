@@ -91,6 +91,10 @@ namespace ActualGame
                         
                         
                     }
+                    else
+                    {
+                        state = PlayerState.Idle;
+                    }
                     Move(right);
 
                     if (kbState.IsKeyDown(Keys.Up))
@@ -128,25 +132,19 @@ namespace ActualGame
                     velX = 0;
                     //velY = 0;
                     Gravity();
-                    if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
+                    if (kbState.IsKeyDown(Keys.Right))
                     {
+                        right = true;
                         state = PlayerState.Walk;
-                        if (kbState.IsKeyDown(Keys.Right))
-                        {
-                            right = true;
-                            state = PlayerState.Walk;
-                        }
-                        if (kbState.IsKeyDown(Keys.Left))
-                        {
-                            right = false;
-                            state = PlayerState.Walk;
-                        }
-                        if (kbState.IsKeyDown(Keys.Up))
-                        {
-                            state = PlayerState.Jump;
-                        }
-                        
-                       
+                    }
+                    if (kbState.IsKeyDown(Keys.Left))
+                    {
+                        right = false;
+                        state = PlayerState.Walk;
+                    }
+                    if (kbState.IsKeyDown(Keys.Up))
+                    {
+                        state = PlayerState.Jump;
                     }
                     if (kbState.IsKeyDown(Keys.Up))
                     {
