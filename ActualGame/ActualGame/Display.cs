@@ -18,44 +18,44 @@ namespace ActualGame
          */
         //This is for camera stuff
         #region Fields
-            Camera2D mainCam;
-            GameObject parent;
+        Camera2D mainCam;
+        GameObject parent;
         #endregion
 
         #region Properties
-            public Camera2D MainCam
+        public Camera2D MainCam
+        {
+            get
             {
-                get
-                {
-                    return mainCam;
-                }
+                return mainCam;
             }
+        }
         #endregion
 
         #region Constructor
-            public Display(GraphicsDevice temp)
-            {
-                mainCam = new Camera2D(temp);
-                parent = null;
-            }
+        public Display(GraphicsDevice temp)
+        {
+            mainCam = new Camera2D(temp);
+            parent = null;
+        }
         #endregion
 
         #region Methods
-            public void MoveCamera(float x, float y)
-            {
-                mainCam.Position = new Vector2(x, y);
-            }
+        public void MoveCamera(float x, float y)
+        {
+            mainCam.Position = new Vector2(x, y);
+        }
         #endregion
 
         #region Update
-            public void Update()
+        public void Update()
+        {
+            if (parent != null)
             {
-                if (parent != null)
-                {
-                    mainCam.Position = new Vector2(parent.X, parent.Y);
-                }
-
+                mainCam.Position = new Vector2(parent.X, parent.Y);
             }
+
+        }
         #endregion
 
 
