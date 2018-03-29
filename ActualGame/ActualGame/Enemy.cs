@@ -67,7 +67,7 @@ namespace ActualGame
         #region Draw
             public override void Draw(SpriteBatch sb)
             {
-                base.Draw(sb);
+                sb.Draw(texture, Rect, Color.Red);
             }
         #endregion
     }
