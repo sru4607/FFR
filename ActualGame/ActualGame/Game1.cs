@@ -35,14 +35,23 @@ namespace ActualGame
         /// </summary>
         protected override void Initialize()
         {
+            // Initialize an array of textures for use
             allTextures = new Dictionary<string, Texture2D>();
-            // TODO: Add your initialization logic here
+
+            // Generic enemy used to test bugs/features
             testEnemy = new Enemy();
+
+            // Base game logic
             mainDisplay = new Display(GraphicsDevice);
             base.Initialize();
+
+            // Set the initial state of the game
             currentState = MainGameState.debug;
+
+            // Values used for debugging purposes
             debugger = new Debug(allTextures);
             debugger.InstantiateAll();
+
             //levelOne = new World("Level One", "level1.txt");
         }
 
@@ -52,13 +61,21 @@ namespace ActualGame
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
+            // Create a new SpriteBatch, which can be used to draw textures
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Import levels
+            //levelOne.Import();
+
+            // Add all necessary textures to the dictionary
             allTextures.Add("Floor", Content.Load<Texture2D>("missingtexture"));
             allTextures.Add("PenPen", Content.Load<Texture2D>("PenPen"));
-            //levelOne.Import();
-            testEnemy.LoadTexture(Content.Load<Texture2D>("missingtexture"));
-            
+            allTextures.Add("missingtexture", Content.Load<Texture2D>("missingtexture"));
+            // TODO: Add these textures/update below values once creates
+            // allTextures.Add("Enemy", Content.Load<Texture2D>("missingtexture"));
+
+            // Sync in-game objects with their dictionary textures
+            testEnemy.LoadTexture(allTextures["missingtexture"]);
 
             // TODO: use this.Content to load your game content here
         }
@@ -89,6 +106,7 @@ namespace ActualGame
                     {
                         debugger.UpdateAll();
                         break;
+                        testEnemy.Update();
                     }
                 case (MainGameState.inGame):
                     {
@@ -134,6 +152,7 @@ namespace ActualGame
                 case (MainGameState.debug):
                     {
                         debugger.Draw(spriteBatch);
+                        testEnemy.Draw(spriteBatch);
                         break;
                     }
                 case (MainGameState.inGame):

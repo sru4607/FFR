@@ -26,6 +26,14 @@ namespace ActualGame
         public Enemy()
             : base()
         {
+            // Initialize the AI pattern
+            mainAi = new AI(PatrolType.Moving);
+
+            // Temporary values to render to screen
+            rect.X = 400;
+            rect.Y = 300;
+            rect.Width = 128;
+            rect.Height = 128;
             noClip = true;
             mainAi = new AI(PatrolType.Standing);
         }
@@ -46,30 +54,37 @@ namespace ActualGame
 
         public new void Die()
         {
-
+            // TODO: Implement during combat
         }
 
 
         public new void Stun(int stunFrames)
         {
-
+            // TODO: Implement during combat
         }
         #endregion
 
         #region Update
         public override void Update()
         {
-            // TODO Implement AI movement
+            // TODO: Update so rect.Y is moved in the same call
+            // NOTE: Do NOT call .MoveAI() twice, it will count as two frames of movement
+            // NOTE: Also only moves in the X direction right now
+            rect.X += (int)mainAi.MoveAI();
 
             base.Update();
         }
         #endregion
 
         #region Draw
-            public override void Draw(SpriteBatch sb)
-            {
-                sb.Draw(texture, Rect, Color.Red);
-            }
+        public override void Draw(SpriteBatch sb)
+        {
+            if(mainAi.FacingRight)
+                sb.Draw(texture, rect, null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, 0);
+            // Draws to the screen with a horizontal flip if the AI is facing left
+            else
+                sb.Draw(texture, rect, null, Color.White, 0, new Vector2(0,0), SpriteEffects.FlipHorizontally, 0);
+        }
         #endregion
     }
 }
