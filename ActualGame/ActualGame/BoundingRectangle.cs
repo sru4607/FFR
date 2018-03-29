@@ -45,6 +45,10 @@ namespace ActualGame
                 {
                     return mainRect;
                 }
+                set
+                {
+                    mainRect = value;
+                }
             }
 
         public Point Center

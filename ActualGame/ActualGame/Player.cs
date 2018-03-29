@@ -92,7 +92,7 @@ namespace ActualGame
                     if (kbState.IsKeyDown(Keys.Up))
                     {
                         state = PlayerState.Jump;
-                    }
+                    } 
                     break;
                 }
                 case (PlayerState.Jump):
@@ -117,6 +117,7 @@ namespace ActualGame
                 case (PlayerState.Idle):
                 {
                     velX = 0;
+                    velY = 0;
                     Gravity();
                     if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
                     {
@@ -129,6 +130,11 @@ namespace ActualGame
                         {
                             right = false;
                         }
+                        if (kbState.IsKeyDown(Keys.Up))
+                        {
+                            state = PlayerState.Jump;
+                        }
+                        Gravity();
                         Move(right);
                     }
                     break;

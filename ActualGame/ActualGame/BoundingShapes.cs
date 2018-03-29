@@ -48,7 +48,13 @@ namespace ActualGame
             //    else if (other is BoundingRectangle)
             //    {
                     BoundingRectangle self = (BoundingRectangle)this;
-                    return self.RectangleRectangle((BoundingRectangle)other);
+                    if (other != null)
+                    {
+                        return self.GetRect.Intersects(((BoundingRectangle)other).GetRect);
+
+                    }
+                    return false;
+                   
             //    }
             //}
             //else if (this is BoundingCircle)
