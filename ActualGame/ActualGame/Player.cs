@@ -15,9 +15,9 @@ namespace ActualGame
     class Player : Character, ICombat
     {
         #region Fields
-            PlayerState state;
-            KeyboardState kbState;
-            KeyboardState prevState;
+        PlayerState state;
+        KeyboardState kbState;
+        KeyboardState prevState;
         #endregion
 
         #region Properties
@@ -25,145 +25,176 @@ namespace ActualGame
         #endregion
 
         #region Constructor
-            public Player(bool right = true)
-                : base(right)
-            {
-                hitbox = new BoundingRectangle(this.Rect.Center, this.Rect.Width * 0.95f, this.Rect.Height * 0.95f);
+        public Player(bool right = true)
+            : base(right)
+        {
+            hitbox = new BoundingRectangle(this.Rect.Center, this.Rect.Width * 0.95f, this.Rect.Height * 0.95f);
 
-                state = PlayerState.Idle;
-            }
+            state = PlayerState.Idle;
+        }
         #endregion
 
         #region Methods
-            /// <summary>
-            /// Reduces the health of the Player when they take damage, and calls the Die method if necessary
-            /// </summary>
-            /// <param name="damageAmount">The amount of damage taken</param>
-            public new void TakeDamage(int damageAmount)
+        /// <summary>
+        /// Reduces the health of the Player when they take damage, and calls the Die method if necessary
+        /// </summary>
+        /// <param name="damageAmount">The amount of damage taken</param>
+        public new void TakeDamage(int damageAmount)
+        {
+            if (damageAmount > hp)
             {
-                if (damageAmount > hp)
-                {
-                    hp = 0;
-                    Die();
-                }
-                else
-                    hp -= damageAmount;
+                hp = 0;
+                Die();
             }
+            else
+                hp -= damageAmount;
+        }
 
-            //TODO: Method to call that should update the game to signal the Player has died
-            public new void Die()
-            {
+        //TODO: Method to call that should update the game to signal the Player has died
+        public new void Die()
+        {
 
-            }
+        }
 
-            //TODO: Method to stun the player for the amount of time chosen
-            public new void Stun(int stunFrames)
-            {
+        //TODO: Method to stun the player for the amount of time chosen
+        public new void Stun(int stunFrames)
+        {
 
-            }
+        }
         #endregion
 
         #region Update
         public override void Update()
+        {
+            //base.Update();
+            prevState = kbState;
+            kbState = Keyboard.GetState();
+            switch (state)
             {
-                //base.Update();
-                prevState = kbState;
-                kbState = Keyboard.GetState();
-                if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
+                case (PlayerState.Walk):
                 {
-                    state = PlayerState.Walk;
-                    if (kbState.IsKeyDown(Keys.Right))
+                    velX = 10;
+                    velY = 0;
+                    if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
                     {
-                        right = true;
-                    }
-                    if (kbState.IsKeyDown(Keys.Left))
-                    {
-                        right = false;
-                    }
-                }
-                else
-                {
-                    state = PlayerState.Idle;
-                }
-                switch (state)
-                {
-                    case (PlayerState.Walk):
-                    {
-                        if (right)
-                            velX = 10;
-                        else
-                            velX = -10;
+                        state = PlayerState.Walk;
+                        if (kbState.IsKeyDown(Keys.Right))
+                        {
+                            right = true;
+                        }
+                        if (kbState.IsKeyDown(Keys.Left))
+                        {
+                            right = false;
+                        }
                         Gravity();
-                        Move();
-                        break;
+                        Move(right);
                     }
-                    case (PlayerState.Jump):
+                    if (kbState.IsKeyDown(Keys.Up))
                     {
-                        break;
+                        state = PlayerState.Jump;
+                    } 
+                    break;
+                }
+                case (PlayerState.Jump):
+                {
+                    velY = -10;
+                    Gravity();
+                    if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
+                    {
+                        state = PlayerState.Walk;
+                        if (kbState.IsKeyDown(Keys.Right))
+                        {
+                            right = true;
+                        }
+                        if (kbState.IsKeyDown(Keys.Left))
+                        {
+                            right = false;
+                        }
+                        Move(right);
                     }
-                    case (PlayerState.Idle):
+                    break;
+                }
+                case (PlayerState.Idle):
+                {
+                    velX = 0;
+                    velY = 0;
+                    Gravity();
+                    if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
                     {
-                        velX = 0;
+                        state = PlayerState.Walk;
+                        if (kbState.IsKeyDown(Keys.Right))
+                        {
+                            right = true;
+                        }
+                        if (kbState.IsKeyDown(Keys.Left))
+                        {
+                            right = false;
+                        }
+                        if (kbState.IsKeyDown(Keys.Up))
+                        {
+                            state = PlayerState.Jump;
+                        }
                         Gravity();
-                        Move();
-                        break;
+                        Move(right);
                     }
-                    case (PlayerState.MAttack):
-                    {
-                        break;
-                    }
-                    case (PlayerState.Crouch):
-                    {
-                        break;
-                    }
-                    case (PlayerState.Interact):
-                    {
-                        break;
-                    }
-                    case (PlayerState.Dead):
-                    {
-                        break;
-                    }
+                    break;
+                }
+                case (PlayerState.MAttack):
+                {
+                    break;
+                }
+                case (PlayerState.Crouch):
+                {
+                    break;
+                }
+                case (PlayerState.Interact):
+                {
+                    break;
+                }
+                case (PlayerState.Dead):
+                {
+                    break;
                 }
             }
+        }
         #endregion
 
         #region Draw
-            public override void Draw(SpriteBatch sb)
+        public override void Draw(SpriteBatch sb)
+        {
+            switch (state)
             {
-                switch (state)
+                case (PlayerState.Walk):
                 {
-                    case (PlayerState.Walk):
-                    {
-                        break;
-                    }
-                    case (PlayerState.Jump):
-                    {
-                        break;
-                    }
-                    case (PlayerState.Idle):
-                    {
-                        break;
-                    }
-                    case (PlayerState.MAttack):
-                    {
-                        break;
-                    }
-                    case (PlayerState.Crouch):
-                    {
-                        break;
-                    }
-                    case (PlayerState.Interact):
-                    {
-                        break;
-                    }
-                    case (PlayerState.Dead):
-                    {
-                        break;
-                    }
+                    break;
                 }
-                base.Draw(sb);
+                case (PlayerState.Jump):
+                {
+                    break;
+                }
+                case (PlayerState.Idle):
+                {
+                    break;
+                }
+                case (PlayerState.MAttack):
+                {
+                    break;
+                }
+                case (PlayerState.Crouch):
+                {
+                    break;
+                }
+                case (PlayerState.Interact):
+                {
+                    break;
+                }
+                case (PlayerState.Dead):
+                {
+                    break;
+                }
             }
+            base.Draw(sb);
+        }
         #endregion
 
 

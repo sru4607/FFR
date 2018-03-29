@@ -11,42 +11,64 @@ namespace ActualGame
 {
     class Debug
     {
+        #region fields
         Dictionary<String, Texture2D > allTexts;
         List<GameObject> allObjects = new List<GameObject>();
+        #endregion
+
+        #region constructor
         public Debug(Dictionary<String, Texture2D> temp)
         {
             allTexts = temp;
         }
+        #endregion
+
+        #region method
         public void InstantiateAll()
         {
+            //creates a floor
             allObjects.Add(new GameObject());
-            allObjects[0].Height = 20;
-            allObjects[0].Width = 800;
-            allObjects[0].Y = 400;
-            allObjects[0].HitBox = new BoundingRectangle(allObjects[0].Rect.Center, allObjects[0].Rect.Width, allObjects[0].Rect.Height);
             allObjects[0].LoadTexture(allTexts["Floor"]);
+            allObjects[0].X = 80;
+            allObjects[0].Y = 300;
+            allObjects[0].Width = 500;
+            allObjects[0].Height = 64;
+            allObjects[0].hitbox = new BoundingRectangle(new Point(), 0, 0);
+            ((BoundingRectangle)allObjects[0].hitbox).GetRect = allObjects[0].Rect;
 
+            //creates a player
             allObjects.Add(new Player());
-            allObjects[1].Height = 150;
-            allObjects[1].Width = 50;
-            allObjects[1].Y = 200;
-            allObjects[1].X = 200;
-            allObjects[1].Physics = true;
             allObjects[1].LoadTexture(allTexts["PenPen"]);
+            allObjects[1].X = 100;
+            allObjects[1].Y = 100;
+            allObjects[1].Width = 64;
+            allObjects[1].Height = 128;
+            ((BoundingRectangle)(allObjects[1].hitbox)).GetRect = allObjects[1].Rect;
+
+            //creates an enemy
+            allObjects.Add(new Enemy());
+            allObjects[2].LoadTexture(allTexts["PenPen"]);
+            allObjects[2].X = 300;
+            allObjects[2].Y = 100;
+            allObjects[2].Width = 64;
+            allObjects[2].Height = 128;
+            allObjects[2].HitBox = null;
 
         }
+        #endregion
+
+        #region Update
         public void UpdateAll()
         {
-            for(int i = 0; i<allObjects.Count; i++)
+            for(int i = 0; i < allObjects.Count; i++)
             {
                 allObjects[i].Update();
             }
-            for(int i = 0; i<allObjects.Count; i++)
-            {
-                if(allObjects[i].Physics)
-                    allObjects[i].Collision(allObjects);
-            }
+            allObjects[1].Collision(allObjects);
         }
+        #endregion
+
+        #region Draw
         public void Draw(SpriteBatch sb)
         {
             foreach (GameObject go in allObjects)
@@ -55,5 +77,6 @@ namespace ActualGame
             }
             
         }
+        #endregion
     }
 }

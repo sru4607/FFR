@@ -10,36 +10,32 @@ namespace ActualGame
     class BoundingRectangle : BoundingShapes
     {
         #region fields
-            Rectangle mainRect;
+        Rectangle mainRect;
         #endregion
 
         #region Constructor
-            public BoundingRectangle(Point center, float width, float height)
-            {
-                mainRect = new Rectangle((center.X - (int)width / 2), (center.Y - (int)height / 2), (int)width, (int)height);
-            }
+        public BoundingRectangle(Point center, float width, float height)
+        {
+            mainRect = new Rectangle((center.X - (int)width / 2), (center.Y - (int)height / 2), (int)width, (int)height);
+        }
         #endregion
 
         #region Methods
-            protected override Point CorrectCollision()
-            {
-                throw new NotImplementedException();
-            }
 
-            public bool RectangleRectangle(BoundingRectangle other)
+        public bool RectangleRectangle(BoundingRectangle other)
+        {
+            Rectangle otherRect = other.GetRect;
+            if (mainRect.Intersects(otherRect))
             {
-                Rectangle otherRect = other.GetRect;
-                if (mainRect.Intersects(otherRect))
-                {
-                    return true;
-                }
-                return false;
+                return true;
             }
+            return false;
+        }
 
-            public void MoveRect(Point center)
-            {
-                mainRect.Location = new Point(center.X - mainRect.Width / 2, center.Y - mainRect.Height / 2);
-            }
+        public void MoveHitBox(Point center)
+        {
+            mainRect.Location = new Point(center.X - mainRect.Width / 2, center.Y - mainRect.Height / 2);
+        }
         #endregion
 
         #region Properties
@@ -48,6 +44,10 @@ namespace ActualGame
                 get
                 {
                     return mainRect;
+                }
+                set
+                {
+                    mainRect = value;
                 }
             }
 

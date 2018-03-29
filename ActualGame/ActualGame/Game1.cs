@@ -8,7 +8,7 @@ namespace ActualGame
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    enum MainGameState {menu, pause, quit, inGame, gameOver }
+    enum MainGameState {debug, menu, pause, quit, inGame, gameOver }
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
@@ -40,7 +40,7 @@ namespace ActualGame
             testEnemy = new Enemy();
             mainDisplay = new Display(GraphicsDevice);
             base.Initialize();
-            currentState = MainGameState.inGame;
+            currentState = MainGameState.debug;
             debugger = new Debug(allTextures);
             debugger.InstantiateAll();
             //levelOne = new World("Level One", "level1.txt");
@@ -85,6 +85,11 @@ namespace ActualGame
             // TODO: Add your update logic here
             switch (currentState)
             {
+                case (MainGameState.debug):
+                    {
+                        debugger.UpdateAll();
+                        break;
+                    }
                 case (MainGameState.inGame):
                     {
 
@@ -126,10 +131,14 @@ namespace ActualGame
             spriteBatch.Begin(transformMatrix: temp);
             switch(currentState)
             {
-                case (MainGameState.inGame):
+                case (MainGameState.debug):
                     {
                         debugger.Draw(spriteBatch);
-                        //testEnemy.Draw(spriteBatch);
+                        break;
+                    }
+                case (MainGameState.inGame):
+                    {
+                        
                         break;
                     }
                 case (MainGameState.menu):
