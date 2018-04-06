@@ -26,7 +26,9 @@ namespace ActualGame
         #endregion
 
         #region Properties
-        // Returns whether the game object can collide with the player
+        /// <summary>
+        /// Returns whether the game object can collide with the player
+        /// </summary>
         public bool NoClip
         {
             get { return noClip; }
@@ -38,43 +40,55 @@ namespace ActualGame
         {
             get { return step >= 15; }
         }
-        
-        // Get and set for the X value of the game object hitbox's top-left corner
+
+        /// <summary>
+        /// Get and set for the X value of the game object hitbox's top-left corner
+        /// </summary>
         public int X
         {
             get { return rect.X; }
             set { rect = new Rectangle(value, Rect.Y, Rect.Width, Rect.Height); }
         }
 
-        // Get and set for the Y value of the game object hitbox's top-left corner
+        /// <summary>
+        /// Get and set for the Y value of the game object hitbox's top-left corner
+        /// </summary>
         public int Y
         {
             get { return rect.Y; }
             set { rect = new Rectangle(Rect.X, value, Rect.Width, Rect.Height); }
         }
 
-        // Get and set for the width of the game object hitbox
+        /// <summary>
+        /// Get and set for the width of the game object hitbox
+        /// </summary>
         public int Width
         {
             get { return rect.Width; }
             set { rect = new Rectangle(Rect.X, Rect.Y, value, Rect.Height); }
         }
 
-        // Get and set for the height of the game object hitbox
+        /// <summary>
+        /// Get and set for the height of the game object hitbox
+        /// </summary>
         public int Height
         {
             get { return rect.Height; }
             set { rect = new Rectangle(Rect.X, Rect.Y, Rect.Width, value); }
         }
 
-        // Get and set for the entirety of the hitbox as a Rectangle
+        /// <summary>
+        /// Get and set for the entirety of the hitbox as a Rectangle
+        /// </summary>
         public Rectangle Rect
         {
             get { return rect; }
             set { rect = value; }
         }
 
-        // Get and set for collision hitbox
+        /// <summary>
+        /// Get and set for collision hitbox
+        /// </summary>
         // TODO: Confirm this is correct documentation
         public BoundingShapes HitBox
         {
@@ -82,7 +96,9 @@ namespace ActualGame
             set { hitbox = value; }
         }
 
-        // Get and set for whether the object experiences physics (most notably, gravity)
+        /// <summary>
+        /// Get and set for whether the object experiences physics (most notably, gravity)
+        /// </summary>
         public bool Physics
         {
             get { return physicsObject; }
@@ -90,8 +106,8 @@ namespace ActualGame
         }
         #endregion
 
-        // TODO Update Constructor fields (possibly have GameObject() take parameters)
         #region Constructor
+        // TODO: Update Constructor fields (possibly have GameObject() take parameters)
         public GameObject()
         {
             rect = new Rectangle();
@@ -207,7 +223,7 @@ namespace ActualGame
 
         #region Draw
         /// <summary>
-        /// 
+        /// Draws the object to the screen based off rect's parameters
         /// </summary>
         /// <param name="sb"></param>
         virtual public void Draw(SpriteBatch sb)
