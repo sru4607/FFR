@@ -26,69 +26,63 @@ namespace ActualGame
         #endregion
 
         #region Properties
-        /// <summary>
-        /// 
-        /// </summary>
+        // Returns whether the game object can collide with the player
         public bool NoClip
         {
             get { return noClip; }
             set { noClip = value; }
         }
+
+        // TODO: Add description
         public bool Finished
         {
-            get
-            {
-                return step >= 15;
-            }
+            get { return step >= 15; }
         }
-
+        
+        // Get and set for the X value of the game object hitbox's top-left corner
         public int X
         {
             get { return rect.X; }
             set { rect = new Rectangle(value, Rect.Y, Rect.Width, Rect.Height); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        // Get and set for the Y value of the game object hitbox's top-left corner
         public int Y
         {
             get { return rect.Y; }
             set { rect = new Rectangle(Rect.X, value, Rect.Width, Rect.Height); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        // Get and set for the width of the game object hitbox
         public int Width
         {
             get { return rect.Width; }
             set { rect = new Rectangle(Rect.X, Rect.Y, value, Rect.Height); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        // Get and set for the height of the game object hitbox
         public int Height
         {
             get { return rect.Height; }
             set { rect = new Rectangle(Rect.X, Rect.Y, Rect.Width, value); }
         }
 
-        /// <summary>
-        /// Interacts with all parameters of rect
-        /// </summary>
+        // Get and set for the entirety of the hitbox as a Rectangle
         public Rectangle Rect
         {
             get { return rect; }
             set { rect = value; }
         }
+
+        // Get and set for collision hitbox
+        // TODO: Confirm this is correct documentation
         public BoundingShapes HitBox
         {
             get { return hitbox; }
             set { hitbox = value; }
         }
 
+        // Get and set for whether the object experiences physics (most notably, gravity)
         public bool Physics
         {
             get { return physicsObject; }
@@ -96,10 +90,10 @@ namespace ActualGame
         }
         #endregion
 
+        // TODO Update Constructor fields (possibly have GameObject() take parameters)
         #region Constructor
         public GameObject()
         {
-            // TODO Update these fields (possibly have GameObject() take parameters)
             rect = new Rectangle();
             velX = 0.0;
             velY = 0.0;
