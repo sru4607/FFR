@@ -1,13 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace ActualGame
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    enum MainGameState {menu, pause, quit, inGame, gameOver }
+    enum MainGameState {debug, menu, pause, quit, inGame, gameOver }
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
@@ -16,7 +17,10 @@ namespace ActualGame
         Display mainDisplay;
         World levelOne;
         MainGameState currentState;
-
+        Dictionary<string, Texture2D> allTextures;
+        Debug debugger;
+        
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -31,11 +35,23 @@ namespace ActualGame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            testEnemy = new Enemy(new Rectangle(100, 100, 150, 250), new Rectangle(0, -50, 10, 250), new Rectangle(100, 100, 150, 250), 5, true, 1);
+            // Initialize an array of textures for use
+            allTextures = new Dictionary<string, Texture2D>();
+
+            // Generic enemy used to test bugs/features
+            testEnemy = new Enemy();
+
+            // Base game logic
             mainDisplay = new Display(GraphicsDevice);
             base.Initialize();
-            currentState = MainGameState.inGame;
+
+            // Set the initial state of the game
+            currentState = MainGameState.debug;
+
+            // Values used for debugging purposes
+            debugger = new Debug(allTextures);
+            debugger.InstantiateAll();
+
             //levelOne = new World("Level One", "level1.txt");
         }
 
@@ -45,10 +61,21 @@ namespace ActualGame
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
+            // Create a new SpriteBatch, which can be used to draw textures
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Import levels
             //levelOne.Import();
-            testEnemy.LoadTexture(Content.Load<Texture2D>("missingtexture"));
+
+            // Add all necessary textures to the dictionary
+            allTextures.Add("Floor", Content.Load<Texture2D>("missingtexture"));
+            allTextures.Add("PenPen", Content.Load<Texture2D>("PenPen"));
+            allTextures.Add("missingtexture", Content.Load<Texture2D>("missingtexture"));
+            // TODO: Add these textures/update below values once creates
+            // allTextures.Add("Enemy", Content.Load<Texture2D>("missingtexture"));
+
+            // Sync in-game objects with their dictionary textures
+            testEnemy.LoadTexture(allTextures["missingtexture"]);
 
             // TODO: use this.Content to load your game content here
         }
@@ -71,10 +98,16 @@ namespace ActualGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            debugger.UpdateAll();
             // TODO: Add your update logic here
             switch (currentState)
             {
+                case (MainGameState.debug):
+                    {
+                        debugger.UpdateAll();
+                        break;
+                        testEnemy.Update();
+                    }
                 case (MainGameState.inGame):
                     {
 
@@ -116,9 +149,15 @@ namespace ActualGame
             spriteBatch.Begin(transformMatrix: temp);
             switch(currentState)
             {
+                case (MainGameState.debug):
+                    {
+                        debugger.Draw(spriteBatch);
+                        testEnemy.Draw(spriteBatch);
+                        break;
+                    }
                 case (MainGameState.inGame):
                     {
-                        testEnemy.Draw(spriteBatch);
+                        
                         break;
                     }
                 case (MainGameState.menu):

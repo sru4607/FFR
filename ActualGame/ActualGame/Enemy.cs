@@ -6,70 +6,43 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-enum FSM { Docile, Search, Aggro, Damaged, Attack }
+enum EnemyState { Docile, Search, Aggro, Damaged, Attack }
 namespace ActualGame
 {
     class Enemy : Character, ICombat
     {
-        // Fields
+        #region Fields
         AI mainAi;
+        #endregion
 
-        // TODO: Organize this class with #regions
-        // TODO: Create a more generic Enemy constructor that only requires an X, Y position (and possibly AI)
+        #region Properties
 
+        #endregion
+
+        #region Constructor
         /// <summary>
-        /// Creates a new instance of the Enemy class
+        /// Creates a generic Enemy
         /// </summary>
-        /// <param name="hurtBox">The hitbox for incoming damage</param>
-        /// <param name="mBox">The hitbox of outgoing attacks (X, Y is localized from the center of the hitbox)</param>
-        /// <param name="drawBox">The Rectangle that will be used to draw the player (X, Y will be auto-updated by hurtBox)</param>
-        /// <param name="hp">Amount of health the character has</param>
-        /// <param name="melee">True if the character is melee-based, false if the character is ranged</param>
-        /// <param name="damage">The amount of damage each attack does</param>
-        public Enemy(Rectangle hurtBox, Rectangle mBox, Rectangle drawBox, int hp, bool melee, int damage)
-            : base(hurtBox, mBox, drawBox, hp, melee, damage)
+        public Enemy()
+            : base()
         {
-            mainAi = new AI();
-        }
+            // Initialize the AI pattern
+            mainAi = new AI(PatrolType.Moving);
 
-        public override void Update()
-        {
-            // TODO Implement AI movement
-
-            base.Update();
+            // Temporary values to render to screen
+            rect.X = 400;
+            rect.Y = 300;
+            rect.Width = 128;
+            rect.Height = 128;
+            noClip = true;
+            mainAi = new AI(PatrolType.Standing);
         }
-        public override void Draw(SpriteBatch sb)
-        {
-            base.Draw(sb);
-        }
+        #endregion
 
-        /*
-        /// <summary>
-        /// Determines whether an object on the screen is colliding with the enemy
-        /// </summary>
-        /// <param name="hitboxes">List of objects from the quad tree</param>
-        /// <returns>True if collision is present, else returns false</returns>
-        public bool IsHit(List<GameObject> objects)
-        {
-            // TODO Ensure a quad tree *and its children* are used
-            foreach (GameObject obj in objects)
-            {
-                if (Rect.Intersects(obj.Rect))
-                {
-                    // TODO Implement method of selectively ignoring collision (e.g. other enemies)
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-         Is this really necessary? Because GameObject should handle collision*/
-        
-        // TODO Implement ICombat TakeDamage() into combat collision detection method
-
+        #region Methods
         public new void TakeDamage(int damageAmount)
         {
-            if (damageAmount > hp)
+            if (damageAmount >= hp)
             {
                 hp = 0;
                 Die();
@@ -81,13 +54,37 @@ namespace ActualGame
 
         public new void Die()
         {
-
+            // TODO: Implement during combat
         }
 
 
         public new void Stun(int stunFrames)
         {
-
+            // TODO: Implement during combat
         }
+        #endregion
+
+        #region Update
+        public override void Update()
+        {
+            // TODO: Update so rect.Y is moved in the same call
+            // NOTE: Do NOT call .MoveAI() twice, it will count as two frames of movement
+            // NOTE: Also only moves in the X direction right now
+            rect.X += (int)mainAi.MoveAI();
+
+            base.Update();
+        }
+        #endregion
+
+        #region Draw
+        public override void Draw(SpriteBatch sb)
+        {
+            if(mainAi.FacingRight)
+                sb.Draw(texture, rect, null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, 0);
+            // Draws to the screen with a horizontal flip if the AI is facing left
+            else
+                sb.Draw(texture, rect, null, Color.White, 0, new Vector2(0,0), SpriteEffects.FlipHorizontally, 0);
+        }
+        #endregion
     }
 }

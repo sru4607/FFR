@@ -3,41 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
 
 namespace ActualGame
 {
     //Enumeration for the FSM for the Player actions
-    public enum PlayerState { Walk, Jump, Idle, MAttack}
+    public enum PlayerState { Walk, Jump, Idle, MAttack, Crouch, Interact, Dead}
 
     class Player : Character, ICombat
     {
-        /// <summary>
-        /// Creates a new instance of the Player class
-        /// </summary>
-        /// <param name="hurtBox">The hitbox for incoming damage</param>
-        /// <param name="mBox">The hitbox of outgoing attacks (X, Y is localized from the center of the hitbox)</param>
-        /// <param name="drawBox">The Rectangle that will be used to draw the player (X, Y will be auto-updated by hurtBox)</param>
-        /// <param name="hp">Amount of health the character has</param>
-        /// <param name="melee">True if the character is melee-based, false if the character is ranged</param>
-        /// <param name="damage">The amount of damage each attack does</param>
-        public Player(Rectangle hurtBox, Rectangle mBox, Rectangle drawBox, int hp, bool melee, int damage)
-            :base(hurtBox, mBox, drawBox, hp, melee, damage)
+        #region Fields
+        PlayerState state;
+        KeyboardState kbState;
+        KeyboardState prevState;
+        #endregion
+
+        #region Properties
+
+        #endregion
+
+        #region Constructor
+        public Player(bool right = true)
+            : base(right)
         {
+            hitbox = new BoundingRectangle(this.Rect.Center, this.Rect.Width * 0.95f, this.Rect.Height * 0.95f);
 
+            state = PlayerState.Idle;
         }
+        #endregion
 
-        public override void Update()
-        {
-            base.Update();
-        }
-
-        public override void Draw(SpriteBatch sb)
-        {
-            base.Draw(sb);
-        }
-
+        #region Methods
         /// <summary>
         /// Reduces the health of the Player when they take damage, and calls the Die method if necessary
         /// </summary>
@@ -62,7 +59,165 @@ namespace ActualGame
         //TODO: Method to stun the player for the amount of time chosen
         public new void Stun(int stunFrames)
         {
-            
+
         }
+        #endregion
+
+        #region Update
+        public override void Update()
+        {
+            //base.Update();
+            prevState = kbState;
+            kbState = Keyboard.GetState();
+            switch (state)
+            {
+                case (PlayerState.Walk):
+                {
+                    Gravity();
+                    
+                    if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
+                    {
+                        velX = 3;
+                        state = PlayerState.Walk;
+                        if (kbState.IsKeyDown(Keys.Right))
+                        {
+                             
+                            right = true;
+                        }
+                        if (kbState.IsKeyDown(Keys.Left))
+                        {
+                            right = false;
+                        }
+                        
+                        
+                    }
+                    else
+                    {
+                        state = PlayerState.Idle;
+                    }
+                    Move(right);
+
+                    if (kbState.IsKeyDown(Keys.Up))
+                    {
+                        state = PlayerState.Jump;
+                    } 
+                    break;
+                }
+                case (PlayerState.Jump):
+                {
+                    Gravity();
+                    velY = -5;
+                    Gravity();
+                    if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
+                    {
+                        state = PlayerState.Walk;
+                        if (kbState.IsKeyDown(Keys.Right))
+                        {
+                            right = true;
+                        }
+                        if (kbState.IsKeyDown(Keys.Left))
+                        {
+                            right = false;
+                        }
+                    }
+                    else
+                    {
+                        state = PlayerState.Idle;
+                    }
+                    Move(right);
+                    break;
+                }
+                case (PlayerState.Idle):
+                {
+                    velX = 0;
+                    //velY = 0;
+                    Gravity();
+                    if (kbState.IsKeyDown(Keys.Right))
+                    {
+                        right = true;
+                        state = PlayerState.Walk;
+                    }
+                    if (kbState.IsKeyDown(Keys.Left))
+                    {
+                        right = false;
+                        state = PlayerState.Walk;
+                    }
+                    if (kbState.IsKeyDown(Keys.Up))
+                    {
+                        state = PlayerState.Jump;
+                    }
+                    if (kbState.IsKeyDown(Keys.Up))
+                    {
+                        state = PlayerState.Jump;
+                    }
+                        Move(right);
+                    break;
+                }
+                case (PlayerState.MAttack):
+                {
+                    break;
+                }
+                case (PlayerState.Crouch):
+                {
+                    break;
+                }
+                case (PlayerState.Interact):
+                {
+                    break;
+                }
+                case (PlayerState.Dead):
+                {
+                    break;
+                }
+            }
+        }
+        #endregion
+
+        #region Draw
+        public override void Draw(SpriteBatch sb)
+        {
+            switch (state)
+            {
+                case (PlayerState.Walk):
+                {
+                    break;
+                }
+                case (PlayerState.Jump):
+                {
+                    break;
+                }
+                case (PlayerState.Idle):
+                {
+                    break;
+                }
+                case (PlayerState.MAttack):
+                {
+                    break;
+                }
+                case (PlayerState.Crouch):
+                {
+                    break;
+                }
+                case (PlayerState.Interact):
+                {
+                    break;
+                }
+                case (PlayerState.Dead):
+                {
+                    break;
+                }
+            }
+            base.Draw(sb);
+        }
+        #endregion
+
+
+
+
+
+
+
+
+        
     }
 }

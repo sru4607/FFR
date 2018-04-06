@@ -42,13 +42,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AI.cs" />
+    <Compile Include="BoundingRectangle.cs" />
     <Compile Include="BoundingCircle.cs" />
+    <Compile Include="BoundingShapes.cs" />
     <Compile Include="Character.cs" />
+    <Compile Include="Debug.cs" />
     <Compile Include="Display.cs" />
     <Compile Include="ICombat.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="Line.cs" />
     <Compile Include="NPC.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Player.cs" />
@@ -60,12 +62,15 @@
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=1.0.617.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Extended.1.0.617\lib\portable-net45+win8+wpa81\MonoGame.Extended.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
     </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
