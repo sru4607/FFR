@@ -105,8 +105,11 @@ namespace ActualGame
                 }
                 case (PlayerState.Jump):
                 {
-                    Gravity();
-                    velY = -5;
+                    if (velY == 0)
+                    {
+                        Gravity();
+                        velY = -5;
+                    }
                     Gravity();
                     if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
                     {

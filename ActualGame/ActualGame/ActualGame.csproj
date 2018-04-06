@@ -42,8 +42,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AI.cs" />
-    <Compile Include="BoundingRectangle.cs" />
     <Compile Include="BoundingCircle.cs" />
+    <Compile Include="BoundingRectangle.cs" />
     <Compile Include="BoundingShapes.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Debug.cs" />
