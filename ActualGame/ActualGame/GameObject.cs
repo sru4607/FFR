@@ -21,7 +21,7 @@ namespace ActualGame
         protected int step;
         static float grav = 9.8f;
         protected bool physicsObject = false;
-        public BoundingShapes hitbox;
+        public HitBoxes hitbox;
         public bool noClip = false;
         #endregion
 
@@ -83,10 +83,19 @@ namespace ActualGame
             get { return rect; }
             set { rect = value; }
         }
-        public BoundingShapes HitBox
+        public Rectangle Prev
+        {
+            get { return prev; }
+            set { prev = value; }
+        }
+        public HitBoxes HitBox
         {
             get { return hitbox; }
             set { hitbox = value; }
+        }
+        public Vector2 Velocity
+        {
+            get { return new Vector2((float)velX, (float)velY); }
         }
 
         public bool Physics
@@ -129,7 +138,7 @@ namespace ActualGame
             Y = (int)(Y + velY);
             if(hitbox != null)
             {
-                hitbox.Location = this.Rect.Location;
+                hitbox.Update();
             }
         }
 

@@ -28,7 +28,7 @@ namespace ActualGame
         public Player(bool right = true)
             : base(right)
         {
-            hitbox = new BoundingRectangle(this.Rect.Center, this.Rect.Width * 0.95f, this.Rect.Height * 0.95f);
+            hitbox = new HitBoxes(this,this.X,this.Y,this.Width,this.Height);
 
             state = PlayerState.Idle;
         }
