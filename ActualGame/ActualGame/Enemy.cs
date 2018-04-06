@@ -27,7 +27,7 @@ namespace ActualGame
             : base()
         {
             // Initialize the AI pattern
-            mainAi = new AI(PatrolType.Moving);
+            mainAi = new AI(this, PatrolType.Moving);
 
             // Temporary values to render to screen
             rect.X = 400;
@@ -35,7 +35,6 @@ namespace ActualGame
             rect.Width = 128;
             rect.Height = 128;
             noClip = true;
-            mainAi = new AI(PatrolType.Standing);
         }
         #endregion
 

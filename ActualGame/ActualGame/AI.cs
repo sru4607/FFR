@@ -16,15 +16,11 @@ namespace ActualGame
         #region Fields
         PatrolType patrolType;
         PatrolState patrolState;
-
-        // Number of frames to follow the movement pattern
-        int frameCounter;
-        int walkLeft;
-        int walkRight;
-        int pauseLeft;
-        int pauseRight;
-
-        double walkSpeed;
+        Enemy enemy; // Reference variable to what the AI is controlling
+        int frameCounter; // Counter for how many frames the AI has paused movement for
+        int pauseLeft; // Number of frames to pause when facing left during the the docile movement pattern
+        int pauseRight; // Number of frames to pause when facing right during the the docile movement pattern
+        double walkSpeed; // How far the enemy moves in a single frame
         bool facingRight; // 0 is facing left, 1 is facing right
         #endregion
 
@@ -40,33 +36,43 @@ namespace ActualGame
         #endregion
 
         #region Constructor
-        // TODO: Implement non-generic values as overloads
-
         /// <summary>
         /// Initializes a generic patrol pattern
         /// </summary>
+        /// <param name="enemy">Reference to the enemy that the AI is controlling</param>
         /// <param name="patrolType">Pattern of movement</param>
-        public AI(PatrolType patrolType)
+        public AI(Enemy enemy, PatrolType patrolType)
         {
+            this.enemy = enemy;
             this.patrolType = patrolType;
             patrolState = PatrolState.PauseRight;
             facingRight = true;
             walkSpeed = 3.0;
+            frameCounter = 0;
 
-            if(patrolType == PatrolType.Standing)
-            {
-                walkLeft = 0;
-                walkRight = 0;
-            }
-            else if(patrolType == PatrolType.Moving)
-            {
-                walkLeft = 60;
-                walkRight = 60;
-            }
-
-            // TODO: Make these adjustable
+            // Pauses for 2 seconds on each side by default
             pauseLeft = 120;
             pauseRight = 120;
+        }
+
+        /// <summary>
+        /// Initializes a more specific patrol pattern
+        /// </summary>
+        /// <param name="enemy">Reference to the enemy that the AI is controlling</param>
+        /// <param name="patrolType">Pattern of movement</param>
+        /// <param name="walkSpeed">The distance traveled in one frame of movement</param>
+        /// <param name="pauseLeft"></param>
+        /// <param name="pauseRight"></param>
+        public AI(Enemy enemy, PatrolType patrolType, double walkSpeed, int pauseLeft = 120, int pauseRight = 120)
+        {
+            this.enemy = enemy;
+            this.patrolType = patrolType;
+            this.walkSpeed = walkSpeed;
+            this.pauseLeft = pauseLeft;
+            this.pauseRight = pauseRight;
+
+            patrolState = PatrolState.PauseRight;
+            frameCounter = 0;
         }
         #endregion
 
@@ -75,28 +81,26 @@ namespace ActualGame
         /// Updates the enemy's movement AI by 1 frame and returns the change in X position 
         /// Called through a class property
         /// </summary>
-        public double MoveAI()
+        public void MoveAI()
         {
             // TODO: Implement vertical movement into the return statement
-
+            // TODO: Have the method update enemy.rect's location
+            // TODO: Have the movement update based on collision hitbox detection (possibly vertices or on a grid)
             // Update the current state
             switch (patrolState)
             {
-                // For the current finite state,
                 case PatrolState.WalkLeft:
-                    // If the end of the frame's cycle has been reached,
-                    if (frameCounter >= walkLeft)
+                    /*
+                    if (frameCounter >= 999999)
                     {
-                        // Move to the next finite state and reset the counter
                         frameCounter = 0;
                         patrolState = PatrolState.PauseLeft;
                     }
-                    // Otherwise, increase the frame count by one
                     else { frameCounter++; }
                     break;
 
                 case PatrolState.PauseLeft:
-                    if (frameCounter >= pauseLeft)
+                    if (frameCounter >= 999999)
                     {
                         frameCounter = 0;
                         patrolState = PatrolState.WalkRight;
@@ -106,7 +110,7 @@ namespace ActualGame
                     break;
 
                 case PatrolState.WalkRight:
-                    if (frameCounter >= walkRight)
+                    if (frameCounter >= 999999)
                     {
                         frameCounter = 0;
                         patrolState = PatrolState.PauseRight;
@@ -116,7 +120,7 @@ namespace ActualGame
 
 
                 case PatrolState.PauseRight:
-                    if (frameCounter >= pauseRight)
+                    if (frameCounter >= 999999)
                     {
                         frameCounter = 0;
                         patrolState = PatrolState.WalkLeft;
@@ -124,12 +128,16 @@ namespace ActualGame
                     }
                     else { frameCounter++; }
                     break;
+                    */
+                default:
+                    // Not implemented yet
+                    break;
             }
 
             // Move based off the current state
             switch (patrolState)
             {
-                // Return the change in movement
+                /*
                 case PatrolState.WalkLeft:
                     return -walkSpeed;
                 case PatrolState.PauseLeft:
@@ -138,8 +146,10 @@ namespace ActualGame
                     return walkSpeed;
                 case PatrolState.PauseRight:
                     return 0;
+                    */
                 default:
-                    throw new NotImplementedException("Unknown patrol state in AI.UpdateMovement()");
+                    // Not implemented yet
+                    break;
             }
         }
         #endregion
