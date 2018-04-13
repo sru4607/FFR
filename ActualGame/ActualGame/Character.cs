@@ -61,8 +61,9 @@ namespace ActualGame
         /// <summary>
         /// used to check if another character is hit by a melee attack
         /// </summary>
-        public virtual void MAttack(Character c)
+        public virtual void MAttack()
         {
+            for
             if (mBox.CheckCollision(c.HitBox))
             {
                 c.TakeDamage(mDamage);
