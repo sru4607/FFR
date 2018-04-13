@@ -23,6 +23,7 @@ namespace ActualGame
         protected bool physicsObject = false;
         public BoundingShapes hitbox;
         public bool noClip = false;
+        protected QuadTreeNode node;
         #endregion
 
         #region Properties
@@ -125,11 +126,12 @@ namespace ActualGame
         /// <param name="y">Y dimension of the draw box</param>
         /// <param name="width">Width of the draw box</param>
         /// <param name="height">Height of the draw box</param>
-        public GameObject(int x, int y, int width, int height)
+        public GameObject(int x, int y, int width, int height, QuadTreeNode node)
         {
             rect = new Rectangle(x, y, width, height);
             velX = 0.0;
             velY = 0.0;
+            this.node = node;
         }
         #endregion
 
@@ -233,7 +235,10 @@ namespace ActualGame
         virtual public void Update()
         {
             if (this is Player temp)
+            {
                 temp.Update();
+            }
+            node = node.GetContainingQuad(this);
 
         }
         #endregion
