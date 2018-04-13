@@ -99,10 +99,26 @@ namespace ActualGame
         #endregion
 
         #region Constructor
-        // TODO: Update Constructor fields (possibly have GameObject() take parameters)
+        /// <summary>
+        /// Generic GameObject without parameters
+        /// </summary>
         public GameObject()
         {
             rect = new Rectangle();
+            velX = 0.0;
+            velY = 0.0;
+        }
+
+        /// <summary>
+        /// Creates a generic GameObject with the provided Rectangle dimensions
+        /// </summary>
+        /// <param name="x">X dimension of the draw box</param>
+        /// <param name="y">Y dimension of the draw box</param>
+        /// <param name="width">Width of the draw box</param>
+        /// <param name="height">Height of the draw box</param>
+        public GameObject(int x, int y, int width, int height)
+        {
+            rect = new Rectangle(x, y, width, height);
             velX = 0.0;
             velY = 0.0;
         }

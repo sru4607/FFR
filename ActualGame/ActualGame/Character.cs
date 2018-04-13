@@ -17,6 +17,7 @@ namespace ActualGame
         protected int rDamage;
         protected int stunFrames;
         protected bool right;
+        protected QuadTreeNode node;
         #endregion
 
         #region Properties
@@ -39,20 +40,45 @@ namespace ActualGame
 
         #region Constructor
         /// <summary>
-        /// Creates a new instance of the Character class
+        /// Creates a generic instance of the Character class
         /// </summary>
-        public Character(bool right = true)
-            : base()
+        /// <param name="x">X location of the Character</param>
+        /// <param name="y">Y location of the Character</param>
+        /// <param name="node">Reference to the quad tree used in-game</param>
+        /// <param name="right">Whether the character starts facing right</param>
+        public Character(int x, int y, QuadTreeNode node, bool right = true)
+            // Defaults to a width of 64 and height of 128
+            : base(x, y, 64, 128)
         {
+            this.node = node;
             hp = 1;
             mBox = new Rectangle(rect.Location.X + 32, rect.Location.Y, 32, 56);
             mDamage = 0;
             rDamage = 0;
             stunFrames = 0;
-            right = true;
+            this.right = right;
         }
 
-        // TODO: add parameterized constructor
+        /// <summary>
+        /// Creates a Character with a specific width and height
+        /// </summary>
+        /// <param name="x">X position of the character</param>
+        /// <param name="y">Y position of the character</param>
+        /// <param name="width">Width of the character's draw hitbox</param>
+        /// <param name="height">Height of the character's draw hitbox</param>
+        /// <param name="node">Reference to the quad tree used in-game</param>
+        /// <param name="right">True if the character faces right, else false</param>
+        public Character(int x, int y, int width, int height, QuadTreeNode node, bool right = true)
+            : base(x, y, width, height)
+        {
+            this.node = node;
+            hp = 1;
+            mBox = new Rectangle(rect.Location.X + 32, rect.Location.Y, 32, 56);
+            mDamage = 0;
+            rDamage = 0;
+            stunFrames = 0;
+            this.right = right;
+        }
         #endregion
 
         #region Methods

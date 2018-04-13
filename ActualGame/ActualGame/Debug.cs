@@ -11,12 +11,17 @@ namespace ActualGame
 {
     class Debug
     {
-        #region fields
+        #region Fields
         Dictionary<String, Texture2D > allTexts;
         List<GameObject> allObjects = new List<GameObject>();
+        QuadTreeNode node; // Passed reference
         #endregion
 
-        #region constructor
+        #region Constructor
+        /// <summary>
+        /// Creates a new Debug instance
+        /// </summary>
+        /// <param name="temp">???</param>
         public Debug(Dictionary<String, Texture2D> temp)
         {
             allTexts = temp;
@@ -27,29 +32,16 @@ namespace ActualGame
         public void InstantiateAll()
         {
             //creates a floor
-            allObjects.Add(new GameObject());
+            allObjects.Add(new GameObject(80, 300, 500, 64));
             allObjects[0].LoadTexture(allTexts["Floor"]);
-            allObjects[0].X = 80;
-            allObjects[0].Y = 300;
-            allObjects[0].Width = 500;
-            allObjects[0].Height = 64;
 
             //creates a player
-            allObjects.Add(new Player());
+            allObjects.Add(new Player(100, 100, node));
             allObjects[1].LoadTexture(allTexts["PenPen"]);
-            allObjects[1].X = 100;
-            allObjects[1].Y = 100;
-            allObjects[1].Width = 64;
-            allObjects[1].Height = 128;
-
-
+            
             //creates an enemy
-            allObjects.Add(new Enemy());
+            allObjects.Add(new Enemy(300, 100, node, PatrolType.Standing));
             allObjects[2].LoadTexture(allTexts["PenPen"]);
-            allObjects[2].X = 300;
-            allObjects[2].Y = 100;
-            allObjects[2].Width = 64;
-            allObjects[2].Height = 128;
 
         }
         #endregion
