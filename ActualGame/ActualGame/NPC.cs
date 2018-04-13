@@ -19,10 +19,18 @@ namespace ActualGame
         #endregion
 
         #region Constructor
-        public NPC()
-            {
+        /// <summary>
+        /// Creates a generic NPC with X and Y values
+        /// </summary>
+        /// <param name="x">X location of the NPC</param>
+        /// <param name="y">Y location of the NPC</param>
+        /// <param name="node">Reference to the QuadTree</param>
+        public NPC(int x, int y, QuadTreeNode node)
+            // Defaults to a width of 64 and a height of 128
+            :base(x, y, 64, 128, node)
+        {
 
-            }
+        }
         #endregion
 
         #region Methods

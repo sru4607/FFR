@@ -25,8 +25,16 @@ namespace ActualGame
         #endregion
 
         #region Constructor
-        public Player(bool right = true)
-            : base(right)
+        /// <summary>
+        /// Creates a generic Player class at the X, Y coordinates provided
+        /// </summary>
+        /// <param name="x">Starting X location of the player</param>
+        /// <param name="y">Starting Y location of the player</param>
+        /// <param name="node">Reference to the QuadTree used in Game1(?)</param>
+        /// <param name="right">Whether the player starts facing right</param>
+        public Player(int x, int y, QuadTreeNode node, bool right = true)
+            // Defaults to a hitbox width of 64 and hitbox height of 128
+            : base(x, y, 64, 128, node, right)
         {
             hitbox = new BoundingRectangle(this.Rect.Center, this.Rect.Width * 0.95f, this.Rect.Height * 0.95f);
 
