@@ -23,6 +23,9 @@ namespace ActualGame
 
         //The divisions of this node
         private QuadTreeNode[] divisions;
+
+        //The parent of this node
+        private QuadTreeNode parent;
         #endregion
 
         #region Properties
@@ -40,6 +43,15 @@ namespace ActualGame
         /// A property returning the GameObjects in the node
         /// </summary>
         public List<GameObject> Objects { get { return objects; } }
+
+        /// <summary>
+        /// A property to get or set the parent QuadTreeNode (null if none exists)
+        /// </summary>
+        public QuadTreeNode Parent
+        {
+            get { return parent; }
+            set { parent = value; }
+        }
         #endregion
 
         #region Constructor
@@ -55,6 +67,7 @@ namespace ActualGame
             rectangle = new Rectangle(x, y, width, height);
             objects = new List<GameObject>();
             divisions = null;
+            parent = null;
         }
         #endregion
 
@@ -100,7 +113,7 @@ namespace ActualGame
             //Divides only if there are no divisions already
             if(divisions == null)
             {
-                //Creates the new division nodes
+                //Creates the new division nodes and sets the parent to this node
                 divisions = new QuadTreeNode[4];
                 int x = rectangle.X;
                 int y = rectangle.Y;
@@ -110,6 +123,10 @@ namespace ActualGame
                 divisions[1] = new QuadTreeNode(x + width, y, width, height);
                 divisions[2] = new QuadTreeNode(x, y + height, width, height);
                 divisions[3] = new QuadTreeNode(x + width, y + height, width, height);
+                divisions[0].Parent = this;
+                divisions[1].Parent = this;
+                divisions[2].Parent = this;
+                divisions[3].Parent = this;
 
                 //Checks which objects fit into the new divisions, and moves them into the new division object lists
                 List<GameObject> objectsToRemove = new List<GameObject>();
@@ -180,6 +197,22 @@ namespace ActualGame
 
             //Returns null if this quad doesn't completely contain the parameter rectangle
             return null;
+        }
+
+        /// <summary>
+        /// A method to return a list of all the parents of this QuadTreeNode
+        /// </summary>
+        /// <returns>A list of all the parent nodes</returns>
+        public List<QuadTreeNode> GetParents()
+        {
+            List<QuadTreeNode> parents = new List<QuadTreeNode>();
+            QuadTreeNode current = this;
+            while(current.Parent != null)
+            {
+                parents.Add(current.Parent);
+                current = current.Parent;
+            }
+            return parents;
         }
         #endregion
     }
