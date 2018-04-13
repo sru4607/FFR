@@ -29,7 +29,6 @@ namespace ActualGame
         {
             this.name = name;
             this.path = path;
-            CurrentBoard = this;
         }
         #endregion
 
