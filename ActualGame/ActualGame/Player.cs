@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework;
 
 
 namespace ActualGame
@@ -37,6 +36,8 @@ namespace ActualGame
             // Defaults to a hitbox width of 64 and hitbox height of 128
             : base(x, y, 64, 128, node, right)
         {
+            hitbox = new BoundingRectangle(this.Rect.Center, this.Rect.Width * 0.95f, this.Rect.Height * 0.95f);
+
             state = PlayerState.Idle;
         }
         #endregion
@@ -71,7 +72,7 @@ namespace ActualGame
         #endregion
 
         #region Update
-        public override void Update(GameTime gameTime)
+        public override void Update()
         {
             //base.Update();
             prevState = kbState;
@@ -80,6 +81,7 @@ namespace ActualGame
             {
                 case (PlayerState.Walk):
                 {
+                    Gravity();
                     
                     if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
                     {
@@ -111,7 +113,9 @@ namespace ActualGame
                 }
                 case (PlayerState.Jump):
                 {
+                    Gravity();
                     velY = -5;
+                    Gravity();
                     if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
                     {
                         state = PlayerState.Walk;
@@ -135,6 +139,7 @@ namespace ActualGame
                 {
                     velX = 0;
                     //velY = 0;
+                    Gravity();
                     if (kbState.IsKeyDown(Keys.Right))
                     {
                         right = true;

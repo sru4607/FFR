@@ -14,7 +14,7 @@ namespace ActualGame
         #region Fields
         Dictionary<String, Texture2D > allTexts;
         List<GameObject> allObjects = new List<GameObject>();
-        QuadTreeNode node; // Passed reference
+        QuadTreeNode node; // TODO: Properly implement QuadTree (this var is used to avoid compile errors)
         #endregion
 
         #region Constructor
@@ -47,11 +47,11 @@ namespace ActualGame
         #endregion
 
         #region Update
-        public void UpdateAll(GameTime gameTime)
+        public void UpdateAll()
         {
             for(int i = 0; i < allObjects.Count; i++)
             {
-                allObjects[i].Update(gameTime);
+                allObjects[i].Update();
             }
             allObjects[1].Collision(allObjects);
         }
