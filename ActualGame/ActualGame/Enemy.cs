@@ -13,25 +13,33 @@ namespace ActualGame
     {
         #region Fields
         AI mainAi;
+        EnemyState enemyState;
+        int stateFrameLock;
         #endregion
 
         #region Properties
-
+        public EnemyState State { get { return enemyState; } set { enemyState = value; } }
+        public int StateLock { get { return stateFrameLock; } set { stateFrameLock = value; } }
         #endregion
 
         #region Constructor
         /// <summary>
         /// Creates a generic Enemy
         /// </summary>
-        public Enemy()
-            : base()
+        /// <param name="x">X location of the </param>
+        /// <param name="y"></param>
+        /// <param name="node">Reference to the quad tree used in-game</param>
+        /// <param name="patrolType"></param>
+        public Enemy(int x, int y, QuadTreeNode node, PatrolType patrolType)
+            // Defaults to a width of 64 and a height of 128
+            : base(x, y, 64, 128, node)
         {
             // Initialize the AI pattern
-            mainAi = new AI(this, PatrolType.Moving);
+            mainAi = new AI(this, patrolType);
 
-            // Temporary values to render to screen
-            rect.X = 400;
-            rect.Y = 300;
+            // Initialize hitbox parameters
+            rect.X = x;
+            rect.Y = y;
             rect.Width = 128;
             rect.Height = 128;
             noClip = true;

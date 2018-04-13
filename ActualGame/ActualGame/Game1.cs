@@ -8,12 +8,12 @@ namespace ActualGame
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    enum MainGameState {debug, menu, pause, quit, inGame, gameOver }
+    enum MainGameState {Debug, Menu, Pause, Quit, InGame, GameOver }
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Enemy testEnemy;
+        // Enemy testEnemy; // Unused - kept for example documentation
         Display mainDisplay;
         World levelOne;
         MainGameState currentState;
@@ -39,14 +39,14 @@ namespace ActualGame
             allTextures = new Dictionary<string, Texture2D>();
 
             // Generic enemy used to test bugs/features
-            testEnemy = new Enemy();
+            // testEnemy = new Enemy();
 
             // Base game logic
             mainDisplay = new Display(GraphicsDevice);
             base.Initialize();
 
             // Set the initial state of the game
-            currentState = MainGameState.debug;
+            currentState = MainGameState.Debug;
 
             // Values used for debugging purposes
             debugger = new Debug(allTextures);
@@ -76,13 +76,11 @@ namespace ActualGame
             allTextures.Add("Floor", Content.Load<Texture2D>("missingtexture"));
             allTextures.Add("PenPen", Content.Load<Texture2D>("PenPen"));
             allTextures.Add("missingtexture", Content.Load<Texture2D>("missingtexture"));
-            // TODO: Add these textures/update below values once creates
-            // allTextures.Add("Enemy", Content.Load<Texture2D>("missingtexture"));
+            allTextures.Add("Enemy", Content.Load<Texture2D>("missingtexture"));
 
             // Sync in-game objects with their dictionary textures
-            testEnemy.LoadTexture(allTextures["missingtexture"]);
+            // EX: testEnemy.LoadTexture(allTextures["missingtexture"]);
 
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -107,28 +105,28 @@ namespace ActualGame
             // TODO: Add your update logic here
             switch (currentState)
             {
-                case (MainGameState.debug):
+                case (MainGameState.Debug):
                     {
-                        debugger.UpdateAll();
+                        debugger.UpdateAll(gameTime);
                         break;
                         testEnemy.Update();
                     }
-                case (MainGameState.inGame):
+                case (MainGameState.InGame):
                     {
 
                         break;
                     }
-                case (MainGameState.menu):
+                case (MainGameState.Menu):
                     {
 
                         break;
                     }
-                case (MainGameState.pause):
+                case (MainGameState.Pause):
                     {
 
                         break;
                     }
-                case (MainGameState.quit):
+                case (MainGameState.Quit):
                     {
                         break;
                     }
@@ -154,35 +152,34 @@ namespace ActualGame
             spriteBatch.Begin(transformMatrix: temp);
             switch(currentState)
             {
-                case (MainGameState.debug):
-                    {
-                        debugger.Draw(spriteBatch);
-                        testEnemy.Draw(spriteBatch);
-                        break;
-                    }
-                case (MainGameState.inGame):
-                    {
+                case (MainGameState.Debug):
+                {
+                    debugger.Draw(spriteBatch);
+                    break;
+                }
+                case (MainGameState.InGame):
+                {
                         
-                        break;
-                    }
-                case (MainGameState.menu):
-                    {
+                    break;
+                }
+                case (MainGameState.Menu):
+                {
 
-                        break;
-                    }
-                case (MainGameState.pause):
-                    {
+                    break;
+                }
+                case (MainGameState.Pause):
+                {
 
-                        break;
-                    }
-                case (MainGameState.quit):
-                    {
-                        break;
-                    }
+                    break;
+                }
+                case (MainGameState.Quit):
+                {
+                    break;
+                }
                 default:
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
             }
             spriteBatch.End();
             base.Draw(gameTime);

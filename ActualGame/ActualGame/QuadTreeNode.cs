@@ -140,10 +140,10 @@ namespace ActualGame
                             objectsToRemove.Add(objects[c]);
                         }
                     }
-                    for(int d=0; d<objectsToRemove.Count; d++)
-                    {
-                        objects.Remove(objectsToRemove[d]);
-                    }
+                }
+                for (int c = 0; c < objectsToRemove.Count; c++)
+                {
+                    objects.Remove(objectsToRemove[c]);
                 }
             }
         }
