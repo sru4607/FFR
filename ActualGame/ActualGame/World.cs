@@ -27,10 +27,11 @@ namespace ActualGame
 
         #region Constructor
         //Creates a world with name
-        public World(String name, String path)
+        public World(String name = "", String path = "")
         {
             this.name = name;
             this.path = path;
+            CurrentBoard = this;
         }
         #endregion
 
@@ -65,7 +66,7 @@ namespace ActualGame
 
         #endregion
 
-        public Tile[,] Tiles { get; set; }
+        public List<GameObject> Tiles { get; set; }
         public int Columns { get; set; }
         public int Rows { get; set; }
         public Texture2D TileTexture { get; set; }
@@ -79,60 +80,25 @@ namespace ActualGame
             Rows = rows;
             TileTexture = tileTexture;
             SpriteBatch = spritebatch;
-            Tiles = new Tile[Columns, Rows];
-            CreateNewBoard();
+            Tiles = new List<GameObject>(Rows);
             World.CurrentBoard = this;
         }
 
-        public void CreateNewBoard()
-        {
-            InitializeAllTilesAndBlockSomeRandomly();
-            SetAllBorderTilesBlocked();
-            SetTopLeftTileUnblocked();
-        }
 
-        private void SetTopLeftTileUnblocked()
-        {
-            Tiles[1, 1].IsBlocked = false;
-        }
 
-        private void InitializeAllTilesAndBlockSomeRandomly()
-        {
-            for (int x = 0; x < Columns; x++)
-            {
-                for (int y = 0; y < Rows; y++)
-                {
-                    Vector2 tilePosition = new Vector2(x * TileTexture.Width, y * TileTexture.Height);
-                    Tiles[x, y] = new Tile(TileTexture, tilePosition, SpriteBatch);
-                }
-            }
-        }
-
-        private void SetAllBorderTilesBlocked()
-        {
-            for (int x = 0; x < Columns; x++)
-            {
-                for (int y = 0; y < Rows; y++)
-                {
-                    if (x == 0 || x == Columns - 1 || y == 0 || y == Rows - 1)
-                    { Tiles[x, y].IsBlocked = true; }
-                }
-            }
-        }
-
-        public void Draw()
+        public void Draw(SpriteBatch sb)
         {
             foreach (var tile in Tiles)
             {
-                tile.Draw();
+                tile.Draw(sb);
             }
         }
 
         public bool HasRoomForRectangle(Rectangle rectangleToCheck)
         {
-            foreach (var tile in Tiles)
+            foreach (var tile in World.CurrentBoard.Tiles)
             {
-                if (tile.IsBlocked && tile.Bounds.Intersects(rectangleToCheck))
+                if (!tile.NoClip && tile.Rect.Intersects(rectangleToCheck))
                 {
                     return false;
                 }

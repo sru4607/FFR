@@ -58,7 +58,7 @@ namespace ActualGame
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
-            //levelOne = new World("Level One", "level1.txt");
+            levelOne = new World("Level One", "level1.txt");
         }
 
         /// <summary>

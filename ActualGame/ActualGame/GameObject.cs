@@ -105,6 +105,7 @@ namespace ActualGame
             rect = new Rectangle();
             velX = 0.0;
             velY = 0.0;
+            World current = new World("");
         }
         #endregion
 

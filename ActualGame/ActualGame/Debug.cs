@@ -33,6 +33,7 @@ namespace ActualGame
             allObjects[0].Y = 300;
             allObjects[0].Width = 500;
             allObjects[0].Height = 64;
+            //World.CurrentBoard.Tiles.Add(allObjects[0]);
 
             //creates a player
             allObjects.Add(new Player());

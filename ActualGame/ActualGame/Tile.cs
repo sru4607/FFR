@@ -8,13 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ActualGame
 {
-    class Tile
+    class Tile : GameObject
     {
         //To Be implemented
         #region Fields
         public bool IsBlocked { get; set; }
         Vector2 position;
-        Texture2D texture;
         SpriteBatch sb;
         #endregion
 
@@ -30,6 +29,7 @@ namespace ActualGame
 
         #region Constructor
         public Tile(Texture2D text, Vector2 pos, SpriteBatch spriteB)
+        :base()
         {
             texture = text;
             position = pos;
