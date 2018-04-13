@@ -53,11 +53,6 @@ namespace ActualGame
         /// <param name="gameTime">Reference to the Update(gameTime) value</param>
         public void UpdateAll(GameTime gameTime)
         {
-            for(int i = 0; i < allObjects.Count; i++)
-            {
-                allObjects[i].Update();
-            }
-            allObjects[1].Collision(allObjects);
         }
         #endregion
 

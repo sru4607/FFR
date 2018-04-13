@@ -14,14 +14,7 @@ namespace ActualGame
         #region Fields
         // Fields
         protected Rectangle rect;
-        protected double velX;
-        protected double velY;
         protected Texture2D texture;
-        protected Rectangle prev;
-        protected int step;
-        static float grav = 9.8f;
-        protected bool physicsObject = false;
-        public Rectangle hitbox;
         public bool noClip = false;
         #endregion
 
@@ -36,10 +29,6 @@ namespace ActualGame
         }
 
         // TODO: Add description
-        public bool Finished
-        {
-            get { return step >= 15; }
-        }
 
         /// <summary>
         /// Get and set for the X value of the game object hitbox's top-left corner
@@ -96,14 +85,6 @@ namespace ActualGame
             set { hitbox = value; }
         }
 
-        /// <summary>
-        /// Get and set for whether the object experiences physics (most notably, gravity)
-        /// </summary>
-        public bool Physics
-        {
-            get { return physicsObject; }
-            set { physicsObject = value; }
-        }
         #endregion
 
         #region Constructor
@@ -113,8 +94,6 @@ namespace ActualGame
         public GameObject()
         {
             rect = new Rectangle();
-            velX = 0.0;
-            velY = 0.0;
             World current = new World("");
         }
 
@@ -145,85 +124,6 @@ namespace ActualGame
         #endregion
 
         #region Methods
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Move()
-        {
-            prev = rect;
-            step = 0;
-            X = (int)(X + velX);
-            Y = (int)(Y + velY);
-            if(hitbox != null)
-            {
-                hitbox.Location = this.Rect.Location;
-            }
-        }
-
-        public void Move(bool right)
-        {
-            prev = rect;
-            step = 0;
-            if (right)
-            {
-                X = (int)(X + velX);
-            }
-            else
-            {
-                X = (int)(X - velX);
-            }
-            Y = (int)(Y + velY);
-            /* check for collisions with the wall, if colliding, revert to previous state and set speed to 0 */
-        }
-        
-        public void Step()
-        {
-            if(step < 15)
-            {
-                X = (int)(X + velX / 16);
-                Y = (int)(Y + velY / 16);
-                step++;
-            }
-
-        }
-        
-        public void StepBack()
-        {
-            X = (int)(X - velX / 16);
-            Y = (int)(Y - velY / 16);
-        }
-        public void Revert()
-        {
-            rect = prev;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Gravity()
-        {
-            velY += grav/60;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Collision(List<GameObject> temp)
-        {
-            for(int i = 0; i< temp.Count; i++)
-            {
-                if(this != temp[i] && !temp[i].noClip)
-                {
-                    if (this.rect.Intersects(temp[i].Rect))
-                    {
-                        //this.Revert();
-                        velY = 0;
-                    }
-                        
-                    
-                }
-            }
-        }
         #endregion
 
         #region Update
