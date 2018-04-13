@@ -60,11 +60,6 @@ namespace ActualGame
         #region Update
         public void UpdateAll()
         {
-            for(int i = 0; i < allObjects.Count; i++)
-            {
-                allObjects[i].Update();
-            }
-            allObjects[1].Collision(allObjects);
         }
         #endregion
 

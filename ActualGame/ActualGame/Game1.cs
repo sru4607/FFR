@@ -111,7 +111,7 @@ namespace ActualGame
                     {
                         debugger.UpdateAll();
                         break;
-                        testEnemy.Update();
+                        //testEnemy.Update();
                     }
                 case (MainGameState.inGame):
                     {
