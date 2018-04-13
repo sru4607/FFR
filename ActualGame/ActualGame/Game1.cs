@@ -24,7 +24,6 @@ namespace ActualGame
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            //fullscreen code
             Content.RootDirectory = "Content";
         }
 
@@ -104,16 +103,15 @@ namespace ActualGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            debugger.UpdateAll(gameTime);
+            debugger.UpdateAll();
             // TODO: Add your update logic here
             switch (currentState)
             {
                 case (MainGameState.debug):
                     {
-                        debugger.UpdateAll(gameTime);
-                        testEnemy.Update(gameTime);
+                        debugger.UpdateAll();
                         break;
-                        
+                        testEnemy.Update();
                     }
                 case (MainGameState.inGame):
                     {

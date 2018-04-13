@@ -13,9 +13,6 @@ namespace ActualGame
     {
         #region Fields
         // Fields
-        public Vector2 Movement { get; set; }
-        public Vector2 Position { get; set; }
-        private Vector2 oldPosition;
         protected Rectangle rect;
         protected double velX;
         protected double velY;
@@ -24,6 +21,7 @@ namespace ActualGame
         protected int step;
         static float grav = 9.8f;
         protected bool physicsObject = false;
+        public BoundingShapes hitbox;
         public bool noClip = false;
         #endregion
 
@@ -89,6 +87,16 @@ namespace ActualGame
         }
 
         /// <summary>
+        /// Get and set for collision hitbox
+        /// </summary>
+        // TODO: Confirm this is correct documentation
+        public BoundingShapes HitBox
+        {
+            get { return hitbox; }
+            set { hitbox = value; }
+        }
+
+        /// <summary>
         /// Get and set for whether the object experiences physics (most notably, gravity)
         /// </summary>
         public bool Physics
@@ -130,6 +138,10 @@ namespace ActualGame
             step = 0;
             X = (int)(X + velX);
             Y = (int)(Y + velY);
+            if(hitbox != null)
+            {
+                hitbox.Location = this.Rect.Location;
+            }
         }
 
         public void Move(bool right)
@@ -147,44 +159,35 @@ namespace ActualGame
             Y = (int)(Y + velY);
             /* check for collisions with the wall, if colliding, revert to previous state and set speed to 0 */
         }
-
-        private void AffectWithGravity()
+        
+        public void Step()
         {
-            Movement += Vector2.UnitY * .65f;
+            if(step < 15)
+            {
+                X = (int)(X + velX / 16);
+                Y = (int)(Y + velY / 16);
+                step++;
+            }
+
+        }
+        
+        public void StepBack()
+        {
+            X = (int)(X - velX / 16);
+            Y = (int)(Y - velY / 16);
+        }
+        public void Revert()
+        {
+            rect = prev;
         }
 
-        private void SimulateFriction()
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Gravity()
         {
-            if (IsOnFirmGround()) { Movement -= Movement * Vector2.One * .08f; }
-            else { Movement -= Movement * Vector2.One * .02f; }
+            velY += grav/60;
         }
-
-        private void MoveAsFarAsPossible(GameTime gameTime)
-        {
-            oldPosition = Position;
-            UpdatePositionBasedOnMovement(gameTime);
-            Position = World.CurrentBoard.WhereCanIGetTo(oldPosition, Position, rect);
-        }
-
-        private void UpdatePositionBasedOnMovement(GameTime gameTime)
-        {
-            Position += Movement * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 15;
-        }
-
-        public bool IsOnFirmGround()
-        {
-            Rectangle onePixelLower = rect;
-            onePixelLower.Offset(0, 1);
-            return !World.CurrentBoard.HasRoomForRectangle(onePixelLower);
-        }
-
-        private void StopMovingIfBlocked()
-        {
-            Vector2 lastMovement = Position - oldPosition;
-            if (lastMovement.X == 0) { Movement *= Vector2.UnitY; }
-            if (lastMovement.Y == 0) { Movement *= Vector2.UnitX; }
-        }
-
 
         /// <summary>
         /// 
@@ -211,14 +214,10 @@ namespace ActualGame
         /// <summary>
         /// 
         /// </summary>
-        virtual public void Update(GameTime gameTime)
+        virtual public void Update()
         {
             if (this is Player temp)
-                temp.Update(gameTime);
-            AffectWithGravity();
-            SimulateFriction();
-            MoveAsFarAsPossible(gameTime);
-            StopMovingIfBlocked();
+                temp.Update();
 
         }
         #endregion

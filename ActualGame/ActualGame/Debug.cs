@@ -33,7 +33,8 @@ namespace ActualGame
             allObjects[0].Y = 300;
             allObjects[0].Width = 500;
             allObjects[0].Height = 64;
-            //World.CurrentBoard.Tiles.Add(allObjects[0]);
+            allObjects[0].hitbox = new BoundingRectangle(new Point(), 0, 0);
+            ((BoundingRectangle)allObjects[0].hitbox).GetRect = allObjects[0].Rect;
 
             //creates a player
             allObjects.Add(new Player());
@@ -42,7 +43,7 @@ namespace ActualGame
             allObjects[1].Y = 100;
             allObjects[1].Width = 64;
             allObjects[1].Height = 128;
-
+            ((BoundingRectangle)(allObjects[1].hitbox)).GetRect = allObjects[1].Rect;
 
             //creates an enemy
             allObjects.Add(new Enemy());
@@ -51,16 +52,17 @@ namespace ActualGame
             allObjects[2].Y = 100;
             allObjects[2].Width = 64;
             allObjects[2].Height = 128;
+            allObjects[2].HitBox = null;
 
         }
         #endregion
 
         #region Update
-        public void UpdateAll(GameTime gameTime)
+        public void UpdateAll()
         {
             for(int i = 0; i < allObjects.Count; i++)
             {
-                allObjects[i].Update(gameTime);
+                allObjects[i].Update();
             }
             allObjects[1].Collision(allObjects);
         }
