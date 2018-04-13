@@ -47,7 +47,11 @@ namespace ActualGame
         #endregion
 
         #region Update
-        public void UpdateAll()
+        /// <summary>
+        /// Updates all GameObjects stored in the Debug object
+        /// </summary>
+        /// <param name="gameTime">Reference to the Update(gameTime) value</param>
+        public void UpdateAll(GameTime gameTime)
         {
             for(int i = 0; i < allObjects.Count; i++)
             {

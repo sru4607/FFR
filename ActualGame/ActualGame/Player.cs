@@ -36,8 +36,6 @@ namespace ActualGame
             // Defaults to a hitbox width of 64 and hitbox height of 128
             : base(x, y, 64, 128, node, right)
         {
-            hitbox = new BoundingRectangle(this.Rect.Center, this.Rect.Width * 0.95f, this.Rect.Height * 0.95f);
-
             state = PlayerState.Idle;
         }
         #endregion

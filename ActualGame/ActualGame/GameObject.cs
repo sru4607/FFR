@@ -21,7 +21,7 @@ namespace ActualGame
         protected int step;
         static float grav = 9.8f;
         protected bool physicsObject = false;
-        public BoundingShapes hitbox;
+        public Rectangle hitbox;
         public bool noClip = false;
         #endregion
 
@@ -90,7 +90,7 @@ namespace ActualGame
         /// Get and set for collision hitbox
         /// </summary>
         // TODO: Confirm this is correct documentation
-        public BoundingShapes HitBox
+        public Rectangle HitBox
         {
             get { return hitbox; }
             set { hitbox = value; }

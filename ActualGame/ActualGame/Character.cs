@@ -12,8 +12,7 @@ namespace ActualGame
     {
         #region Fields
         protected int hp;
-        protected BoundingRectangle mBox;
-        protected BoundingRectangle hitBox;
+        protected Rectangle mBox;
         protected int mDamage;
         protected int rDamage;
         protected int stunFrames;
@@ -27,7 +26,7 @@ namespace ActualGame
             get { return hp; }
             set { hp = value; }
         }
-        public virtual BoundingRectangle MBox
+        public virtual Rectangle MBox
         {
             get { return mBox; }
             set { mBox = value; }
@@ -53,8 +52,10 @@ namespace ActualGame
         {
             this.node = node;
             hp = 1;
-        hitbox = new BoundingRectangle(new Point(0, 0), 32, 64);
-            mBox = new BoundingRectangle(new Point(HitBox.Location.X + 32, HitBox.Location.Y), 32, 56);
+            // TODO: Verify whether the hitbox line of code is valid or if it belongs in GameObject 
+            // Also, should it use 0, 0, 32, 64; or x, y, 32, 64?
+            hitbox = new Rectangle(0, 0, 32, 64);
+            mBox = new Rectangle(HitBox.Location.X + 32, HitBox.Location.Y, 32, 56);
             mDamage = 0;
             rDamage = 0;
             stunFrames = 0;
@@ -89,7 +90,7 @@ namespace ActualGame
         /// </summary>
         public virtual void MAttack(Character c)
         {
-            if (mBox.CheckCollision(c.HitBox))
+            if (mBox.Intersects(c.HitBox))
             {
                 c.TakeDamage(mDamage);
             }
@@ -105,12 +106,12 @@ namespace ActualGame
 
 
         public void Flip()
-    {
-        if (mBox.Location.X > hitbox.Location.X)
         {
-            //Flip to left side
-        } 
-    }
+            if (mBox.Location.X > hitbox.Location.X)
+            {
+                //Flip to left side
+            } 
+        }
 
 
         /// <summary>
