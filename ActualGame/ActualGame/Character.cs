@@ -12,8 +12,7 @@ namespace ActualGame
     {
         #region Fields
         protected int hp;
-        protected BoundingRectangle mBox;
-        protected BoundingRectangle hitBox;
+        protected Rectangle mBox;
         protected int mDamage;
         protected int rDamage;
         protected int stunFrames;
@@ -26,7 +25,7 @@ namespace ActualGame
             get { return hp; }
             set { hp = value; }
         }
-        public virtual BoundingRectangle MBox
+        public virtual Rectangle MBox
         {
             get { return mBox; }
             set { mBox = value; }
@@ -46,8 +45,7 @@ namespace ActualGame
             : base()
         {
             hp = 1;
-        hitbox = new BoundingRectangle(new Point(0, 0), 32, 64);
-            mBox = new BoundingRectangle(new Point(HitBox.Location.X + 32, HitBox.Location.Y), 32, 56);
+            mBox = new Rectangle(rect.Location.X + 32, rect.Location.Y, 32, 56);
             mDamage = 0;
             rDamage = 0;
             stunFrames = 0;
@@ -63,10 +61,10 @@ namespace ActualGame
         /// </summary>
         public virtual void MAttack(Character c)
         {
-            if (mBox.CheckCollision(c.HitBox))
-            {
-                c.TakeDamage(mDamage);
-            }
+            //if (CheckCollision(mBox, c.HitBox))
+            ////{
+            //    c.TakeDamage(mDamage);
+            //}
         }
 
         /// <summary>
@@ -80,7 +78,7 @@ namespace ActualGame
 
         public void Flip()
     {
-        if (mBox.Location.X > hitbox.Location.X)
+        if (mBox.Location.X > rect.Location.X)
         {
             //Flip to left side
         } 
@@ -121,10 +119,10 @@ namespace ActualGame
         /// <summary>
         /// Updates the status of a Character object
         /// </summary>
-        public override void Update()
-            {
-                base.Update();
-            }
+        public override void Update(GameTime gm)
+        {
+            base.Update(gm);
+         }
         #endregion
 
         #region Draw

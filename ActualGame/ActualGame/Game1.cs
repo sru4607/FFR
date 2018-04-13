@@ -24,6 +24,7 @@ namespace ActualGame
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            //fullscreen code
             Content.RootDirectory = "Content";
         }
 
@@ -51,6 +52,11 @@ namespace ActualGame
             // Values used for debugging purposes
             debugger = new Debug(allTextures);
             debugger.InstantiateAll();
+
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            graphics.IsFullScreen = true;
+            graphics.ApplyChanges();
 
             //levelOne = new World("Level One", "level1.txt");
         }
@@ -98,15 +104,16 @@ namespace ActualGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            debugger.UpdateAll();
+            debugger.UpdateAll(gameTime);
             // TODO: Add your update logic here
             switch (currentState)
             {
                 case (MainGameState.debug):
                     {
-                        debugger.UpdateAll();
+                        debugger.UpdateAll(gameTime);
+                        testEnemy.Update(gameTime);
                         break;
-                        testEnemy.Update();
+                        
                     }
                 case (MainGameState.inGame):
                     {
