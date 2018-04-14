@@ -11,12 +11,25 @@ namespace ActualGame
 {
     class PhysicsObject : GameObject
     {
+        //Thanks for help from XNAFan's Blog for some physics code guides
         public Vector2 Movement { get; set; }
         private Vector2 prevLocation;
 
         public PhysicsObject()
         {
+           
+        }
 
+        public override void Update(GameTime gm)
+        {
+            if (this is Player temp)
+            {
+                KeyboardMovement();
+            }
+            Gravity();
+            Friction();
+            MoveAsPossible(gm);
+            StopIfBlocked();
         }
 
         public void KeyboardMovement()
@@ -36,26 +49,30 @@ namespace ActualGame
 
         private void Friction()
         {
-
+            if (OnGround())
+                Movement = 0.8f * Movement;
+            else
+                Movement = 0.9f * Movement;
         }
 
         private void MoveAsPossible(GameTime gm)
         {
             prevLocation = new Vector2(Rect.X, Rect.Y);
             UpdatePosition(gm);
+            Position = World.Current.WhereCanIGetTo(prevLocation, Position, Rect);
 
         }
 
         private void UpdatePosition(GameTime gm)
         {
-
+            X += (int)(Movement.X * (float)gm.ElapsedGameTime.TotalMilliseconds / 15);
+            Y += (int)(Movement.X * (float)gm.ElapsedGameTime.TotalMilliseconds / 15);
         }
 
         public bool OnGround()
         {
             Rectangle lower = Rect;
             lower.Offset(0, 1);
-
             return false;
         }
 
@@ -67,7 +84,15 @@ namespace ActualGame
 
         private void StopIfBlocked()
         {
-
+            Vector2 diff = prevLocation - Position;
+            if(diff.Y == 0)
+            {
+                Movement -= Vector2.UnitY * Movement.Y;
+            }
+            if(diff.X == 0)
+            {
+                Movement -= Vector2.UnitX * Movement.X;
+            }
         }
     }
 }

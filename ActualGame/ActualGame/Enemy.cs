@@ -72,7 +72,7 @@ namespace ActualGame
         #endregion
 
         #region Update
-        public override void Update()
+        public override void Update(GameTime gm)
         {
             // TODO: Update so rect.Y is moved in the same call
             // NOTE: Do NOT call .MoveAI() twice, it will count as two frames of movement
@@ -80,7 +80,7 @@ namespace ActualGame
             
             mainAi.MoveAI();
 
-            base.Update();
+            base.Update(gm);
         }
         #endregion
 

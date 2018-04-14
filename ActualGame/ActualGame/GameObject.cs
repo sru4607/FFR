@@ -30,6 +30,11 @@ namespace ActualGame
 
         // TODO: Add description
 
+        public Vector2 Position
+        {
+            get { return new Vector2(X, Y); }
+            set { X = (int)value.X; Y = (int)value.Y; }
+        }
         /// <summary>
         /// Get and set for the X value of the game object hitbox's top-left corner
         /// </summary>
@@ -75,16 +80,6 @@ namespace ActualGame
             set { rect = value; }
         }
 
-        /// <summary>
-        /// Get and set for collision hitbox
-        /// </summary>
-        // TODO: Confirm this is correct documentation
-        public Rectangle HitBox
-        {
-            get { return hitbox; }
-            set { hitbox = value; }
-        }
-
         #endregion
 
         #region Constructor
@@ -107,8 +102,6 @@ namespace ActualGame
         public GameObject(int x, int y, int width, int height)
         {
             rect = new Rectangle(x, y, width, height);
-            velX = 0.0;
-            velY = 0.0;
         }
         #endregion
 
@@ -130,10 +123,10 @@ namespace ActualGame
         /// <summary>
         /// 
         /// </summary>
-        virtual public void Update()
+        virtual public void Update(GameTime gm)
         {
-            if (this is Player temp)
-                temp.Update();
+            if (this is PhysicsObject temp)
+                ((PhysicsObject)temp).Update(gm);
 
         }
         #endregion

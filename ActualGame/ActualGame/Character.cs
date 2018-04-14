@@ -48,14 +48,12 @@ namespace ActualGame
         /// <param name="right">Whether the character starts facing right</param>
         public Character(int x, int y, QuadTreeNode node, bool right = true)
             // Defaults to a width of 64 and height of 128
-            : base(x, y, 64, 128)
         {
             this.node = node;
             hp = 1;
             // TODO: Verify whether the hitbox line of code is valid or if it belongs in GameObject 
             // Also, should it use 0, 0, 32, 64; or x, y, 32, 64?
-            hitbox = new Rectangle(0, 0, 32, 64);
-            mBox = new Rectangle(HitBox.Location.X + 32, HitBox.Location.Y, 32, 56);
+            mBox = new Rectangle(Rect.X + 32, Rect.Y, 32, 56);
             mDamage = 0;
             rDamage = 0;
             stunFrames = 0;
@@ -72,7 +70,6 @@ namespace ActualGame
         /// <param name="node">Reference to the quad tree used in-game</param>
         /// <param name="right">True if the character faces right, else false</param>
         public Character(int x, int y, int width, int height, QuadTreeNode node, bool right = true)
-            : base(x, y, width, height)
         {
             this.node = node;
             hp = 1;
@@ -90,7 +87,7 @@ namespace ActualGame
         /// </summary>
         public virtual void MAttack(Character c)
         {
-            if (mBox.Intersects(c.HitBox))
+            if (mBox.Intersects(c.Rect))
             {
                 c.TakeDamage(mDamage);
             }
@@ -107,7 +104,7 @@ namespace ActualGame
 
         public void Flip()
         {
-            if (mBox.Location.X > hitbox.Location.X)
+            if (mBox.Location.X > X)
             {
                 //Flip to left side
             } 
@@ -148,9 +145,9 @@ namespace ActualGame
         /// <summary>
         /// Updates the status of a Character object
         /// </summary>
-        public override void Update()
+        public override void Update(GameTime gm)
             {
-                base.Update();
+                base.Update(gm);
             }
         #endregion
 

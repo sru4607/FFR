@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 
 
 namespace ActualGame
@@ -70,7 +71,7 @@ namespace ActualGame
         #endregion
 
         #region Update
-        public override void Update()
+        public override void Update(GameTime gm)
         {
             //base.Update();
             prevState = kbState;
