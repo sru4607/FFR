@@ -74,6 +74,7 @@ namespace ActualGame
             this.node = node;
             hp = 1;
             mBox = new Rectangle(rect.Location.X + 32, rect.Location.Y, 32, 56);
+            Rect = new Rectangle(X, Y, width, height);
             mDamage = 0;
             rDamage = 0;
             stunFrames = 0;

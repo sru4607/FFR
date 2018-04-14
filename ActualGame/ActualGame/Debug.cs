@@ -14,6 +14,7 @@ namespace ActualGame
         #region Fields
         Dictionary<String, Texture2D > allTexts;
         List<GameObject> allObjects = new List<GameObject>();
+        World debug;
         QuadTreeNode node; // TODO: Properly implement QuadTree (this var is used to avoid compile errors)
         #endregion
 
@@ -31,17 +32,22 @@ namespace ActualGame
         #region method
         public void InstantiateAll()
         {
+            debug = new World();
+            World.Current = debug;
+            
             //creates a floor
             allObjects.Add(new GameObject(80, 300, 500, 64));
             allObjects[0].LoadTexture(allTexts["Floor"]);
 
             //creates a player
-            allObjects.Add(new Player(100, 100, node));
+            allObjects.Add(new Player(00, 00, node));
             allObjects[1].LoadTexture(allTexts["PenPen"]);
             
             //creates an enemy
             allObjects.Add(new Enemy(300, 100, node, PatrolType.Standing));
             allObjects[2].LoadTexture(allTexts["PenPen"]);
+
+            debug.AllObjects = allObjects;
 
         }
         #endregion
@@ -53,6 +59,10 @@ namespace ActualGame
         /// <param name="gameTime">Reference to the Update(gameTime) value</param>
         public void UpdateAll(GameTime gameTime)
         {
+            foreach(GameObject go in World.Current.AllObjects)
+            {
+                go.Update(gameTime);
+            }
         }
         #endregion
 

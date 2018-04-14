@@ -31,6 +31,10 @@ namespace ActualGame
             MoveAsPossible(gm);
             StopIfBlocked();
         }
+        public override void Draw(SpriteBatch sb)
+        {
+            base.Draw(sb);
+        }
 
         public void KeyboardMovement()
         {
@@ -44,7 +48,7 @@ namespace ActualGame
 
         private void Gravity()
         {
-            Movement += Vector2.UnitY * 0.5f;
+            Movement += Vector2.UnitY*5;
         }
 
         private void Friction()
@@ -60,13 +64,13 @@ namespace ActualGame
             prevLocation = new Vector2(Rect.X, Rect.Y);
             UpdatePosition(gm);
             Position = World.Current.WhereCanIGetTo(prevLocation, Position, Rect);
+            Rect = new Rectangle((int)Position.X, (int)Position.Y, Rect.Width, Rect.Height);
 
         }
 
         private void UpdatePosition(GameTime gm)
         {
-            X += (int)(Movement.X * (float)gm.ElapsedGameTime.TotalMilliseconds / 15);
-            Y += (int)(Movement.X * (float)gm.ElapsedGameTime.TotalMilliseconds / 15);
+            Position += (Movement * (float)gm.ElapsedGameTime.TotalMilliseconds / 15);
         }
 
         public bool OnGround()

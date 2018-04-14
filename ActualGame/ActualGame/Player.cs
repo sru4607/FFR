@@ -73,9 +73,7 @@ namespace ActualGame
         #region Update
         public override void Update(GameTime gm)
         {
-            //base.Update();
-            prevState = kbState;
-            kbState = Keyboard.GetState();
+            base.Update(gm);
             switch (state)
             {
                 case (PlayerState.Walk):

@@ -20,7 +20,7 @@ namespace ActualGame
         int height;
         String path;
         Tile[,] loadedTiles;
-        List<GameObject> allObjects;
+        public List<GameObject> AllObjects { get; set; }
         public static World Current { get; set; }
         #endregion
 
@@ -34,7 +34,7 @@ namespace ActualGame
         {
             this.name = name;
             this.path = path;
-            allObjects = new List<GameObject>();
+            AllObjects = new List<GameObject>();
         }
         #endregion
 
@@ -98,15 +98,17 @@ namespace ActualGame
         }
 
         public bool HasRoomForRectangle(Rectangle rectangleToCheck)
-        {
-            foreach (Tile tile in loadedTiles)
+        {   if (loadedTiles != null && loadedTiles.Length > 0)
             {
-                if (tile.Solid && tile.Rect.Intersects(rectangleToCheck))
+                foreach (Tile tile in loadedTiles)
                 {
-                    return false;
+                    if (tile.Solid && tile.Rect.Intersects(rectangleToCheck))
+                    {
+                        return false;
+                    }
                 }
             }
-            foreach (GameObject obj in allObjects)
+            foreach (GameObject obj in AllObjects)
             {
                 if (!obj.NoClip && obj.Rect.Intersects(rectangleToCheck))
                 {
