@@ -22,10 +22,7 @@ namespace ActualGame
 
         public override void Update(GameTime gm)
         {
-            if (this is Player temp)
-            {
                 KeyboardMovement();
-            }
             Gravity();
             Friction();
             MoveAsPossible(gm);
@@ -40,15 +37,15 @@ namespace ActualGame
         {
             KeyboardState kb = Keyboard.GetState();
 
-            if (kb.IsKeyDown(Keys.Left)) { Movement += 0.5f * Vector2.UnitX; }
-            if (kb.IsKeyDown(Keys.Right)) { Movement += -0.5f * Vector2.UnitX; }
+            if (kb.IsKeyDown(Keys.Left)) { Movement = -0.5f * Vector2.UnitX; }
+            if (kb.IsKeyDown(Keys.Right)) { Movement = Vector2.UnitX * 0.5f; }
             if (kb.IsKeyDown(Keys.Space)) { Jump(); }
             
         }
 
         private void Gravity()
         {
-            Movement += Vector2.UnitY*5;
+            Movement += Vector2.UnitY;
         }
 
         private void Friction()
@@ -89,13 +86,13 @@ namespace ActualGame
         private void StopIfBlocked()
         {
             Vector2 diff = prevLocation - Position;
-            if(diff.Y == 0)
-            {
-                Movement -= Vector2.UnitY * Movement.Y;
-            }
             if(diff.X == 0)
             {
-                Movement -= Vector2.UnitX * Movement.X;
+                Movement *= Vector2.UnitY;
+            }
+            if(diff.Y == 0)
+            {
+                Movement *= Vector2.UnitX;
             }
         }
     }

@@ -51,11 +51,38 @@ namespace ActualGame
             {
                 for (int j = 0; j < height; j++)
                 {
-                    //Read information from file 
-                    loadedTiles[j, i] = new Tile();
+                    String  source = worldReader.ReadString();
+                    int index = worldReader.Read();
+                    int depth = worldReader.Read();
+                    loadedTiles[i, j] = new Tile();
                 }
             }
 
+            int events = worldReader.Read();
+
+            for (int i = 0; i < events; i++)
+            {
+                int type = worldReader.Read();
+                if(type == 0)
+                {
+                    //Enemy
+                    int x = worldReader.Read();
+                    int y = worldReader.Read();
+                    AllObjects.Add(new Enemy(x,y,null,PatrolType.Standing));
+                }
+                if(type == 1)
+                {
+                    //Warp
+                    int x = worldReader.Read();
+                    int y = worldReader.Read();
+                    String warpTo = worldReader.ReadString();
+                    int xOff = worldReader.Read();
+                    int yOff = worldReader.Read(); 
+                    AllObjects.Add(new Warp());
+                }
+
+                
+            }
         }
 
         public Vector2 WhereCanIGetTo(Vector2 original, Vector2 future, Rectangle rect)
@@ -126,7 +153,17 @@ namespace ActualGame
         #endregion
 
         #region Draw
-
+        public void Draw(SpriteBatch sb)
+        {
+            foreach(Tile t in loadedTiles)
+            {
+                t.Draw(sb);
+            }
+            foreach(GameObject g in AllObjects)
+            {
+                g.Draw(sb);
+            }
+        }
         #endregion
 
 
