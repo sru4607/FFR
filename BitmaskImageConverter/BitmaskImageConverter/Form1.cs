@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,9 @@ namespace BitmaskImageConverter
 
     public partial class Form1 : Form
     {
+        // Field for storing the different orientations of the tile
+        private Bitmap[] orientations;
+        
         public Form1()
         {
             InitializeComponent();
@@ -132,6 +136,8 @@ namespace BitmaskImageConverter
                 }
             }
 
+            orientations = tiles;
+
             // Create the new image
             Bitmap splice = new Bitmap(128, 128);
             Graphics g = Graphics.FromImage(splice);
@@ -152,6 +158,21 @@ namespace BitmaskImageConverter
         private void SaveDialog_FileOk(object sender, CancelEventArgs e)
         {
             SplicedImage.Image.Save(SaveDialog.FileName);
+
+            string[] fileNameArray = SaveDialog.FileName.Split('\\');
+            string filePath = SaveDialog.FileName.Substring(0, SaveDialog.FileName.IndexOf(fileNameArray[fileNameArray.Length - 1]));
+            string fileName = fileNameArray[fileNameArray.Length - 1].Split('.')[0];
+
+            if (!Directory.Exists(filePath + fileName + "Orientations"))
+            {
+                Directory.CreateDirectory(filePath + fileName + "Orientations");
+            }
+
+            for (int i =0; i<orientations.Length; i++)
+            {
+                orientations[i].Save(filePath + fileName + "Orientations\\" + fileName + i + ".png");
+            }
+            
         }
     }
 }
