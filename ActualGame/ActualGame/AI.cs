@@ -152,6 +152,17 @@ namespace ActualGame
                     break;
             }
         }
+
+        /// <summary>
+        /// Helper method with determining whether there is an area to walk forward to
+        /// </summary>
+        /// <returns>True if the enemy can walk forward, else false</returns>
+        private bool AbleToMove()
+        {
+            if (enemy.AtEdge(enemy.Texture.Width) || enemy.AtWall(enemy.Texture.Width))
+                return false;
+            return true;
+        }
         #endregion
     }
 }

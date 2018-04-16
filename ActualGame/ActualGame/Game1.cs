@@ -49,7 +49,7 @@ namespace ActualGame
             currentState = MainGameState.Debug;
 
             // Values used for debugging purposes
-            debugger = new Debug(allTextures);
+            debugger = new Debug(allTextures, GraphicsDevice);
             debugger.InstantiateAll();
 
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
