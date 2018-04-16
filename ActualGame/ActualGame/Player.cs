@@ -36,8 +36,6 @@ namespace ActualGame
             // Defaults to a hitbox width of 64 and hitbox height of 128
             : base(x, y, 64, 128, node, right)
         {
-            hitbox = new BoundingRectangle(this.Rect.Center, this.Rect.Width * 0.95f, this.Rect.Height * 0.95f);
-
             state = PlayerState.Idle;
         }
         #endregion
@@ -81,84 +79,18 @@ namespace ActualGame
             {
                 case (PlayerState.Walk):
                 {
-                    Gravity();
-                    
-                    if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
-                    {
-                        velX = 3;
-                        state = PlayerState.Walk;
-                        if (kbState.IsKeyDown(Keys.Right))
-                        {
-                             
-                            right = true;
-                        }
-                        if (kbState.IsKeyDown(Keys.Left))
-                        {
-                            right = false;
-                        }
-                        
-                        
-                    }
-                    else
-                    {
-                        state = PlayerState.Idle;
-                    }
-                    Move(right);
 
-                    if (kbState.IsKeyDown(Keys.Up))
-                    {
-                        state = PlayerState.Jump;
-                    } 
                     break;
                 }
                 case (PlayerState.Jump):
                 {
-                    Gravity();
-                    velY = -5;
-                    Gravity();
-                    if (kbState.IsKeyDown(Keys.Right) || kbState.IsKeyDown(Keys.Left))
-                    {
-                        state = PlayerState.Walk;
-                        if (kbState.IsKeyDown(Keys.Right))
-                        {
-                            right = true;
-                        }
-                        if (kbState.IsKeyDown(Keys.Left))
-                        {
-                            right = false;
-                        }
-                    }
-                    else
-                    {
-                        state = PlayerState.Idle;
-                    }
-                    Move(right);
+
+
                     break;
                 }
                 case (PlayerState.Idle):
                 {
-                    velX = 0;
-                    //velY = 0;
-                    Gravity();
-                    if (kbState.IsKeyDown(Keys.Right))
-                    {
-                        right = true;
-                        state = PlayerState.Walk;
-                    }
-                    if (kbState.IsKeyDown(Keys.Left))
-                    {
-                        right = false;
-                        state = PlayerState.Walk;
-                    }
-                    if (kbState.IsKeyDown(Keys.Up))
-                    {
-                        state = PlayerState.Jump;
-                    }
-                    if (kbState.IsKeyDown(Keys.Up))
-                    {
-                        state = PlayerState.Jump;
-                    }
-                        Move(right);
+
                     break;
                 }
                 case (PlayerState.MAttack):
