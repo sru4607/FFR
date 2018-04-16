@@ -15,7 +15,7 @@ namespace ActualGame
         Dictionary<String, Texture2D > allTexts;
         List<GameObject> allObjects = new List<GameObject>();
         World debug;
-        QuadTreeNode node; // TODO: Properly implement QuadTree (this var is used to avoid compile errors)
+        QuadTreeNode node;
         #endregion
 
         #region Constructor
@@ -23,9 +23,11 @@ namespace ActualGame
         /// Creates a new Debug instance
         /// </summary>
         /// <param name="temp">???</param>
-        public Debug(Dictionary<String, Texture2D> temp)
+        public Debug(Dictionary<String, Texture2D> temp, GraphicsDevice device)
         {
             allTexts = temp;
+            node = new QuadTreeNode(0, 0, device.Viewport.Width, device.Viewport.Height);
+
         }
         #endregion
 
@@ -36,7 +38,7 @@ namespace ActualGame
             World.Current = debug;
             
             //creates a floor
-            allObjects.Add(new GameObject(80, 300, 500, 64));
+            allObjects.Add(new GameObject(80, 300, 500, 64, node));
             allObjects[0].LoadTexture(allTexts["Floor"]);
             allObjects[0].NoClip = false;
 
@@ -44,12 +46,12 @@ namespace ActualGame
             allObjects.Add(new Player(100, 100, node));
             allObjects[1].Position = new Vector2(200, 00);
             allObjects[1].Size = new Vector2(64, 128);
-            allObjects[1].LoadTexture(allTexts["Floor"]);
+            allObjects[1].LoadTexture(allTexts["PenPen"]);
             
             //creates an enemy
             allObjects.Add(new Enemy(300, 100, node, PatrolType.Standing));
             allObjects[2].Position = new Vector2(300, 0);
-            allObjects[2].LoadTexture(allTexts["PenPen"]);
+            allObjects[2].LoadTexture(allTexts["Floor"]);
 
             debug.AllObjects = allObjects;
 

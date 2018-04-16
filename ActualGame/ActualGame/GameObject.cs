@@ -15,7 +15,7 @@ namespace ActualGame
         // Fields
         public Vector2 Position { get; set; }
         public Vector2 Size { get; set; }
-        protected Texture2D texture;
+        public Texture2D Texture { get; set; }
         public bool noClip = false;
         protected QuadTreeNode node;
         #endregion
@@ -91,6 +91,7 @@ namespace ActualGame
             Position = new Vector2(x, y); 
             Size = new Vector2(width, height);
             this.node = node;
+            node.AddObject(this);
         }
         #endregion
 
@@ -101,11 +102,12 @@ namespace ActualGame
         /// <param name="texture">Content.Load&lt;Texture2D&gt;("INSERTLOCATION")</param>
         public void LoadTexture(Texture2D texture)
         {
-            this.texture = texture;
+            this.Texture = texture;
         }
         #endregion
 
         #region Methods
+        
         #endregion
 
         #region Update
@@ -128,7 +130,7 @@ namespace ActualGame
         /// <param name="sb"></param>
         virtual public void Draw(SpriteBatch sb)
         {
-            sb.Draw(texture, Position, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / texture.Width, Height / texture.Height), SpriteEffects.None, 0);
+            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
         }
         #endregion
     }
