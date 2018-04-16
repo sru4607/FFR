@@ -177,13 +177,13 @@ namespace ActualGame
         public QuadTreeNode GetContainingQuad(GameObject gameObject)
         {
             //Recursively checks the divisions until it finds the smallest node the rectangle fits in
-            if (rectangle.Contains((new Rectangle((int)gameObject.X, (int)gameObject.Y, (int)gameObject.Width, (int)gameObject.Height))))
+            if (rectangle.Contains((new Rectangle((int)gameObject.Position.X, (int)gameObject.Position.Y, (int)gameObject.Size.X, (int)gameObject.Size.Y))))
             {
                 if(divisions != null)
                 {
                     for(int c=0; c<divisions.Length; c++)
                     {
-                        if(divisions[c].Rectangle.Contains((new Rectangle((int)gameObject.X, (int)gameObject.Y, (int)gameObject.Width, (int)gameObject.Height))))
+                        if(divisions[c].Rectangle.Contains((new Rectangle((int)gameObject.Position.X, (int)gameObject.Position.Y, (int)gameObject.Size.X, (int)gameObject.Size.Y))))
                         {
                             if (divisions[c].Divisions == null)
                                 return divisions[c];
@@ -191,8 +191,8 @@ namespace ActualGame
                                 return divisions[c].GetContainingQuad(gameObject);
                         }
                     }
-                    return this;
                 }
+                return this;
             }
 
             //Returns null if this quad doesn't completely contain the parameter rectangle

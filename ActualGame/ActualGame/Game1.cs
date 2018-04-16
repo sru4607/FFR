@@ -19,6 +19,8 @@ namespace ActualGame
         MainGameState currentState;
         Dictionary<string, Texture2D> allTextures;
         Debug debugger;
+        Dictionary<string, World> maps;
+        World currentWorld;
         Button[] menuButtons;
         int indexActiveMenuButton;
         KeyboardState kbState;
@@ -53,7 +55,7 @@ namespace ActualGame
             currentState = MainGameState.Debug;
 
             // Values used for debugging purposes
-            debugger = new Debug(allTextures);
+            debugger = new Debug(allTextures, GraphicsDevice);
             debugger.InstantiateAll();
 
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
@@ -61,10 +63,10 @@ namespace ActualGame
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
-            levelOne = new World("Level One", "level1.txt");
-
             kbState = Keyboard.GetState();
             prevkbState = kbState;
+            // Initialize the maps list
+            maps = new Dictionary<string, World>();
         }
 
         /// <summary>
@@ -87,6 +89,46 @@ namespace ActualGame
             allTextures.Add("Menu", Content.Load<Texture2D>("Menu"));
             allTextures.Add("StartButton", Content.Load<Texture2D>("StartButton"));
             allTextures.Add("ExitButton", Content.Load<Texture2D>("ExitButton"));
+
+            // Load tiles systemmatically
+            // BrickWall
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("BrickWall" + i, Content.Load<Texture2D>("Tiles/BrickWall" + i));
+
+            // BrickWallBlue
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("BrickWallBlue" + i, Content.Load<Texture2D>("Tiles/BrickWallBlue" + i));
+
+            // BrickWallRed
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("BrickWallRed" + i, Content.Load<Texture2D>("Tiles/BrickWallRed" + i));
+
+            // holder
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("holder" + i, Content.Load<Texture2D>("Tiles/holder" + i));
+
+            // temp
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("temp" + i, Content.Load<Texture2D>("Tiles/temp" + i));
+
+            // Walls
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("Walls" + i, Content.Load<Texture2D>("Tiles/Walls" + i));
+
+            // WallsGreen
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("WallsGreen" + i, Content.Load<Texture2D>("Tiles/WallsGreen" + i));
+
+            // WallsRed
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("WallsRed" + i, Content.Load<Texture2D>("Tiles/WallsRed" + i));
+
+            // Load maps
+            //maps.Add("Map1", new World(allTextures, "Map1", "Content/Map1.map"));
+
+            //currentWorld = maps["Map1"];
+
+            //levelOne = new World(allTextures, "Level One", "level1.txt");
 
             SwitchToMainMenu();
 
@@ -113,7 +155,6 @@ namespace ActualGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            debugger.UpdateAll(gameTime);
             // TODO: Add your update logic here
             prevkbState = kbState;
             kbState = Keyboard.GetState();
@@ -127,7 +168,7 @@ namespace ActualGame
                     }
                 case (MainGameState.InGame):
                     {
-
+                        currentWorld.UpdateAll(gameTime);
                         break;
                     }
                 case (MainGameState.Menu):
@@ -196,7 +237,7 @@ namespace ActualGame
                 }
                 case (MainGameState.InGame):
                 {
-                        
+                        currentWorld.Draw(spriteBatch);
                     break;
                 }
                 case (MainGameState.Menu):

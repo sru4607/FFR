@@ -83,74 +83,119 @@ namespace ActualGame
         /// </summary>
         public void MoveAI()
         {
-            // TODO: Implement vertical movement into the return statement
-            // TODO: Have the method update enemy.rect's location
-            // TODO: Have the movement update based on collision hitbox detection (possibly vertices or on a grid)
-            // Update the current state
-            switch (patrolState)
+            // Update the current finite state
+            switch(enemy.State)
             {
-                case PatrolState.WalkLeft:
-                    /*
-                    if (frameCounter >= 999999)
-                    {
-                        frameCounter = 0;
-                        patrolState = PatrolState.PauseLeft;
-                    }
-                    else { frameCounter++; }
-                    break;
+                case EnemyState.Docile:
+                    // Check to see whether something causes the enemy to leave a Docile state
+                    enemy.State = UpdateAggro();
 
-                case PatrolState.PauseLeft:
-                    if (frameCounter >= 999999)
+                    // Make normal Docile movement patterns if the enemy's still docile
+                    switch (patrolState)
                     {
-                        frameCounter = 0;
-                        patrolState = PatrolState.WalkRight;
-                        facingRight = true;
-                    }
-                    else { frameCounter++;  }
-                    break;
+                        case PatrolState.WalkLeft:
+                            // If the enemy is unable to walk to the left, update to PauseLeft
+                            if(!AbleToMove())
+                            {
+                                // If the enemy never pauses facing to the left, swap immediately to walking right
+                                if (pauseLeft > 0)
+                                {
+                                    frameCounter = 0;
+                                    patrolState = PatrolState.PauseLeft;
+                                }
+                                else
+                                {
+                                    patrolState = PatrolState.WalkRight;
+                                    facingRight = true;
+                                }
+                            }
+                            break;
 
-                case PatrolState.WalkRight:
-                    if (frameCounter >= 999999)
-                    {
-                        frameCounter = 0;
-                        patrolState = PatrolState.PauseRight;
-                    }
-                    else { frameCounter++; }
-                    break;
+                        case PatrolState.PauseLeft:
+                            // If the enemy has stood still for pauseLeft frames, walk right
+                            if(++frameCounter >= pauseLeft)
+                            {
+                                patrolState = PatrolState.WalkRight;
+                                facingRight = true;
+                            }
+                            break;
 
+                        case PatrolState.WalkRight:
+                            if (!AbleToMove())
+                            {
+                                // If the enemy never pauses facing to the right, swap immediately to walking left
+                                if (pauseRight > 0)
+                                {
+                                    frameCounter = 0;
+                                    patrolState = PatrolState.PauseRight;
+                                }
+                                else
+                                {
+                                    patrolState = PatrolState.WalkLeft;
+                                    facingRight = false;
+                                }
+                            }
+                            break;
 
-                case PatrolState.PauseRight:
-                    if (frameCounter >= 999999)
-                    {
-                        frameCounter = 0;
-                        patrolState = PatrolState.WalkLeft;
-                        facingRight = false;
+                        case PatrolState.PauseRight:
+                            // If the enemy has stood still for pauseRight frames, walk left
+                            if (++frameCounter >= pauseRight)
+                            {
+                                patrolState = PatrolState.WalkLeft;
+                                facingRight = false;
+                            }
+                            break;
+
+                        default:
+                            throw new NotImplementedException("Unknown PatrolState case in AI.MoveAI()");
                     }
-                    else { frameCounter++; }
                     break;
-                    */
                 default:
-                    // Not implemented yet
                     break;
             }
 
             // Move based off the current state
-            switch (patrolState)
+            switch (enemy.State)
             {
-                /*
-                case PatrolState.WalkLeft:
-                    return -walkSpeed;
-                case PatrolState.PauseLeft:
-                    return 0;
-                case PatrolState.WalkRight:
-                    return walkSpeed;
-                case PatrolState.PauseRight:
-                    return 0;
-                    */
-                default:
-                    // Not implemented yet
+                // If the enemy is docile, follow the patrol route
+                case EnemyState.Docile:
+                    switch(patrolState)
+                    {
+                        case PatrolState.PauseLeft:
+                        case PatrolState.PauseRight:
+                            break;
+                        case PatrolState.WalkLeft:
+                            // TODO: Add movement for walking left
+                            break;
+                        case PatrolState.WalkRight:
+                            // TODO: Add movement for walking right
+                            break;
+                    }
                     break;
+                // TODO: Add Search, Aggro, Damaged, and Attack movements
+                default:
+                    throw new NotImplementedException($"AI movement not implemented for {Enum.GetName(typeof(EnemyState), enemy.State)} state in AI.MoveAI()");
             }
+        }
+
+
+        /// <summary>
+        /// Helper method - determines what state of aggro the enemy will be in
+        /// </summary>
+        /// <returns>The current finite state of aggro</returns>
+        private EnemyState UpdateAggro()
+        {
+            // TODO: Update this code to scan for the player
+            return EnemyState.Docile;
+        }
+
+        /// <summary>
+        /// Sets the AI's finite state to the provided parameter
+        /// </summary>
+        /// <param name="state">Updated Enemy finite state</param>
+        public void UpdateAggro(EnemyState state)
+        {
+            enemy.State = state;
         }
 
         /// <summary>
