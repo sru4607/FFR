@@ -10,22 +10,51 @@ using System.Windows.Forms;
 
 namespace MuraMapEditorV2
 {
+    public enum EditorMode { Tile, Remove, Enemy, Warp }
+
     public partial class Map : UserControl
     {
         // Fields
+        private EditorMode mode;
         private Tile[,] tiles;
         private int width;
         private int height;
         private TileData selected;
         private bool mouseIsDown;
+        private List<GameEvent> events;
 
         // Properties
+        public EditorMode Mode
+        {
+            get { return mode; }
+            set
+            {
+                mode = value;
+                if (mode == EditorMode.Tile)
+                {
+                    foreach (GameEvent g in events)
+                        g.Hide();
+                }
+                else
+                {
+                    foreach (GameEvent g in events)
+                        g.Show();
+                }
+            }
+        }
+
         public Tile this[int index1, int index2]
         {
             get
             {
                 return tiles[index1 , index2];
             }
+        }
+
+        public List<GameEvent> Events
+        {
+            get { return events; }
+            set { events = value; }
         }
 
         public int Width
@@ -48,13 +77,15 @@ namespace MuraMapEditorV2
 
         public Map()
         {
+            mode = EditorMode.Tile;
+            events = new List<GameEvent>();
             mouseIsDown = false;
             InitializeComponent();
         }
 
         // Methods
 
-        public void CreateMap(Tileset tileset, int width = 20, int height = 15)
+        public void CreateMap(int width = 20, int height = 15)
         {
             // Clear the previous map
             if (tiles != null)
@@ -62,6 +93,15 @@ namespace MuraMapEditorV2
                 {
                     Controls.Remove(t);
                 }
+
+            if (events != null)
+                foreach (GameEvent e in events)
+                {
+                    Controls.Remove(e);
+                }
+
+            // Reset event list
+            events = new List<GameEvent>();
 
             // Initialize the tile matrix
             tiles = new Tile[width, height];
@@ -74,7 +114,7 @@ namespace MuraMapEditorV2
                 {
                     Tile t = new Tile(i,j);
                     t.Location = new Point(1 + i * 32, 1 + j * 32);
-                    t.Data = tileset.Tiles[0];
+                    t.Data = Tileset.Tiles[0];
                     t.MouseDown += new MouseEventHandler(TileClick);
                     t.MouseEnter += new EventHandler(TileMouseEnter);
                     t.MouseUp += new MouseEventHandler(TileMouseUp);
@@ -91,17 +131,30 @@ namespace MuraMapEditorV2
 
         private void TileClick(object sender, MouseEventArgs e)
         {
-            if (e.Button.HasFlag(MouseButtons.Left))
+            if (e.Button.HasFlag(MouseButtons.Left) && mode == EditorMode.Tile)
             {
                 ((Tile)sender).Capture = false;
                 mouseIsDown = !mouseIsDown;
                 ChangeTile((Tile)sender);
             }
+            else
+            {
+                if (sender is Tile)
+                {
+                    Tile t = (Tile)sender;
+                    SetEvent(t.XIndex, t.YIndex);
+                }
+                else
+                {
+                    GameEvent g = (GameEvent)sender;
+                    SetEvent(g.XIndex, g.YIndex);
+                }
+            }
         }
 
         private void TileMouseEnter(object sender, EventArgs e)
         {
-            if (mouseIsDown)
+            if (mouseIsDown && mode == EditorMode.Tile)
                 ChangeTile((Tile)sender);
         }
 
@@ -210,6 +263,97 @@ namespace MuraMapEditorV2
                 else
                     t.RemoveAdjacency(Direction.West);
             }
+        }
+
+        private void SetEvent(int xIndex, int yIndex)
+        {
+            switch (mode)
+            {
+                case EditorMode.Remove:
+                    // Store  all events that occur at the coordinates
+                    List<GameEvent> eventsAtLocation = new List<GameEvent>();
+                    foreach(GameEvent g in events)
+                    {
+                        if (g.XIndex == xIndex && g.YIndex == yIndex)
+                            eventsAtLocation.Add(g);
+                    }
+
+                    // Remove all events at these coordinates
+
+                    foreach (GameEvent g in eventsAtLocation)
+                        Controls.Remove(g);
+
+                    break;
+                case EditorMode.Enemy:
+                    // Only one enemy can exist at a location at a time, so first check for other enemies
+                    GameEvent enemyEvent = null;
+                    foreach(GameEvent g in events)
+                    {
+                        if (g.EventType == EventType.Enemy && g.XIndex == xIndex && g.YIndex == yIndex)
+                        {
+                            enemyEvent = g;
+                            break;
+                        }
+                    }
+
+                    // Only place an enemy if one doesn't exist
+                    if (enemyEvent == null)
+                    {
+                        enemyEvent = new GameEvent();
+                        enemyEvent.EventType = EventType.Enemy;
+                        enemyEvent.Location = new Point(1 + xIndex * 32, 1 + yIndex * 32);
+                        enemyEvent.Image = Properties.Resources.Enemy;
+                        enemyEvent.MouseClick += new MouseEventHandler(TileClick);
+                        enemyEvent.XIndex = xIndex;
+                        enemyEvent.YIndex = yIndex;
+                        events.Add(enemyEvent);
+                        Controls.Add(enemyEvent);
+                        enemyEvent.BringToFront();
+                    }
+
+                    break;
+                case EditorMode.Warp:
+                    // Only one warp can exist at a location at a time, so first check for other warps
+                    GameEvent warpEvent = null;
+                    foreach (GameEvent g in events)
+                    {
+                        if (g.EventType == EventType.Warp && g.XIndex == xIndex && g.YIndex == yIndex)
+                        {
+                            // Do stuff then break
+                            warpEvent = g;
+                            break;
+                        }
+                    }
+
+                    // Either edit the current warp if it exists or create a new one
+                    if (warpEvent == null)
+                    {
+                        WarpCreator creator = new WarpCreator();
+                        creator.ShowDialog();
+
+                        if (creator.Finished)
+                        {
+                            warpEvent = new GameEvent();
+                            warpEvent.EventType = EventType.Warp;
+                            warpEvent.WarpData = new WarpData(creator);
+                            warpEvent.Location = new Point(1 + xIndex * 32, 1 + yIndex * 32);
+                            warpEvent.MouseClick += new MouseEventHandler(TileClick);
+                            warpEvent.Image = Properties.Resources.Warp;
+                            warpEvent.XIndex = xIndex;
+                            warpEvent.YIndex = yIndex;
+                            events.Add(warpEvent);
+                            Controls.Add(warpEvent);
+                            warpEvent.BringToFront();
+                        }
+                    }
+                    else
+                    {
+                        warpEvent.WarpData.WarpCreator.Show();
+                    }
+
+                    break;
+            }
+
         }
 
         private Point GetPosition(int xIndex, int yIndex)

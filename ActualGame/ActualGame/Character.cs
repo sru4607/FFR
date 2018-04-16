@@ -51,8 +51,9 @@ namespace ActualGame
             : base(x, y, 64, 128, node)
         {
             hp = 1;
-            hitbox = new Rectangle(0, 0, 32, 64);
-            mBox = new Rectangle(HitBox.Location.X + 32, HitBox.Location.Y, 32, 56);
+            // TODO: Verify whether the hitbox line of code is valid or if it belongs in GameObject 
+            // Also, should it use 0, 0, 32, 64; or x, y, 32, 64?
+            mBox = new Rectangle((int)Position.X + 32, (int)Position.Y, 32, 56);
             mDamage = 0;
             rDamage = 0;
             stunFrames = 0;
@@ -73,7 +74,10 @@ namespace ActualGame
         {
             this.node = node;
             hp = 1;
-            mBox = new Rectangle(rect.Location.X + 32, rect.Location.Y, 32, 56);
+            mBox = new Rectangle((int)Position.X + 32, (int)Position.Y, 32, 56);
+
+            Position = new Vector2(X, Y);
+            
             mDamage = 0;
             rDamage = 0;
             stunFrames = 0;
@@ -112,7 +116,7 @@ namespace ActualGame
 
         public void Flip()
         {
-            if (mBox.Location.X > hitbox.Location.X)
+            if (mBox.Location.X > X)
             {
                 //Flip to left side
             } 
@@ -153,9 +157,9 @@ namespace ActualGame
         /// <summary>
         /// Updates the status of a Character object
         /// </summary>
-        public override void Update()
+        public override void Update(GameTime gm)
             {
-                base.Update();
+                base.Update(gm);
             }
         #endregion
 

@@ -13,7 +13,8 @@ namespace ActualGame
     {
         #region Fields
         // Fields
-        protected Rectangle rect;
+        public Vector2 Position { get; set; }
+        public Vector2 Size { get; set; }
         protected Texture2D texture;
         public bool noClip = false;
         protected QuadTreeNode node;
@@ -30,61 +31,42 @@ namespace ActualGame
         }
 
         // TODO: Add description
-
         /// <summary>
         /// Get and set for the X value of the game object hitbox's top-left corner
         /// </summary>
-        public int X
+        public float X
         {
-            get { return rect.X; }
-            set { rect = new Rectangle(value, Rect.Y, Rect.Width, Rect.Height); }
+            get { return Position.X; }
+            set { Position = new Vector2(value, Position.Y); }
         }
 
         /// <summary>
         /// Get and set for the Y value of the game object hitbox's top-left corner
         /// </summary>
-        public int Y
+        public float Y
         {
-            get { return rect.Y; }
-            set { rect = new Rectangle(Rect.X, value, Rect.Width, Rect.Height); }
+            get { return Position.Y; }
+            set { Position = new Vector2(Position.X, value); }
         }
 
         /// <summary>
         /// Get and set for the width of the game object hitbox
         /// </summary>
-        public int Width
+        public float Width
         {
-            get { return rect.Width; }
-            set { rect = new Rectangle(Rect.X, Rect.Y, value, Rect.Height); }
+            get { return Size.X; }
+            set { Size = new Vector2(value, Size.Y); }
         }
 
         /// <summary>
         /// Get and set for the height of the game object hitbox
         /// </summary>
-        public int Height
+        public float Height
         {
-            get { return rect.Height; }
-            set { rect = new Rectangle(Rect.X, Rect.Y, Rect.Width, value); }
+            get { return Size.Y; }
+            set { Size = new Vector2(Size.X, value); }
         }
 
-        /// <summary>
-        /// Get and set for the entirety of the hitbox as a Rectangle
-        /// </summary>
-        public Rectangle Rect
-        {
-            get { return rect; }
-            set { rect = value; }
-        }
-
-        /// <summary>
-        /// Get and set for collision hitbox
-        /// </summary>
-        // TODO: Confirm this is correct documentation
-        public Rectangle HitBox
-        {
-            get { return hitbox; }
-            set { hitbox = value; }
-        }
 
         #endregion
 
@@ -94,7 +76,7 @@ namespace ActualGame
         /// </summary>
         public GameObject()
         {
-            rect = new Rectangle();
+            Position = new Vector2(0,0);
             World current = new World("");
         }
 
@@ -107,9 +89,8 @@ namespace ActualGame
         /// <param name="height">Height of the draw box</param>
         public GameObject(int x, int y, int width, int height, QuadTreeNode node)
         {
-            rect = new Rectangle(x, y, width, height);
-            velX = 0.0;
-            velY = 0.0;
+            Position = new Vector2(x, y); 
+            Size = new Vector2(width, height);
             this.node = node;
         }
         #endregion
@@ -132,13 +113,11 @@ namespace ActualGame
         /// <summary>
         /// 
         /// </summary>
-        virtual public void Update()
+        virtual public void Update(GameTime gm)
         {
-            if (this is Player temp)
-            {
-                temp.Update();
-            }
             node = node.GetContainingQuad(this);
+            if (this is PhysicsObject temp)
+                ((PhysicsObject)temp).Update(gm);
 
         }
         #endregion
@@ -150,7 +129,7 @@ namespace ActualGame
         /// <param name="sb"></param>
         virtual public void Draw(SpriteBatch sb)
         {
-            sb.Draw(texture, rect, Color.White);
+            sb.Draw(texture, Position, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / texture.Width, Height / texture.Height), SpriteEffects.None, 0);
         }
         #endregion
     }

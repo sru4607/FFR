@@ -86,14 +86,14 @@ namespace ActualGame
                     Divide();
 
                 //Checks which division (if any) the object fits in completely and adds the object to the appropriate list
-                if (rectangle.Contains(gameObject.Rect))
+                if (rectangle.Contains((new Rectangle((int)gameObject.X, (int)gameObject.Y, (int)gameObject.Width, (int)gameObject.Height))))
                 {
                     int index = -1;
                     if (divisions != null)
                     {
                         for (int c = 0; c < divisions.Length; c++)
                         {
-                            if (divisions[c].Rectangle.Contains(gameObject.Rect))
+                            if (divisions[c].Rectangle.Contains((new Rectangle((int)gameObject.X, (int)gameObject.Y, (int)gameObject.Width, (int)gameObject.Height))))
                                 index = c;
                         }
                     }
@@ -134,7 +134,7 @@ namespace ActualGame
                 {
                     for(int c2=0; c2<divisions.Length; c2++)
                     {
-                        if(divisions[c2].Rectangle.Contains(objects[c].Rect))
+                        if(divisions[c2].Rectangle.Contains((new Rectangle((int)objects[c].X, (int)objects[c].Y, (int)objects[c].Width, (int)objects[c].Height))))
                         {
                             divisions[c2].Objects.Add(objects[c]);
                             objectsToRemove.Add(objects[c]);
@@ -177,13 +177,13 @@ namespace ActualGame
         public QuadTreeNode GetContainingQuad(GameObject gameObject)
         {
             //Recursively checks the divisions until it finds the smallest node the rectangle fits in
-            if (rectangle.Contains(gameObject.Rect))
+            if (rectangle.Contains((new Rectangle((int)gameObject.X, (int)gameObject.Y, (int)gameObject.Width, (int)gameObject.Height))))
             {
                 if(divisions != null)
                 {
                     for(int c=0; c<divisions.Length; c++)
                     {
-                        if(divisions[c].Rectangle.Contains(gameObject.Rect))
+                        if(divisions[c].Rectangle.Contains((new Rectangle((int)gameObject.X, (int)gameObject.Y, (int)gameObject.Width, (int)gameObject.Height))))
                         {
                             if (divisions[c].Divisions == null)
                                 return divisions[c];

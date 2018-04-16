@@ -32,7 +32,7 @@ namespace MuraMapEditorV2
             {
                 if (width >0 && height > 0)
                 {
-                    editor.Map.CreateMap(editor.Tileset, width, height);
+                    editor.Map.CreateMap(width, height);
                     this.Hide();
                 }
                 else

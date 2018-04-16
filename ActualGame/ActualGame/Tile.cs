@@ -10,7 +10,7 @@ namespace ActualGame
     {
         //To Be implemented
         #region Fields
-
+        public bool Solid { get; set; }
         #endregion
 
         #region Properties

@@ -14,7 +14,6 @@ namespace MuraMapEditorV2
     public partial class MapEditor : Form
     {
         // Fields
-        private Tileset tileset;
         private NewMapForm NewMap;
         private string currentFilePath;
 
@@ -24,18 +23,13 @@ namespace MuraMapEditorV2
             get { return MapView; }
         }
 
-        public Tileset Tileset
-        {
-            get { return tileset; }
-        }
-
         public MapEditor()
         {
             InitializeComponent();
-            tileset = new Tileset();
-            TilePalette.Update(tileset);
+            Tileset.InitiateTileset();
+            TilePalette.Update();
             MapView.Selected = TilePalette.Selected;
-            MapView.CreateMap(tileset);
+            MapView.CreateMap();
             NewMap = new NewMapForm(this);
 
         }
@@ -47,6 +41,7 @@ namespace MuraMapEditorV2
 
         private void TilePalette_Click(object sender, EventArgs e)
         {
+            MapView.Mode = EditorMode.Tile;
             MapView.Selected = TilePalette.Selected;
         }
 
@@ -81,7 +76,27 @@ namespace MuraMapEditorV2
                 }
             }
 
-            output.Write(0);
+            output.Write(MapView.Events.Count);
+
+            foreach (GameEvent g in MapView.Events)
+            {
+                output.Write((int)g.EventType);
+
+                switch (g.EventType)
+                {
+                    case EventType.Enemy:
+                        output.Write(g.XIndex);
+                        output.Write(g.YIndex);
+                        break;
+                    case EventType.Warp:
+                        output.Write(g.XIndex);
+                        output.Write(g.YIndex);
+                        output.Write(g.WarpData.MapName);
+                        output.Write(g.WarpData.XOffset);
+                        output.Write(g.WarpData.YOffset);
+                        break;
+                }
+            }
 
 
             output.Close();
@@ -98,19 +113,35 @@ namespace MuraMapEditorV2
 
             BinaryReader input = new BinaryReader(File.OpenRead(currentFilePath));
 
-            MapView.CreateMap(tileset, input.ReadInt32(), input.ReadInt32());
+            MapView.CreateMap(input.ReadInt32(), input.ReadInt32());
 
             for (int i = 0; i<MapView.Width; i++)
             {
                 for (int j = 0; j<MapView.Height; j++)
                 {
-                    MapView[i,j].Data = tileset.Sources[input.ReadString()];
+                    MapView[i,j].Data = Tileset.Sources[input.ReadString()];
                     MapView[i,j].ImageIndex = input.ReadInt32();
                     input.ReadInt32(); // Depth, currently useless for reading into this program
                 }
             }
+            
+            MapView.Events = new List<GameEvent>(); // Number of Events, not yet implemented
 
-            input.ReadInt32(); // Number of Events, not yet implemented
+            for (int i = 0; i<input.ReadInt32(); i++)
+            {
+                GameEvent g = new GameEvent();
+                g.EventType = (EventType)input.ReadInt32();
+                g.XIndex = input.ReadInt32();
+                g.YIndex = input.ReadInt32();
+
+                if (g.EventType == EventType.Warp)
+                {
+                    WarpCreator c = new WarpCreator();
+                    c.Name = input.ReadString();
+                    c.XOffset = input.ReadInt32();
+                    c.YOffset = input.ReadInt32();
+                }
+            }
 
             input.Close();
         }
@@ -146,6 +177,22 @@ namespace MuraMapEditorV2
             else
             {
                 SaveDialog.ShowDialog();
+            }
+        }
+
+        private void EventButton_Click(object sender, EventArgs e)
+        {
+            if (sender == ClearButton)
+            {
+                MapView.Mode = EditorMode.Remove;
+            }
+            else if (sender == EnemyButton)
+            {
+                MapView.Mode = EditorMode.Enemy;
+            }
+            else if (sender == WarpButton)
+            {
+                MapView.Mode = EditorMode.Warp;
             }
         }
     }
