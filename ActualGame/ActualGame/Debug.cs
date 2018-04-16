@@ -42,12 +42,13 @@ namespace ActualGame
 
             //creates a player
             allObjects.Add(new Player(100, 100, node));
-            allObjects[1].Position = new Vector2(100, 100);
+            allObjects[1].Position = new Vector2(200, 00);
             allObjects[1].Size = new Vector2(64, 128);
-            allObjects[1].LoadTexture(allTexts["PenPen"]);
+            allObjects[1].LoadTexture(allTexts["Floor"]);
             
             //creates an enemy
             allObjects.Add(new Enemy(300, 100, node, PatrolType.Standing));
+            allObjects[2].Position = new Vector2(300, 0);
             allObjects[2].LoadTexture(allTexts["PenPen"]);
 
             debug.AllObjects = allObjects;
