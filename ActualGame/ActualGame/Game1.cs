@@ -19,6 +19,10 @@ namespace ActualGame
         MainGameState currentState;
         Dictionary<string, Texture2D> allTextures;
         Debug debugger;
+        Button[] menuButtons;
+        int indexActiveMenuButton;
+        KeyboardState kbState;
+        KeyboardState prevkbState;
         
         
         public Game1()
@@ -58,6 +62,9 @@ namespace ActualGame
             graphics.ApplyChanges();
 
             levelOne = new World("Level One", "level1.txt");
+
+            kbState = Keyboard.GetState();
+            prevkbState = kbState;
         }
 
         /// <summary>
@@ -77,6 +84,11 @@ namespace ActualGame
             allTextures.Add("PenPen", Content.Load<Texture2D>("PenPen"));
             allTextures.Add("missingtexture", Content.Load<Texture2D>("missingtexture"));
             allTextures.Add("Enemy", Content.Load<Texture2D>("missingtexture"));
+            allTextures.Add("Menu", Content.Load<Texture2D>("Menu"));
+            allTextures.Add("StartButton", Content.Load<Texture2D>("StartButton"));
+            allTextures.Add("ExitButton", Content.Load<Texture2D>("ExitButton"));
+
+            SwitchToMainMenu();
 
             // Sync in-game objects with their dictionary textures
             // EX: testEnemy.LoadTexture(allTextures["missingtexture"]);
@@ -103,6 +115,9 @@ namespace ActualGame
                 Exit();
             debugger.UpdateAll(gameTime);
             // TODO: Add your update logic here
+            prevkbState = kbState;
+            kbState = Keyboard.GetState();
+
             switch (currentState)
             {
                 case (MainGameState.Debug):
@@ -117,7 +132,30 @@ namespace ActualGame
                     }
                 case (MainGameState.Menu):
                     {
-
+                        //Adjusts the current active button if up or down arrow is pressed
+                        if(kbState.IsKeyDown(Keys.Down) && prevkbState.IsKeyUp(Keys.Down) && kbState.IsKeyUp(Keys.Up))
+                        {
+                            if (indexActiveMenuButton == menuButtons.Length - 1)
+                                indexActiveMenuButton = 0;
+                            else
+                                indexActiveMenuButton++;
+                        }
+                        else if(kbState.IsKeyDown(Keys.Up) && prevkbState.IsKeyUp(Keys.Up) && kbState.IsKeyUp(Keys.Down))
+                        {
+                            if (indexActiveMenuButton == 0)
+                                indexActiveMenuButton = menuButtons.Length - 1;
+                            else
+                                indexActiveMenuButton--;
+                        }
+                        //Switches the game state when a certain button is pressed
+                        else if(kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
+                        {
+                            string buttonText = menuButtons[indexActiveMenuButton].Name;
+                            if (buttonText == "StartButton")
+                                currentState = MainGameState.InGame;
+                            else if (buttonText == "ExitButton")
+                                Exit();
+                        }
                         break;
                     }
                 case (MainGameState.Pause):
@@ -163,7 +201,14 @@ namespace ActualGame
                 }
                 case (MainGameState.Menu):
                 {
-
+                    spriteBatch.Draw(allTextures["Menu"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                    for(int c=0; c<menuButtons.Length; c++)
+                    {
+                        if (indexActiveMenuButton == c)
+                            spriteBatch.Draw(menuButtons[c].Texture, menuButtons[c].Rectangle, Color.White);
+                        else
+                            spriteBatch.Draw(menuButtons[c].Texture, menuButtons[c].Rectangle, Color.Gray);
+                    }
                     break;
                 }
                 case (MainGameState.Pause):
@@ -182,6 +227,22 @@ namespace ActualGame
             }
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// A helper method that will initialize the main menu whenever it is called
+        /// </summary>
+        public void SwitchToMainMenu()
+        {
+            currentState = MainGameState.Menu;
+            int height = GraphicsDevice.Viewport.Height;
+            int width = GraphicsDevice.Viewport.Width;
+            menuButtons = new Button[2];
+            Texture2D startButton = allTextures["StartButton"];
+            menuButtons[0] = new Button(startButton, "StartButton", new Rectangle(width / 2 - startButton.Width / 2, height / 2 - startButton.Height / 2, startButton.Width, startButton.Height));
+            Texture2D exitButton = allTextures["ExitButton"];
+            menuButtons[1] = new Button(exitButton, "ExitButton", new Rectangle(width / 2 - exitButton.Width / 2, height * 3 / 4 - exitButton.Height / 2, exitButton.Width, exitButton.Height));
+            indexActiveMenuButton = 0;
         }
     }
 }
