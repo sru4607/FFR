@@ -16,8 +16,15 @@ namespace ActualGame
         private Vector2 prevLocation;
 
         public PhysicsObject()
+            : base()
         {
            
+        }
+
+        public PhysicsObject(int x, int y, int width, int height, QuadTreeNode node)
+            :base(x, y, width, height, node)
+        {
+
         }
 
         public override void Update(GameTime gm)
@@ -65,7 +72,6 @@ namespace ActualGame
             UpdatePosition(gm);
             Position = World.Current.WhereCanIGetTo(this, prevLocation, Position, new Rectangle((int)Position.X, (int)Position.Y,(int)Size.X,(int)Size.Y));
              
-
         }
 
         private void UpdatePosition(GameTime gm)

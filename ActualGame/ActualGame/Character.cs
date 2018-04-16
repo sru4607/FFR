@@ -96,13 +96,18 @@ namespace ActualGame
             {
                 for (int j = 0; j < parents[i].Objects.Count; j++)
                 {
-                    if (mBox.Intersects(parents[i].Objects[j].Rect) && parents[i].Objects[j] is Character)
+                    if (AttackIntersects(parents[i].Objects[j]) && parents[i].Objects[j] is Character)
                     {
                         Character temp = (Character) parents[i].Objects[j];
                         temp.TakeDamage(mDamage);
                     }
                 }
             }
+        }
+
+        public virtual bool AttackIntersects(GameObject @object)
+        {
+            return mBox.Intersects(new Rectangle((int)@object.Position.X, (int)@object.Position.Y, (int)@object.Size.X, (int)@object.Size.Y));
         }
 
         /// <summary>

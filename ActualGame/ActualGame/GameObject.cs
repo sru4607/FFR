@@ -77,7 +77,6 @@ namespace ActualGame
         public GameObject()
         {
             Position = new Vector2(0,0);
-            World current = new World("");
         }
 
         /// <summary>
@@ -92,6 +91,7 @@ namespace ActualGame
             Position = new Vector2(x, y); 
             Size = new Vector2(width, height);
             this.node = node;
+            node.AddObject(this);
         }
         #endregion
 
@@ -107,6 +107,7 @@ namespace ActualGame
         #endregion
 
         #region Methods
+        
         #endregion
 
         #region Update
