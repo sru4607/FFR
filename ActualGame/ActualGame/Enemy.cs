@@ -38,10 +38,8 @@ namespace ActualGame
             mainAi = new AI(this, patrolType);
 
             // Initialize hitbox parameters
-            rect.X = x;
-            rect.Y = y;
-            rect.Width = 128;
-            rect.Height = 128;
+            Position = new Vector2(X,Y);
+            Size = new Vector2(64, 128);
             noClip = true;
         }
         #endregion
@@ -88,10 +86,10 @@ namespace ActualGame
         public override void Draw(SpriteBatch sb)
         {
             if(mainAi.FacingRight)
-                sb.Draw(texture, rect, null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, 0);
+                sb.Draw(texture, Position, new Rectangle(0,0,texture.Width,texture.Height), Color.White,0, Vector2.Zero, new Vector2(Width / texture.Width, Height / texture.Height), SpriteEffects.None, 0);
             // Draws to the screen with a horizontal flip if the AI is facing left
             else
-                sb.Draw(texture, rect, null, Color.White, 0, new Vector2(0,0), SpriteEffects.FlipHorizontally, 0);
+                sb.Draw(texture, Position, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width/ texture.Width, Height / texture.Height), SpriteEffects.FlipHorizontally, 0);
         }
         #endregion
     }

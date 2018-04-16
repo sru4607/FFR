@@ -22,7 +22,7 @@ namespace ActualGame
 
         public override void Update(GameTime gm)
         {
-                KeyboardMovement();
+            KeyboardMovement();
             Gravity();
             Friction();
             MoveAsPossible(gm);
@@ -37,9 +37,12 @@ namespace ActualGame
         {
             KeyboardState kb = Keyboard.GetState();
 
-            if (kb.IsKeyDown(Keys.Left)) { Movement = -0.5f * Vector2.UnitX; }
-            if (kb.IsKeyDown(Keys.Right)) { Movement = Vector2.UnitX * 0.5f; }
-            if (kb.IsKeyDown(Keys.Space)) { Jump(); }
+            if (kb.IsKeyDown(Keys.Left))
+                { Movement = -0.5f * Vector2.UnitX; }
+            if (kb.IsKeyDown(Keys.Right))
+                { Movement += Vector2.UnitX * 0.5f; }
+            if (kb.IsKeyDown(Keys.Space))
+                { Jump(); }
             
         }
 
@@ -51,17 +54,17 @@ namespace ActualGame
         private void Friction()
         {
             if (OnGround())
-                Movement = 0.8f * Movement;
+                Movement -= 0.08f * Movement;
             else
-                Movement = 0.9f * Movement;
+                Movement -= 0.02f * Movement;
         }
 
         private void MoveAsPossible(GameTime gm)
         {
-            prevLocation = new Vector2(Rect.X, Rect.Y);
+            prevLocation = Position;
             UpdatePosition(gm);
-            Position = World.Current.WhereCanIGetTo(prevLocation, Position, Rect);
-            Rect = new Rectangle((int)Position.X, (int)Position.Y, Rect.Width, Rect.Height);
+            Position = World.Current.WhereCanIGetTo(this, prevLocation, Position, new Rectangle((int)Position.X, (int)Position.Y,(int)Size.X,(int)Size.Y));
+             
 
         }
 
@@ -72,7 +75,7 @@ namespace ActualGame
 
         public bool OnGround()
         {
-            Rectangle lower = Rect;
+            Rectangle lower = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
             lower.Offset(0, 1);
             return false;
         }
@@ -80,7 +83,7 @@ namespace ActualGame
         private void Jump()
         {
             if(OnGround())
-                Movement -= Vector2.UnitY * 2f;
+                Movement = -Vector2.UnitY * 20f;
         }
 
         private void StopIfBlocked()

@@ -32,22 +32,25 @@ namespace ActualGame
         #region method
         public void InstantiateAll()
         {
-           // debug = new World("Test", "Content/Map1.Map");
-            //World.Current = debug;
+            debug = new World();
+            World.Current = debug;
             
             //creates a floor
             allObjects.Add(new GameObject(80, 300, 500, 64));
             allObjects[0].LoadTexture(allTexts["Floor"]);
+            allObjects[0].NoClip = false;
 
             //creates a player
-            allObjects.Add(new Player(00, 00, node));
+            allObjects.Add(new Player(100, 100, node));
+            allObjects[1].Position = new Vector2(100, 100);
+            allObjects[1].Size = new Vector2(64, 128);
             allObjects[1].LoadTexture(allTexts["PenPen"]);
             
             //creates an enemy
             allObjects.Add(new Enemy(300, 100, node, PatrolType.Standing));
             allObjects[2].LoadTexture(allTexts["PenPen"]);
 
-            //debug.AllObjects = allObjects;
+            debug.AllObjects = allObjects;
 
         }
         #endregion
@@ -59,10 +62,10 @@ namespace ActualGame
         /// <param name="gameTime">Reference to the Update(gameTime) value</param>
         public void UpdateAll(GameTime gameTime)
         {
-            //foreach(GameObject go in World.Current.AllObjects)
-            //{
-            //    go.Update(gameTime);
-            //}
+            foreach(GameObject go in World.Current.AllObjects)
+            {
+                go.Update(gameTime);
+            }
         }
         #endregion
 

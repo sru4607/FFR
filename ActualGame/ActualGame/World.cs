@@ -85,7 +85,7 @@ namespace ActualGame
             }
         }
 
-        public Vector2 WhereCanIGetTo(Vector2 original, Vector2 future, Rectangle rect)
+        public Vector2 WhereCanIGetTo(PhysicsObject currentObject, Vector2 original, Vector2 future, Rectangle rect)
         {
             Vector2 MovementToTry = future - original;
             Vector2 FurthestAvailableLocationSoFar = original;
@@ -98,7 +98,7 @@ namespace ActualGame
             {
                 Vector2 positionToTry = original + OneStep * i;
                 Rectangle newBoundary = CreateRectangleAtPosition(positionToTry, Rect.Width, Rect.Height);
-                if (HasRoomForRectangle(newBoundary)) { FurthestAvailableLocationSoFar = positionToTry; }
+                if (HasRoomForRectangle(newBoundary, currentObject)) { FurthestAvailableLocationSoFar = positionToTry; }
                 else
                 {
                     if (IsDiagonalMove)
@@ -107,11 +107,11 @@ namespace ActualGame
 
                         Vector2 remainingHorizontalMovement = OneStep.X * Vector2.UnitX * stepsLeft;
                         FurthestAvailableLocationSoFar =
-                            WhereCanIGetTo(FurthestAvailableLocationSoFar, FurthestAvailableLocationSoFar + remainingHorizontalMovement, Rect);
+                            WhereCanIGetTo(currentObject, FurthestAvailableLocationSoFar, FurthestAvailableLocationSoFar + remainingHorizontalMovement, Rect);
 
                         Vector2 remainingVerticalMovement = OneStep.Y * Vector2.UnitY * stepsLeft;
                         FurthestAvailableLocationSoFar =
-                            WhereCanIGetTo(FurthestAvailableLocationSoFar, FurthestAvailableLocationSoFar + remainingVerticalMovement, Rect);
+                            WhereCanIGetTo(currentObject, FurthestAvailableLocationSoFar, FurthestAvailableLocationSoFar + remainingVerticalMovement, Rect);
                     }
 
                 }
@@ -124,12 +124,12 @@ namespace ActualGame
             return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
         }
 
-        public bool HasRoomForRectangle(Rectangle rectangleToCheck)
+        public bool HasRoomForRectangle(Rectangle rectangleToCheck, GameObject currentObject)
         {   if (loadedTiles != null && loadedTiles.Length > 0)
             {
                 foreach (Tile tile in loadedTiles)
                 {
-                    if (tile.Solid && tile.Rect.Intersects(rectangleToCheck))
+                    if (tile.Solid && (new Rectangle((int)tile.X, (int)tile.Y, (int)tile.Width, (int)tile.Height)).Intersects(rectangleToCheck))
                     {
                         return false;
                     }
@@ -137,7 +137,7 @@ namespace ActualGame
             }
             foreach (GameObject obj in AllObjects)
             {
-                if (!obj.NoClip && obj.Rect.Intersects(rectangleToCheck))
+                if (!obj.NoClip && obj != currentObject && (new Rectangle((int)obj.X, (int)obj.Y, (int)obj.Width, (int)obj.Height)).Intersects(rectangleToCheck))
                 {
                     return false;
                 }
@@ -155,9 +155,12 @@ namespace ActualGame
         #region Draw
         public void Draw(SpriteBatch sb)
         {
-            foreach(Tile t in loadedTiles)
+            if (loadedTiles != null)
             {
-                t.Draw(sb);
+                foreach (Tile t in loadedTiles)
+                {
+                    t.Draw(sb);
+                }
             }
             foreach(GameObject g in AllObjects)
             {

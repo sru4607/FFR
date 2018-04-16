@@ -53,7 +53,7 @@ namespace ActualGame
             hp = 1;
             // TODO: Verify whether the hitbox line of code is valid or if it belongs in GameObject 
             // Also, should it use 0, 0, 32, 64; or x, y, 32, 64?
-            mBox = new Rectangle(Rect.X + 32, Rect.Y, 32, 56);
+            mBox = new Rectangle((int)Position.X + 32, (int)Position.Y, 32, 56);
             mDamage = 0;
             rDamage = 0;
             stunFrames = 0;
@@ -73,8 +73,10 @@ namespace ActualGame
         {
             this.node = node;
             hp = 1;
-            mBox = new Rectangle(rect.Location.X + 32, rect.Location.Y, 32, 56);
-            Rect = new Rectangle(X, Y, width, height);
+            mBox = new Rectangle((int)Position.X + 32, (int)Position.Y, 32, 56);
+
+            Position = new Vector2(X, Y);
+            
             mDamage = 0;
             rDamage = 0;
             stunFrames = 0;
@@ -88,7 +90,7 @@ namespace ActualGame
         /// </summary>
         public virtual void MAttack(Character c)
         {
-            if (mBox.Intersects(c.Rect))
+            if (mBox.Intersects(new Rectangle((int)c.X,(int)c.Y,(int)c.Width,(int)c.Height)))
             {
                 c.TakeDamage(mDamage);
             }
