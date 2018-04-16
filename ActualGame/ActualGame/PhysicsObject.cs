@@ -120,7 +120,7 @@ namespace ActualGame
         private void Jump()
         {
             if(OnGround())
-                Movement = new Vector2(Movement.X, -1 * 20f);
+                Movement = new Vector2(Movement.X, -1 * 2f);
         }
 
         private void StopIfBlocked()
