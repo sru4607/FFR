@@ -33,7 +33,10 @@ namespace ActualGame
         {
             this.name = name;
             AllObjects = new List<GameObject>();
-            Import(allTextures, path);
+
+            // Load the world
+            if (path!= "")
+                Import(allTextures, path);
         }
         #endregion
 
