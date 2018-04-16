@@ -19,6 +19,8 @@ namespace ActualGame
         MainGameState currentState;
         Dictionary<string, Texture2D> allTextures;
         Debug debugger;
+        Dictionary<string, World> maps;
+        World currentWorld;
         
         
         public Game1()
@@ -57,7 +59,8 @@ namespace ActualGame
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
-            levelOne = new World("Level One", "level1.txt");
+            // Initialize the maps list
+            maps = new Dictionary<string, World>();
         }
 
         /// <summary>
@@ -77,6 +80,46 @@ namespace ActualGame
             allTextures.Add("PenPen", Content.Load<Texture2D>("PenPen"));
             allTextures.Add("missingtexture", Content.Load<Texture2D>("missingtexture"));
             allTextures.Add("Enemy", Content.Load<Texture2D>("missingtexture"));
+
+            // Load tiles systemmatically
+            // BrickWall
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("BrickWall" + i, Content.Load<Texture2D>("BrickWall" + i));
+
+            // BrickWallBlue
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("BrickWallBlue" + i, Content.Load<Texture2D>("BrickWallBlue" + i));
+
+            // BrickWallRed
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("BrickWallRed" + i, Content.Load<Texture2D>("BrickWallRed" + i));
+
+            // holder
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("holder" + i, Content.Load<Texture2D>("holder" + i));
+
+            // temp
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("temp" + i, Content.Load<Texture2D>("temp" + i));
+
+            // Walls
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("Walls" + i, Content.Load<Texture2D>("Walls" + i));
+
+            // WallsGreen
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("WallsGreen" + i, Content.Load<Texture2D>("WallsGreen" + i));
+
+            // WallsRed
+            for (int i = 0; i < 16; i++)
+                allTextures.Add("WallsRed" + i, Content.Load<Texture2D>("WallsRed" + i));
+
+            // Load maps
+            maps.Add("Map1", new World(allTextures, "Map1", "Content/Map1.map"));
+
+            currentWorld = maps["Map1"];
+
+            //levelOne = new World(allTextures, "Level One", "level1.txt");
 
             // Sync in-game objects with their dictionary textures
             // EX: testEnemy.LoadTexture(allTextures["missingtexture"]);
@@ -112,7 +155,7 @@ namespace ActualGame
                     }
                 case (MainGameState.InGame):
                     {
-
+                        currentWorld.UpdateAll(gameTime);
                         break;
                     }
                 case (MainGameState.Menu):
@@ -158,7 +201,7 @@ namespace ActualGame
                 }
                 case (MainGameState.InGame):
                 {
-                        
+                        currentWorld.Draw(spriteBatch);
                     break;
                 }
                 case (MainGameState.Menu):

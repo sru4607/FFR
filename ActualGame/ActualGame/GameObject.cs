@@ -77,7 +77,6 @@ namespace ActualGame
         public GameObject()
         {
             Position = new Vector2(0,0);
-            World current = new World("");
         }
 
         /// <summary>
