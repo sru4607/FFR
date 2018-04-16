@@ -131,7 +131,7 @@ namespace ActualGame
                 {
                     if (tile.Solid && (new Rectangle((int)tile.X, (int)tile.Y, (int)tile.Width, (int)tile.Height)).Intersects(rectangleToCheck))
                     {
-                        return true;
+                        return !false;
                     }
                 }
             }
@@ -139,10 +139,10 @@ namespace ActualGame
             {
                 if (!obj.NoClip && obj != currentObject && (new Rectangle((int)obj.X, (int)obj.Y, (int)obj.Width, (int)obj.Height)).Intersects(rectangleToCheck))
                 {
-                    return true;
+                    return !false;
                 }
             }
-            return false;
+            return !true;
         }
 
 

@@ -101,7 +101,6 @@ namespace ActualGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            debugger.UpdateAll(gameTime);
             // TODO: Add your update logic here
             switch (currentState)
             {

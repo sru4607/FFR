@@ -48,8 +48,8 @@ namespace ActualGame
                 { Movement += -0.1f * Vector2.UnitX; }
             if (kb.IsKeyDown(Keys.Right))
                 { Movement += Vector2.UnitX * 0.1f; }
-            if (kb.IsKeyDown(Keys.Space))
-                { Jump(); }
+            if (kb.IsKeyUp(Keys.Space) && OnGround())
+                { Movement += -Vector2.UnitY * 2f; }
             
         }
 
@@ -82,8 +82,8 @@ namespace ActualGame
         public bool OnGround(int distExtra = 0)
         {
             Rectangle Lower = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
-            Lower.Offset(distExtra, 1);
-            return World.Current.HasRoomForRectangle(Lower, null);
+            Lower.Offset(distExtra, 2);
+            return (World.Current.HasRoomForRectangle(Lower, null));
            
 
         }
@@ -123,11 +123,6 @@ namespace ActualGame
 
         }
 
-        private void Jump()
-        {
-            if(OnGround())
-                Movement = new Vector2(Movement.X, -1 * 2f);
-        }
 
         private void StopIfBlocked()
         {
