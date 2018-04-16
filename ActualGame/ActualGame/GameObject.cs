@@ -17,6 +17,7 @@ namespace ActualGame
         public Vector2 Size { get; set; }
         protected Texture2D texture;
         public bool noClip = false;
+        protected QuadTreeNode node;
         #endregion
 
         #region Properties
@@ -86,10 +87,11 @@ namespace ActualGame
         /// <param name="y">Y dimension of the draw box</param>
         /// <param name="width">Width of the draw box</param>
         /// <param name="height">Height of the draw box</param>
-        public GameObject(int x, int y, int width, int height)
+        public GameObject(int x, int y, int width, int height, QuadTreeNode node)
         {
             Position = new Vector2(x, y); 
             Size = new Vector2(width, height);
+            this.node = node;
         }
         #endregion
 
@@ -113,6 +115,7 @@ namespace ActualGame
         /// </summary>
         virtual public void Update(GameTime gm)
         {
+            node = node.GetContainingQuad(this);
             if (this is PhysicsObject temp)
                 ((PhysicsObject)temp).Update(gm);
 
