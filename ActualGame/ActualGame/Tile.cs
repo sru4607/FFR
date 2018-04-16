@@ -22,7 +22,7 @@ namespace ActualGame
         #region Constructor
         public Tile(Texture2D texture, int depth)
         {
-            this.texture = texture;
+            Texture = texture;
             if (texture != null)
                 noClip = true;
             Depth = depth;
@@ -40,7 +40,7 @@ namespace ActualGame
         #region Draw
         public override void Draw(SpriteBatch sb)
         {
-            if (texture != null)
+            if (Texture != null)
                 base.Draw(sb);
         }
         #endregion

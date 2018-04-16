@@ -29,7 +29,7 @@ namespace ActualGame
 
         #region Constructor
         //Creates a world with name
-        public World(Dictionary<string, Texture2D> allTextures, String name = "", String path = "")
+        public World(Dictionary<string, Texture2D> allTextures = null, String name = "", String path = "")
         {
             this.name = name;
             AllObjects = new List<GameObject>();
