@@ -178,14 +178,5 @@ namespace ActualGame
             base.Draw(sb);
         }
         #endregion
-
-
-
-
-
-
-
-
-        
     }
 }
