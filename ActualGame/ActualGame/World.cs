@@ -98,7 +98,7 @@ namespace ActualGame
             {
                 Vector2 positionToTry = original + OneStep * i;
                 Rectangle newBoundary = CreateRectangleAtPosition(positionToTry, Rect.Width, Rect.Height);
-                if (HasRoomForRectangle(newBoundary, currentObject)) { FurthestAvailableLocationSoFar = positionToTry; }
+                if (!HasRoomForRectangle(newBoundary, currentObject)) { FurthestAvailableLocationSoFar = positionToTry; }
                 else
                 {
                     if (IsDiagonalMove)
@@ -131,7 +131,7 @@ namespace ActualGame
                 {
                     if (tile.Solid && (new Rectangle((int)tile.X, (int)tile.Y, (int)tile.Width, (int)tile.Height)).Intersects(rectangleToCheck))
                     {
-                        return false;
+                        return true;
                     }
                 }
             }
@@ -139,10 +139,10 @@ namespace ActualGame
             {
                 if (!obj.NoClip && obj != currentObject && (new Rectangle((int)obj.X, (int)obj.Y, (int)obj.Width, (int)obj.Height)).Intersects(rectangleToCheck))
                 {
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
 
 

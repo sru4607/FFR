@@ -15,7 +15,7 @@ namespace ActualGame
         // Fields
         public Vector2 Position { get; set; }
         public Vector2 Size { get; set; }
-        protected Texture2D texture;
+        public Texture2D Texture { get; set; }
         public bool noClip = false;
         protected QuadTreeNode node;
         #endregion
@@ -77,7 +77,6 @@ namespace ActualGame
         public GameObject()
         {
             Position = new Vector2(0,0);
-            World current = new World("");
         }
 
         /// <summary>
@@ -92,6 +91,7 @@ namespace ActualGame
             Position = new Vector2(x, y); 
             Size = new Vector2(width, height);
             this.node = node;
+            node.AddObject(this);
         }
         #endregion
 
@@ -107,6 +107,7 @@ namespace ActualGame
         #endregion
 
         #region Methods
+        
         #endregion
 
         #region Update

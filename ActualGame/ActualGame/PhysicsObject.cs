@@ -16,8 +16,15 @@ namespace ActualGame
         private Vector2 prevLocation;
 
         public PhysicsObject()
+            : base()
         {
            
+        }
+
+        public PhysicsObject(int x, int y, int width, int height, QuadTreeNode node)
+            :base(x, y, width, height, node)
+        {
+
         }
 
         public override void Update(GameTime gm)
@@ -38,9 +45,9 @@ namespace ActualGame
             KeyboardState kb = Keyboard.GetState();
 
             if (kb.IsKeyDown(Keys.Left))
-                { Movement = -0.5f * Vector2.UnitX; }
+                { Movement += -0.1f * Vector2.UnitX; }
             if (kb.IsKeyDown(Keys.Right))
-                { Movement += Vector2.UnitX * 0.5f; }
+                { Movement += Vector2.UnitX * 0.1f; }
             if (kb.IsKeyDown(Keys.Space))
                 { Jump(); }
             
@@ -65,7 +72,6 @@ namespace ActualGame
             UpdatePosition(gm);
             Position = World.Current.WhereCanIGetTo(this, prevLocation, Position, new Rectangle((int)Position.X, (int)Position.Y,(int)Size.X,(int)Size.Y));
              
-
         }
 
         private void UpdatePosition(GameTime gm)
@@ -73,17 +79,54 @@ namespace ActualGame
             Position += (Movement * (float)gm.ElapsedGameTime.TotalMilliseconds / 15);
         }
 
-        public bool OnGround()
+        public bool OnGround(int distExtra = 0)
         {
-            Rectangle lower = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
-            lower.Offset(0, 1);
+            Rectangle Lower = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            Lower.Offset(distExtra, 1);
+            return World.Current.HasRoomForRectangle(Lower, null);
+           
+
+        }
+        public bool AtEdge(int distExtra = 0)
+        {
+            Rectangle Right = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            Right.Offset(distExtra, 1);
+            Rectangle Left = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            Left.Offset(-distExtra, 1);
+            if (World.Current.HasRoomForRectangle(Right, null))
+            {
+                return true;
+            }
+            if (World.Current.HasRoomForRectangle(Left, null))
+            {
+                return true;
+            }
             return false;
+
+        }
+
+        public bool AtWall(int distExtra = 1)
+        {
+            Rectangle Right = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            Right.Offset(distExtra, 0);
+            if(World.Current.HasRoomForRectangle(Right, null))
+            {
+                return true;   
+            }
+            Rectangle Left = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            Left.Offset(-distExtra, 0);
+            if (World.Current.HasRoomForRectangle(Left, null))
+            {
+                return true;
+            }
+            return false;
+
         }
 
         private void Jump()
         {
             if(OnGround())
-                Movement = -Vector2.UnitY * 20f;
+                Movement = new Vector2(Movement.X, -1 * 2f);
         }
 
         private void StopIfBlocked()

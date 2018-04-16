@@ -83,10 +83,6 @@ namespace ActualGame
         /// </summary>
         public void MoveAI()
         {
-            // TODO: Implement vertical movement into the return statement
-            // TODO: Have the method update enemy.rect's location
-            // TODO: Have the movement update based on collision hitbox detection (possibly vertices or on a grid)
-
             // Update the current finite state
             switch(enemy.State)
             {
@@ -182,19 +178,6 @@ namespace ActualGame
             }
         }
 
-        /// <summary>
-        /// Helper method with determining whether there is an area to walk forward to
-        /// </summary>
-        /// <returns>True if the enemy can walk forward, else false</returns>
-        private bool AbleToMove()
-        {
-            // TODO: Implement collision detection
-            if (/* there is a wall in front of the enemy */ false)
-                return false;
-            if (/* there is no ground to walk onto */ false)
-                return false;
-            return true;
-        }
 
         /// <summary>
         /// Helper method - determines what state of aggro the enemy will be in
@@ -213,6 +196,17 @@ namespace ActualGame
         public void UpdateAggro(EnemyState state)
         {
             enemy.State = state;
+        }
+
+        /// <summary>
+        /// Helper method with determining whether there is an area to walk forward to
+        /// </summary>
+        /// <returns>True if the enemy can walk forward, else false</returns>
+        private bool AbleToMove()
+        {
+            if (enemy.AtEdge(enemy.Texture.Width) || enemy.AtWall(enemy.Texture.Width))
+                return false;
+            return true;
         }
         #endregion
     }
