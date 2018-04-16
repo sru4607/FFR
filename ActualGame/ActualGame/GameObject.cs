@@ -15,7 +15,7 @@ namespace ActualGame
         // Fields
         public Vector2 Position { get; set; }
         public Vector2 Size { get; set; }
-        protected Texture2D texture;
+        public Texture2D Texture { get; set; }
         public bool noClip = false;
         protected QuadTreeNode node;
         #endregion
