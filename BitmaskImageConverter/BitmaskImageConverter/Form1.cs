@@ -157,7 +157,7 @@ namespace BitmaskImageConverter
 
         private void SaveDialog_FileOk(object sender, CancelEventArgs e)
         {
-            SplicedImage.Image.Save(SaveDialog.FileName);
+            //SplicedImage.Image.Save(SaveDialog.FileName);
 
             string[] fileNameArray = SaveDialog.FileName.Split('\\');
             string filePath = SaveDialog.FileName.Substring(0, SaveDialog.FileName.IndexOf(fileNameArray[fileNameArray.Length - 1]));

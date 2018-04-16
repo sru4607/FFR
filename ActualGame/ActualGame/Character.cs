@@ -13,7 +13,6 @@ namespace ActualGame
         #region Fields
         protected int hp;
         protected Rectangle mBox;
-        protected Rectangle hitBox;
         protected int mDamage;
         protected int rDamage;
         protected int stunFrames;
@@ -178,14 +177,5 @@ namespace ActualGame
             base.Draw(sb);
         }
         #endregion
-
-
-
-
-
-
-
-
-        
     }
 }

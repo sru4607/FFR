@@ -78,6 +78,8 @@ namespace ActualGame
             
             //mainAi.MoveAI();
 
+            // TODO: Add EnemyState updater
+
             base.Update(gm);
         }
         #endregion
