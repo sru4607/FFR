@@ -88,10 +88,10 @@ namespace ActualGame
         public override void Draw(SpriteBatch sb)
         {
             if(mainAi.FacingRight)
-                sb.Draw(texture, Position, new Rectangle(0,0,texture.Width,texture.Height), Color.White,0, Vector2.Zero, new Vector2(Width / texture.Width, Height / texture.Height), SpriteEffects.None, 0);
+                sb.Draw(Texture, Position, new Rectangle(0,0,Texture.Width,Texture.Height), Color.White,0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
             // Draws to the screen with a horizontal flip if the AI is facing left
             else
-                sb.Draw(texture, Position, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width/ texture.Width, Height / texture.Height), SpriteEffects.FlipHorizontally, 0);
+                sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width/ Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
         }
         #endregion
     }

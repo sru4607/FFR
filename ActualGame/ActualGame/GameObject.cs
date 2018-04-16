@@ -126,7 +126,7 @@ namespace ActualGame
         /// <param name="texture">Content.Load&lt;Texture2D&gt;("INSERTLOCATION")</param>
         public void LoadTexture(Texture2D texture)
         {
-            this.texture = texture;
+            this.Texture = texture;
         }
         #endregion
 
@@ -154,7 +154,7 @@ namespace ActualGame
         /// <param name="sb"></param>
         virtual public void Draw(SpriteBatch sb)
         {
-            sb.Draw(texture, Position, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / texture.Width, Height / texture.Height), SpriteEffects.None, 0);
+            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
         }
         #endregion
     }

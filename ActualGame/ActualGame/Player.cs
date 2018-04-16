@@ -78,7 +78,10 @@ namespace ActualGame
             {
                 case (PlayerState.Walk):
                 {
-
+                    if (kbState.IsKeyDown(Keys.Z))
+                        {
+                            state = PlayerState.MAttack;
+                        }
                     break;
                 }
                 case (PlayerState.Jump):
@@ -89,11 +92,15 @@ namespace ActualGame
                 }
                 case (PlayerState.Idle):
                 {
-
+                    if (kbState.IsKeyDown(Keys.Z))
+                        {
+                            state = PlayerState.MAttack;
+                        }
                     break;
                 }
                 case (PlayerState.MAttack):
                 {
+                        this.MAttack();
                     break;
                 }
                 case (PlayerState.Crouch):
@@ -131,6 +138,7 @@ namespace ActualGame
                 }
                 case (PlayerState.MAttack):
                 {
+                        sb.Draw(this.Texture, mBox, Color.Red); //meant to help check to make sure MAttack was going through. As of yet, hasn't seemed to work.
                     break;
                 }
                 case (PlayerState.Crouch):
