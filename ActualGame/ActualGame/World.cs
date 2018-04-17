@@ -21,6 +21,7 @@ namespace ActualGame
         Tile[,] tiles;
         public List<GameObject> AllObjects { get; set; }
         public static World Current { get; set; }
+        public QuadTreeNode QuadTree { get; set; }
         #endregion
 
         #region Properties
@@ -48,6 +49,8 @@ namespace ActualGame
             BinaryReader worldReader = new BinaryReader(temp);
             width = worldReader.ReadInt32();
             height = worldReader.ReadInt32();
+            QuadTree = new QuadTreeNode(width * 64, height * 64, 0,0);
+
             tiles = new Tile[width, height];
             for (int i = 0; i < width; i++)
             {
@@ -70,6 +73,7 @@ namespace ActualGame
                     t.Position = new Vector2(i * 64, j * 64);
                     t.Size = new Vector2(64, 64);
                     tiles[i, j] = t;
+                    QuadTree.AddObject(t);
                 }
             }
 
@@ -83,7 +87,9 @@ namespace ActualGame
                     //Enemy
                     int x = worldReader.ReadInt32();
                     int y = worldReader.ReadInt32();
-                    AllObjects.Add(new Enemy(x,y,null,PatrolType.Standing));
+                    Enemy e = new Enemy(x, y, null, PatrolType.Standing);
+                    AllObjects.Add(e);
+                    QuadTree.AddObject(e);
                 }
                 if(type == 1)
                 {
