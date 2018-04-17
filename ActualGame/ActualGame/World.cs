@@ -18,8 +18,7 @@ namespace ActualGame
         String name;
         int width;
         int height;
-        String path;
-        Tile[,] loadedTiles;
+        Tile[,] tiles;
         public List<GameObject> AllObjects { get; set; }
         public static World Current { get; set; }
         #endregion
@@ -30,54 +29,70 @@ namespace ActualGame
 
         #region Constructor
         //Creates a world with name
-        public World(String name = "", String path = "")
+        public World(Dictionary<string, Texture2D> allTextures = null, String name = "", String path = "")
         {
             this.name = name;
-            this.path = path;
             AllObjects = new List<GameObject>();
+
+            // Load the world
+            if (path!= "")
+                Import(allTextures, path);
         }
         #endregion
 
         #region Methods
-        //Imports a world saved in loadedTiles with width and height all generated from a previously created binary file
-        public void Import()
+        //Imports a world saved in tiles with width and height all generated from a previously created binary file
+        public void Import(Dictionary<string, Texture2D> allTextures, string filePath)
         {
-            FileStream temp = new FileStream(path, FileMode.Open);
+            FileStream temp = new FileStream(filePath, FileMode.Open);
             BinaryReader worldReader = new BinaryReader(temp);
-            width = worldReader.Read();
-            height = worldReader.Read();
-            loadedTiles = new Tile[height, width];
+            width = worldReader.ReadInt32();
+            height = worldReader.ReadInt32();
+            tiles = new Tile[width, height];
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
                     String  source = worldReader.ReadString();
-                    int index = worldReader.Read();
-                    int depth = worldReader.Read();
-                    loadedTiles[i, j] = new Tile();
+                    int index = worldReader.ReadInt32();
+                    int depth = worldReader.ReadInt32();
+
+
+                    // Set the texture based on the source
+                    Texture2D texture;
+
+                    if (source == "Default")
+                        texture = null;
+                    else
+                        texture = allTextures[source + index];
+
+                    Tile t = new Tile(texture, depth);
+                    t.Position = new Vector2(i * 64, j * 64);
+                    t.Size = new Vector2(64, 64);
+                    tiles[i, j] = t;
                 }
             }
 
-            int events = worldReader.Read();
+            int events = worldReader.ReadInt32();
 
             for (int i = 0; i < events; i++)
             {
-                int type = worldReader.Read();
+                int type = worldReader.ReadInt32();
                 if(type == 0)
                 {
                     //Enemy
-                    int x = worldReader.Read();
-                    int y = worldReader.Read();
+                    int x = worldReader.ReadInt32();
+                    int y = worldReader.ReadInt32();
                     AllObjects.Add(new Enemy(x,y,null,PatrolType.Standing));
                 }
                 if(type == 1)
                 {
                     //Warp
-                    int x = worldReader.Read();
-                    int y = worldReader.Read();
-                    String warpTo = worldReader.ReadString();
-                    int xOff = worldReader.Read();
-                    int yOff = worldReader.Read(); 
+                    int x = worldReader.ReadInt32();
+                    int y = worldReader.ReadInt32();
+                    String destination = worldReader.ReadString();
+                    int xOffset = worldReader.ReadInt32();
+                    int yOffset = worldReader.ReadInt32(); 
                     AllObjects.Add(new Warp());
                 }
 
@@ -98,7 +113,7 @@ namespace ActualGame
             {
                 Vector2 positionToTry = original + OneStep * i;
                 Rectangle newBoundary = CreateRectangleAtPosition(positionToTry, Rect.Width, Rect.Height);
-                if (HasRoomForRectangle(newBoundary, currentObject)) { FurthestAvailableLocationSoFar = positionToTry; }
+                if (!HasRoomForRectangle(newBoundary, currentObject)) { FurthestAvailableLocationSoFar = positionToTry; }
                 else
                 {
                     if (IsDiagonalMove)
@@ -113,6 +128,7 @@ namespace ActualGame
                         FurthestAvailableLocationSoFar =
                             WhereCanIGetTo(currentObject, FurthestAvailableLocationSoFar, FurthestAvailableLocationSoFar + remainingVerticalMovement, Rect);
                     }
+                    break;
 
                 }
             }
@@ -125,13 +141,13 @@ namespace ActualGame
         }
 
         public bool HasRoomForRectangle(Rectangle rectangleToCheck, GameObject currentObject)
-        {   if (loadedTiles != null && loadedTiles.Length > 0)
+        {   if (tiles != null && tiles.Length > 0)
             {
-                foreach (Tile tile in loadedTiles)
+                foreach (Tile tile in tiles)
                 {
                     if (tile.Solid && (new Rectangle((int)tile.X, (int)tile.Y, (int)tile.Width, (int)tile.Height)).Intersects(rectangleToCheck))
                     {
-                        return false;
+                        return !false;
                     }
                 }
             }
@@ -139,25 +155,33 @@ namespace ActualGame
             {
                 if (!obj.NoClip && obj != currentObject && (new Rectangle((int)obj.X, (int)obj.Y, (int)obj.Width, (int)obj.Height)).Intersects(rectangleToCheck))
                 {
-                    return false;
+                    return !false;
                 }
             }
-            return true;
+            return !true;
         }
 
 
         #endregion
 
         #region Update
-
+        /// <summary>
+        /// Updates all objects on the given map
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public void UpdateAll(GameTime gameTime)
+        {
+            foreach (GameObject g in AllObjects)
+                g.Update(gameTime);
+        }
         #endregion
 
         #region Draw
         public void Draw(SpriteBatch sb)
         {
-            if (loadedTiles != null)
+            if (tiles != null)
             {
-                foreach (Tile t in loadedTiles)
+                foreach (Tile t in tiles)
                 {
                     t.Draw(sb);
                 }

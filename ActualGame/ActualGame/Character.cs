@@ -17,7 +17,6 @@ namespace ActualGame
         protected int rDamage;
         protected int stunFrames;
         protected bool right;
-        protected QuadTreeNode node;
         #endregion
 
         #region Properties
@@ -48,8 +47,8 @@ namespace ActualGame
         /// <param name="right">Whether the character starts facing right</param>
         public Character(int x, int y, QuadTreeNode node, bool right = true)
             // Defaults to a width of 64 and height of 128
+            : base(x, y, 64, 128, node)
         {
-            this.node = node;
             hp = 1;
             // TODO: Verify whether the hitbox line of code is valid or if it belongs in GameObject 
             // Also, should it use 0, 0, 32, 64; or x, y, 32, 64?
@@ -70,6 +69,7 @@ namespace ActualGame
         /// <param name="node">Reference to the quad tree used in-game</param>
         /// <param name="right">True if the character faces right, else false</param>
         public Character(int x, int y, int width, int height, QuadTreeNode node, bool right = true)
+            : base(x, y, width, height, node)
         {
             this.node = node;
             hp = 1;
@@ -88,12 +88,25 @@ namespace ActualGame
         /// <summary>
         /// used to check if another character is hit by a melee attack
         /// </summary>
-        public virtual void MAttack(Character c)
+        public virtual void MAttack()
         {
-            if (mBox.Intersects(new Rectangle((int)c.X,(int)c.Y,(int)c.Width,(int)c.Height)))
+            List<QuadTreeNode> parents = node.GetParents();
+            for (int i = 0; i < parents.Count; i++)
             {
-                c.TakeDamage(mDamage);
+                for (int j = 0; j < parents[i].Objects.Count; j++)
+                {
+                    if (AttackIntersects(parents[i].Objects[j]) && parents[i].Objects[j] is Character)
+                    {
+                        Character temp = (Character) parents[i].Objects[j];
+                        temp.TakeDamage(mDamage);
+                    }
+                }
             }
+        }
+
+        public virtual bool AttackIntersects(GameObject @object)
+        {
+            return mBox.Intersects(new Rectangle((int)@object.Position.X, (int)@object.Position.Y, (int)@object.Size.X, (int)@object.Size.Y));
         }
 
         /// <summary>
@@ -164,14 +177,5 @@ namespace ActualGame
             base.Draw(sb);
         }
         #endregion
-
-
-
-
-
-
-
-
-        
     }
 }

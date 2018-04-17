@@ -43,14 +43,15 @@ namespace MuraMapEditorV2
 
             for (int i = 0; i<tileNames.Length; i++)
             {
-                string sourceName = tileNames[i].Split('/')[tileNames[i].Split('/').Length - 1];
+                string sourceName = tileNames[i].Split('\\')[tileNames[i].Split('\\').Length - 1];
+                sourceName = sourceName.Split('.')[0];
                 tiles[i] = new TileData(new Bitmap(tileNames[i]), sourceName);
                 sources.Add(sourceName, tiles[i]);
             }
 
             for (int i = 0; i < bitmaskNames.Length; i++)
             {
-                string sourceName = bitmaskNames[i].Split('/')[bitmaskNames[i].Split('/').Length - 1];
+                string sourceName = bitmaskNames[i].Split('\\')[bitmaskNames[i].Split('\\').Length - 1];
                 tiles[i + tileNames.Length] = new TileData(new Bitmap(bitmaskNames[i]), sourceName, true);
                 sources.Add(sourceName, tiles[i + tileNames.Length]);
             }

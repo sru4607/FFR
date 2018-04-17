@@ -13,23 +13,50 @@ namespace ActualGame
     {
         #region Fields
         // Fields
-        public Vector2 Position { get; set; }
-        public Vector2 Size { get; set; }
-        protected Texture2D texture;
+        public Vector2 position;
+        public Vector2 size;
+        public Texture2D texture;
         public bool noClip = false;
+        protected QuadTreeNode node;
         #endregion
 
         #region Properties
         /// <summary>
-        /// Returns whether the game object can collide with the player
+        /// Get and set for the GameObject's 2D position in the world
+        /// </summary>
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
+        /// <summary>
+        /// Get and set for the width/height of the GameObject
+        /// </summary>
+        public Vector2 Size
+        {
+            get { return size; }
+            set { size = value; }
+        }
+
+        /// <summary>
+        /// Get and set for the texture of the object
+        /// </summary>
+        public Texture2D Texture
+        {
+            get { return texture; }
+            set { texture = value; }
+        }
+
+        /// <summary>
+        /// Get and set for whether the game object can collide with the player
         /// </summary>
         public bool NoClip
         {
             get { return noClip; }
             set { noClip = value; }
         }
-
-        // TODO: Add description
+        
         /// <summary>
         /// Get and set for the X value of the game object hitbox's top-left corner
         /// </summary>
@@ -65,8 +92,6 @@ namespace ActualGame
             get { return Size.Y; }
             set { Size = new Vector2(Size.X, value); }
         }
-
-
         #endregion
 
         #region Constructor
@@ -76,7 +101,6 @@ namespace ActualGame
         public GameObject()
         {
             Position = new Vector2(0,0);
-            World current = new World("");
         }
 
         /// <summary>
@@ -86,25 +110,28 @@ namespace ActualGame
         /// <param name="y">Y dimension of the draw box</param>
         /// <param name="width">Width of the draw box</param>
         /// <param name="height">Height of the draw box</param>
-        public GameObject(int x, int y, int width, int height)
+        public GameObject(int x, int y, int width, int height, QuadTreeNode node)
         {
             Position = new Vector2(x, y); 
             Size = new Vector2(width, height);
+            this.node = node;
+            node.AddObject(this);
         }
         #endregion
 
         #region LoadTexture
         /// <summary>
-        /// 
+        /// Method used to load the texture in Game1.LoadContent()
         /// </summary>
         /// <param name="texture">Content.Load&lt;Texture2D&gt;("INSERTLOCATION")</param>
         public void LoadTexture(Texture2D texture)
         {
-            this.texture = texture;
+            this.Texture = texture;
         }
         #endregion
 
         #region Methods
+        
         #endregion
 
         #region Update
@@ -113,6 +140,7 @@ namespace ActualGame
         /// </summary>
         virtual public void Update(GameTime gm)
         {
+            node = node.GetContainingQuad(this);
             if (this is PhysicsObject temp)
                 ((PhysicsObject)temp).Update(gm);
 
@@ -126,7 +154,7 @@ namespace ActualGame
         /// <param name="sb"></param>
         virtual public void Draw(SpriteBatch sb)
         {
-            sb.Draw(texture, Position, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / texture.Width, Height / texture.Height), SpriteEffects.None, 0);
+            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
         }
         #endregion
     }
