@@ -67,8 +67,8 @@ namespace ActualGame
                         texture = allTextures[source + index];
 
                     Tile t = new Tile(texture, depth);
-                    t.Position = new Vector2(i * 256, j * 256);
-                    t.Size = new Vector2(256, 256);
+                    t.Position = new Vector2(i * 64, j * 64);
+                    t.Size = new Vector2(64, 64);
                     tiles[i, j] = t;
                 }
             }
@@ -128,6 +128,7 @@ namespace ActualGame
                         FurthestAvailableLocationSoFar =
                             WhereCanIGetTo(currentObject, FurthestAvailableLocationSoFar, FurthestAvailableLocationSoFar + remainingVerticalMovement, Rect);
                     }
+                    break;
 
                 }
             }

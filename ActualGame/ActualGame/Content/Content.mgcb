@@ -61,3 +61,6 @@
 /processorParam:TextureFormat=Color
 /build:EmptyHeart.png
 
+#begin Map1.map
+/copy:Map1.map
+
