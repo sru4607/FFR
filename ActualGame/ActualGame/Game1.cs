@@ -229,7 +229,6 @@ namespace ActualGame
                         DrawButtons();
                         break;
                     }
-                //The textures in the pause method are all missing; the assets need to be created again
                 case (MainGameState.Pause):
                     {
                         spriteBatch.Draw(allTextures["PauseMenu"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
