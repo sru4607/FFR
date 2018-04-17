@@ -90,6 +90,7 @@ namespace ActualGame
             allTextures.Add("GameOverBackground", Content.Load<Texture2D>("GameOverBackground"));
             allTextures.Add("GameOverRetry", Content.Load<Texture2D>("GameOverRetry"));
             allTextures.Add("GameOverExit", Content.Load<Texture2D>("GameOverExit"));
+            allTextures.Add("Heart", Content.Load<Texture2D>("Heart"));
 
             // Load tiles systemmatically
             // BrickWall
@@ -174,6 +175,11 @@ namespace ActualGame
                 case (MainGameState.InGame):
                     {
                         currentWorld.UpdateAll(gameTime);
+
+                        // Switch to the game over screen if the player is dead
+                        if (player.IsDead)
+                            SwitchToGameOver();
+
                         //Pauses the game if the player presses the escape key
                         if (kbState.IsKeyDown(Keys.Escape) && prevkbState.IsKeyUp(Keys.Escape))
                             SwitchToPauseMenu();
@@ -226,6 +232,21 @@ namespace ActualGame
                 case (MainGameState.InGame):
                     {
                         currentWorld.Draw(spriteBatch);
+
+                        // Draw the player's health bar
+                        Texture2D heart = allTextures["Heart"];
+                        for (int i = 0; i<player.MaxHealth; i++)
+                        {
+                            if (i < player.HP)
+                            {
+                                spriteBatch.Draw(heart, new Rectangle(i * 132, 0, 128, 128), Color.White);
+                            }
+                            else
+                            {
+                                spriteBatch.Draw(heart, new Rectangle(i * 132, 0, 128, 128), Color.Gray);
+                            }
+                        }
+
                         break;
                     }
                 case (MainGameState.Menu):
@@ -261,6 +282,7 @@ namespace ActualGame
         public void StartGame()
         {
             currentState = MainGameState.InGame;
+            // Create the player in the first map & add it to the world
             player = new Player(128, 128, currentWorld.QuadTree);
             player.Texture = allTextures["PenPen"];
             currentWorld.AllObjects.Add(player);

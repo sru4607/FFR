@@ -19,10 +19,19 @@ namespace ActualGame
         PlayerState state;
         KeyboardState kbState;
         KeyboardState prevState;
+        int maxHealth;
         #endregion
 
         #region Properties
+        public bool IsDead
+        {
+            get { return state == PlayerState.Dead;}
+        }
 
+        public int MaxHealth
+        {
+            get { return maxHealth; }
+        }
         #endregion
 
         #region Constructor
@@ -38,6 +47,8 @@ namespace ActualGame
             : base(x, y, 64, 128, node, right)
         {
             state = PlayerState.Idle;
+            maxHealth = 3;
+            hp = 3;
         }
         #endregion
 

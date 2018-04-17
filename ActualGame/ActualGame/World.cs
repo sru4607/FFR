@@ -87,7 +87,7 @@ namespace ActualGame
                     //Enemy
                     int x = worldReader.ReadInt32();
                     int y = worldReader.ReadInt32();
-                    Enemy e = new Enemy(x, y, null, PatrolType.Standing);
+                    Enemy e = new Enemy(x*64, y*64, null, PatrolType.Standing);
                     AllObjects.Add(e);
                     QuadTree.AddObject(e);
                 }
