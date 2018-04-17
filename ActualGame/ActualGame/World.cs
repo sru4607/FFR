@@ -51,7 +51,7 @@ namespace ActualGame
             width = worldReader.ReadInt32();
             height = worldReader.ReadInt32();
             QuadTree = new QuadTreeNode(width * 64, height * 64, 0,0);
-
+            //load tiles
             tiles = new Tile[width, height];
             for (int i = 0; i < width; i++)
             {
@@ -111,7 +111,7 @@ namespace ActualGame
         {
 
         }
-
+        //Returns the position closest you can get to, between the original and future position based on other objects
         public Vector2 WhereCanIGetTo(PhysicsObject currentObject, Vector2 original, Vector2 future, Rectangle rect)
         {
             Vector2 MovementToTry = future - original;
@@ -120,7 +120,7 @@ namespace ActualGame
             bool IsDiagonalMove = MovementToTry.X != 0 && MovementToTry.Y != 0;
             Vector2 OneStep = MovementToTry / NumberOfStepsToBreakMovementInto;
             Rectangle Rect = rect;
-
+            //splits distance into steps
             for (int i = 1; i <= NumberOfStepsToBreakMovementInto; i++)
             {
                 Vector2 positionToTry = original + OneStep * i;
@@ -128,14 +128,15 @@ namespace ActualGame
                 if (!HasRoomForRectangle(newBoundary, currentObject)) { FurthestAvailableLocationSoFar = positionToTry; }
                 else
                 {
+                    //if movement is diagonal
                     if (IsDiagonalMove)
                     {
                         int stepsLeft = NumberOfStepsToBreakMovementInto - (i - 1);
-
+                        //break into horizontal movement
                         Vector2 remainingHorizontalMovement = OneStep.X * Vector2.UnitX * stepsLeft;
                         FurthestAvailableLocationSoFar =
                             WhereCanIGetTo(currentObject, FurthestAvailableLocationSoFar, FurthestAvailableLocationSoFar + remainingHorizontalMovement, Rect);
-
+                        //break into vertical movement
                         Vector2 remainingVerticalMovement = OneStep.Y * Vector2.UnitY * stepsLeft;
                         FurthestAvailableLocationSoFar =
                             WhereCanIGetTo(currentObject, FurthestAvailableLocationSoFar, FurthestAvailableLocationSoFar + remainingVerticalMovement, Rect);
@@ -146,7 +147,7 @@ namespace ActualGame
             }
             return FurthestAvailableLocationSoFar;
         }
-
+        //Create a rectangle at the vector with width and height
         private Rectangle CreateRectangleAtPosition(Vector2 positionToTry, int width, int height)
         {
             return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
@@ -155,6 +156,7 @@ namespace ActualGame
         public bool HasRoomForRectangle(Rectangle rectangleToCheck, GameObject currentObject)
         {   if (tiles != null && tiles.Length > 0)
             {
+                //Tile objects collision if noCLip is false, the object is not the one we are using, and they intersect
                 foreach (Tile tile in Current.tiles)
                 {
                     if (!tile.noClip && (new Rectangle((int)tile.X, (int)tile.Y, (int)tile.Width, (int)tile.Height)).Intersects(rectangleToCheck))
@@ -163,6 +165,7 @@ namespace ActualGame
                     }
                 }
             }
+        //Game objects collision if noCLip is false, the object is not the one we are using, and they intersect
             foreach (GameObject obj in Current.AllObjects)
             {
                 if (!obj.NoClip && obj != currentObject && (new Rectangle((int)obj.X, (int)obj.Y, (int)obj.Width, (int)obj.Height)).Intersects(rectangleToCheck))

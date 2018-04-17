@@ -15,18 +15,20 @@ namespace ActualGame
         public Vector2 Movement { get; set; }
         private Vector2 prevLocation;
 
+        //just use the gameobject constructor
         public PhysicsObject()
             : base()
         {
            
         }
-
+        //just use the gameObject parameterized constructor
         public PhysicsObject(int x, int y, int width, int height, QuadTreeNode node)
             :base(x, y, width, height, node)
         {
 
         }
 
+        //Adjust movement based on physics
         public override void Update(GameTime gm)
         {
             
@@ -35,16 +37,17 @@ namespace ActualGame
             MoveAsPossible(gm);
             StopIfBlocked();
         }
+        //draw the object
         public override void Draw(SpriteBatch sb)
         {
             base.Draw(sb);
         }
-
+        //apply gravity
         private void Gravity()
         {
             Movement += Vector2.UnitY;
         }
-
+        //if onGround apply more friction
         private void Friction()
         {
             if (OnGround())
@@ -52,20 +55,19 @@ namespace ActualGame
             else
                 Movement -= 0.02f * Movement;
         }
-
+        //Move based on gameTime and movement
         private void MoveAsPossible(GameTime gm)
         {
             prevLocation = Position;
             UpdatePosition(gm);
-            Position = World.Current.WhereCanIGetTo(this, prevLocation, Position, new Rectangle((int)Position.X, (int)Position.Y,(int)Size.X,(int)Size.Y));
-             
+            Position = World.Current.WhereCanIGetTo(this, prevLocation, Position, new Rectangle((int)Position.X, (int)Position.Y,(int)Size.X,(int)Size.Y));  
         }
-
+        //adjust the position field based on Game Time
         private void UpdatePosition(GameTime gm)
         {
             Position += (Movement * (float)gm.ElapsedGameTime.TotalMilliseconds / 15);
         }
-
+        //check if you are on the ground
         public bool OnGround(int distExtra = 0)
         {
             Rectangle Lower = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
@@ -74,6 +76,7 @@ namespace ActualGame
            
 
         }
+        //check if you are at the edge of the platform
         public bool AtEdge(int distExtra = 0)
         {
             Rectangle Right = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
@@ -91,7 +94,7 @@ namespace ActualGame
             return false;
 
         }
-
+        //check if you are at the wall
         public bool AtWall(int distExtra = 1)
         {
             Rectangle Right = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
@@ -110,7 +113,7 @@ namespace ActualGame
 
         }
 
-
+        //if blocked take away velocity
         private void StopIfBlocked()
         {
             Vector2 diff = prevLocation - Position;

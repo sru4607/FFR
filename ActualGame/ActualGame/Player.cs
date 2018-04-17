@@ -23,11 +23,12 @@ namespace ActualGame
         #endregion
 
         #region Properties
+        //return if dead
         public bool IsDead
         {
             get { return state == PlayerState.Dead;}
         }
-
+        //only get MaxHealth
         public int MaxHealth
         {
             get { return maxHealth; }
@@ -67,10 +68,13 @@ namespace ActualGame
             else
                 hp -= damageAmount;
         }
+        /// <summary>
+        /// Movement with arrow keys
+        /// </summary>
         public void KeyboardMovement()
         {
             KeyboardState kb = Keyboard.GetState();
-
+            //Adjust movement based on keyboard controls
             if (kb.IsKeyDown(Keys.Left))
             { Movement = new Vector2(-5f, Movement.Y); }
             if (kb.IsKeyDown(Keys.Right))
@@ -96,8 +100,9 @@ namespace ActualGame
         #region Update
         public override void Update(GameTime gm)
         {
-            
+            //Keyboard Movement   
             KeyboardMovement();
+            //call physicsObject update
             base.Update(gm);
             switch (state)
             {
