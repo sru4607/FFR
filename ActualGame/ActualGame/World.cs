@@ -21,7 +21,6 @@ namespace ActualGame
         Tile[,] tiles;
         private List<Enemy> initialEnemies;
         private List<Warp> warps;
-        public Player Player { get; set; }
         public List<GameObject> AllObjects { get; set; }
         public static World Current { get; set; }
         public QuadTreeNode QuadTree { get; set; }
