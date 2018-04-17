@@ -407,7 +407,7 @@ namespace ActualGame
                         StartGame();
                         break;
                     case 1:
-                        Exit();
+                        SwitchToMainMenu();
                         break;
                 }
             }
