@@ -149,22 +149,22 @@ namespace ActualGame
         public bool HasRoomForRectangle(Rectangle rectangleToCheck, GameObject currentObject)
         {   if (tiles != null && tiles.Length > 0)
             {
-                foreach (Tile tile in tiles)
+                foreach (Tile tile in Current.tiles)
                 {
-                    if (tile.Solid && (new Rectangle((int)tile.X, (int)tile.Y, (int)tile.Width, (int)tile.Height)).Intersects(rectangleToCheck))
+                    if (!tile.noClip && (new Rectangle((int)tile.X, (int)tile.Y, (int)tile.Width, (int)tile.Height)).Intersects(rectangleToCheck))
                     {
-                        return !false;
+                        return true;
                     }
                 }
             }
-            foreach (GameObject obj in AllObjects)
+            foreach (GameObject obj in Current.AllObjects)
             {
                 if (!obj.NoClip && obj != currentObject && (new Rectangle((int)obj.X, (int)obj.Y, (int)obj.Width, (int)obj.Height)).Intersects(rectangleToCheck))
                 {
-                    return !false;
+                    return true;
                 }
             }
-            return !true;
+            return false;
         }
 
 
