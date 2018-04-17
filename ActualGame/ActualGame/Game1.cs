@@ -15,7 +15,6 @@ namespace ActualGame
         SpriteBatch spriteBatch;
         // Enemy testEnemy; // Unused - kept for example documentation
         Display mainDisplay;
-        World levelOne;
         MainGameState currentState;
         Dictionary<string, Texture2D> allTextures;
         Debug debugger;
@@ -130,7 +129,7 @@ namespace ActualGame
             maps.Add("Map1", new World(allTextures, "Map1", "Content/Map1.map"));
 
             currentWorld = maps["Map1"];
-
+            World.Current = currentWorld;
             //levelOne = new World(allTextures, "Level One", "level1.txt");
 
             // Change the game to fullscreen and start the main menu
@@ -174,6 +173,7 @@ namespace ActualGame
                     }
                 case (MainGameState.InGame):
                     {
+                        World.Current = currentWorld;
                         currentWorld.UpdateAll(gameTime);
 
                         // Switch to the game over screen if the player is dead or I say so

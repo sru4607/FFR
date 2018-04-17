@@ -24,6 +24,8 @@ namespace ActualGame
         {
             Texture = texture;
             if (texture != null)
+                noClip = false;
+            else
                 noClip = true;
             Depth = depth;
         }
