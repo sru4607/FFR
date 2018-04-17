@@ -52,7 +52,7 @@ namespace ActualGame
             base.Initialize();
 
             // Set the initial state of the game
-            currentState = MainGameState.InGame ;
+            currentState = MainGameState.Menu ;
 
             // Values used for debugging purposes
             debugger = new Debug(allTextures, GraphicsDevice);
