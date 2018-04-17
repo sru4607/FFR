@@ -89,6 +89,9 @@ namespace ActualGame
             allTextures.Add("Menu", Content.Load<Texture2D>("Menu"));
             allTextures.Add("StartButton", Content.Load<Texture2D>("StartButton"));
             allTextures.Add("ExitButton", Content.Load<Texture2D>("ExitButton"));
+            allTextures.Add("PauseMenu", Content.Load<Texture2D>("PauseMenu"));
+            allTextures.Add("ResumeButton", Content.Load<Texture2D>("ResumeButton"));
+            allTextures.Add("MainMenuButton", Content.Load<Texture2D>("MainMenuButton"));
 
             // Load tiles systemmatically
             // BrickWall
@@ -229,7 +232,7 @@ namespace ActualGame
                 //The textures in the pause method are all missing; the assets need to be created again
                 case (MainGameState.Pause):
                     {
-                        spriteBatch.Draw(allTextures["Menu"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                        spriteBatch.Draw(allTextures["PauseMenu"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                         DrawButtons();
                         break;
                     }
@@ -271,9 +274,9 @@ namespace ActualGame
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
             buttons = new Button[2];
-            Texture2D resumeButton = allTextures["missingtexture"];
+            Texture2D resumeButton = allTextures["ResumeButton"];
             buttons[0] = new Button(resumeButton, "ResumeButton", new Rectangle(width / 2 - resumeButton.Width / 2, height * 6 / 10 - resumeButton.Height / 2, resumeButton.Width, resumeButton.Height));
-            Texture2D mainMenuButton = allTextures["ExitButton"];
+            Texture2D mainMenuButton = allTextures["MainMenuButton"];
             buttons[1] = new Button(mainMenuButton, "MainMenuButton", new Rectangle(width / 2 - mainMenuButton.Width / 2, height * 3 / 4 - mainMenuButton.Height / 2, mainMenuButton.Width, mainMenuButton.Height));
             indexActiveButton = 0;
         }
