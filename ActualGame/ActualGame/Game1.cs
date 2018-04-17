@@ -52,7 +52,7 @@ namespace ActualGame
             base.Initialize();
 
             // Set the initial state of the game
-            currentState = MainGameState.Debug;
+            currentState = MainGameState.InGame ;
 
             // Values used for debugging purposes
             debugger = new Debug(allTextures, GraphicsDevice);
@@ -93,40 +93,41 @@ namespace ActualGame
             // Load tiles systemmatically
             // BrickWall
             for (int i = 0; i < 16; i++)
-                allTextures.Add("BrickWall" + i, Content.Load<Texture2D>("Tiles/BrickWall" + i));
+                allTextures.Add("BrickWall.png" + i, Content.Load<Texture2D>("Tiles/BrickWall" + i));
 
             // BrickWallBlue
             for (int i = 0; i < 16; i++)
-                allTextures.Add("BrickWallBlue" + i, Content.Load<Texture2D>("Tiles/BrickWallBlue" + i));
+                allTextures.Add("BrickWallBlue.png" + i, Content.Load<Texture2D>("Tiles/BrickWallBlue" + i));
 
             // BrickWallRed
             for (int i = 0; i < 16; i++)
-                allTextures.Add("BrickWallRed" + i, Content.Load<Texture2D>("Tiles/BrickWallRed" + i));
+                allTextures.Add("BrickWallRed.png" + i, Content.Load<Texture2D>("Tiles/BrickWallRed" + i));
 
             // holder
             for (int i = 0; i < 16; i++)
-                allTextures.Add("holder" + i, Content.Load<Texture2D>("Tiles/holder" + i));
+                allTextures.Add("holder.png" + i, Content.Load<Texture2D>("Tiles/holder" + i));
 
             // temp
             for (int i = 0; i < 16; i++)
-                allTextures.Add("temp" + i, Content.Load<Texture2D>("Tiles/temp" + i));
+                allTextures.Add("temp.png" + i, Content.Load<Texture2D>("Tiles/temp" + i));
 
             // Walls
             for (int i = 0; i < 16; i++)
-                allTextures.Add("Walls" + i, Content.Load<Texture2D>("Tiles/Walls" + i));
+                allTextures.Add("Walls.png" + i, Content.Load<Texture2D>("Tiles/Walls" + i));
 
             // WallsGreen
             for (int i = 0; i < 16; i++)
-                allTextures.Add("WallsGreen" + i, Content.Load<Texture2D>("Tiles/WallsGreen" + i));
+                allTextures.Add("WallsGreen.png" + i, Content.Load<Texture2D>("Tiles/WallsGreen" + i));
 
             // WallsRed
             for (int i = 0; i < 16; i++)
-                allTextures.Add("WallsRed" + i, Content.Load<Texture2D>("Tiles/WallsRed" + i));
+                allTextures.Add("WallsRed.png" + i, Content.Load<Texture2D>("Tiles/WallsRed" + i));
 
             // Load maps
-            //maps.Add("Map1", new World(allTextures, "Map1", "Content/Map1.map"));
+            maps = new Dictionary<string, World>();
+            maps.Add("Map1", new World(allTextures, "Map1", "Content/Map1.map"));
 
-            //currentWorld = maps["Map1"];
+            currentWorld = maps["Map1"];
 
             //levelOne = new World(allTextures, "Level One", "level1.txt");
 
