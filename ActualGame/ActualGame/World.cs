@@ -128,6 +128,7 @@ namespace ActualGame
                         FurthestAvailableLocationSoFar =
                             WhereCanIGetTo(currentObject, FurthestAvailableLocationSoFar, FurthestAvailableLocationSoFar + remainingVerticalMovement, Rect);
                     }
+                    break;
 
                 }
             }

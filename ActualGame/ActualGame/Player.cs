@@ -56,6 +56,18 @@ namespace ActualGame
             else
                 hp -= damageAmount;
         }
+        public void KeyboardMovement()
+        {
+            KeyboardState kb = Keyboard.GetState();
+
+            if (kb.IsKeyDown(Keys.Left))
+            { Movement = new Vector2(-5f, Movement.Y); }
+            if (kb.IsKeyDown(Keys.Right))
+            { Movement = new Vector2(5f, Movement.Y); }
+            if (kb.IsKeyDown(Keys.Space) && OnGround())
+            { Movement = new Vector2(Movement.X, -20f); }
+
+        }
 
         //TODO: Method to call that should update the game to signal the Player has died
         public new void Die()
@@ -74,6 +86,7 @@ namespace ActualGame
         public override void Update(GameTime gm)
         {
             base.Update(gm);
+            KeyboardMovement();
             switch (state)
             {
                 case (PlayerState.Walk):

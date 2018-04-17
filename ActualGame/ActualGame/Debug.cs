@@ -49,10 +49,10 @@ namespace ActualGame
             allObjects[1].LoadTexture(allTexts["Floor"]);
             
             //creates an enemy
-            allObjects.Add(new Enemy(300, 100, node, PatrolType.Standing));
-            allObjects[2].Position = new Vector2(300, 0);
-            allObjects[2].Size = new Vector2(64, 128);
-            allObjects[2].LoadTexture(allTexts["Floor"]);
+            //allObjects.Add(new Enemy(300, 100, node, PatrolType.Standing));
+            //allObjects[2].Position = new Vector2(300, 0);
+           // allObjects[2].Size = new Vector2(64, 128);
+            //allObjects[2].LoadTexture(allTexts["Floor"]);
 
             debug.AllObjects = allObjects;
 
