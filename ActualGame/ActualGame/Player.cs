@@ -75,7 +75,7 @@ namespace ActualGame
             { Movement = new Vector2(-5f, Movement.Y); }
             if (kb.IsKeyDown(Keys.Right))
             { Movement = new Vector2(5f, Movement.Y); }
-            if (kb.IsKeyDown(Keys.Space) && OnGround())
+            if (kb.IsKeyDown(Keys.Up) && OnGround())
             { Movement = new Vector2(Movement.X, -20f); }
 
         }
