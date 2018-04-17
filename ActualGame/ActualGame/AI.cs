@@ -33,6 +33,14 @@ namespace ActualGame
             get { return facingRight; }
             set { facingRight = value; }
         }
+
+        /// <summary>
+        /// Gets the AI's patrolType
+        /// </summary>
+        public PatrolType PatrolType
+        {
+            get { return patrolType; }
+        }
         #endregion
 
         #region Constructor
