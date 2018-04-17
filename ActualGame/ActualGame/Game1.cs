@@ -176,8 +176,8 @@ namespace ActualGame
                     {
                         currentWorld.UpdateAll(gameTime);
 
-                        // Switch to the game over screen if the player is dead
-                        if (player.IsDead)
+                        // Switch to the game over screen if the player is dead or I say so
+                        if (player.IsDead || kbState.IsKeyDown(Keys.Delete))
                             SwitchToGameOver();
 
                         //Pauses the game if the player presses the escape key
