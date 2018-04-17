@@ -8,7 +8,7 @@ namespace ActualGame
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    enum MainGameState {Debug, Menu, Pause, Quit, InGame, GameOver }
+    enum MainGameState {Debug, Menu, Pause, InGame, GameOver }
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
@@ -187,7 +187,7 @@ namespace ActualGame
                         ButtonLogic();
                         break;
                     }
-                case (MainGameState.Quit):
+                case (MainGameState.GameOver):
                     {
                         break;
                     }
@@ -235,7 +235,7 @@ namespace ActualGame
                         DrawButtons();
                         break;
                     }
-                case (MainGameState.Quit):
+                case (MainGameState.GameOver):
                     {
                         break;
                     }
