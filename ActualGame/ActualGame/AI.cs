@@ -152,6 +152,19 @@ namespace ActualGame
                     break;
             }
         }
+
+        /// <summary>
+        /// Helper method with determining whether there is an area to walk forward to
+        /// </summary>
+        /// <returns>True if the enemy can walk forward, else false</returns>
+        private bool AbleToMove()
+        {
+            /*if (// there is a wall in front of the enemy)
+                return false;
+            if (// there is no ground to walk onto)
+                return false;*/
+            return true;
+        }
         #endregion
     }
 }
