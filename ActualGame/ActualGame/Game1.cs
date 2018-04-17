@@ -51,9 +51,7 @@ namespace ActualGame
             mainDisplay = new Display(GraphicsDevice);
             base.Initialize();
 
-            // Values used for debugging purposes
-            debugger = new Debug(allTextures, GraphicsDevice);
-            debugger.InstantiateAll();
+            
 
             
 
@@ -168,12 +166,18 @@ namespace ActualGame
             {
                 case (MainGameState.Debug):
                     {
+                        if(debugger == null)
+                        {
+                            // Values used for debugging purposes
+                            debugger = new Debug(allTextures, GraphicsDevice);
+                            debugger.InstantiateAll();
+                        }
                         debugger.UpdateAll(gameTime);
                         break;
                     }
                 case (MainGameState.InGame):
                     {
-                        World.Current = currentWorld;
+                       
                         currentWorld.UpdateAll(gameTime);
 
                         // Switch to the game over screen if the player is dead or I say so
