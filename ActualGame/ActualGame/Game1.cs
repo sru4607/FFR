@@ -256,7 +256,7 @@ namespace ActualGame
             int width = GraphicsDevice.Viewport.Width;
             buttons = new Button[2];
             Texture2D startButton = allTextures["StartButton"];
-            buttons[0] = new Button(startButton, "StartButton", new Rectangle(width / 2 - startButton.Width / 2, height / 2 - startButton.Height / 2, startButton.Width, startButton.Height));
+            buttons[0] = new Button(startButton, "StartButton", new Rectangle(width / 2 - startButton.Width / 2, height * 6 / 10 - startButton.Height / 2, startButton.Width, startButton.Height));
             Texture2D exitButton = allTextures["ExitButton"];
             buttons[1] = new Button(exitButton, "ExitButton", new Rectangle(width / 2 - exitButton.Width / 2, height * 3 / 4 - exitButton.Height / 2, exitButton.Width, exitButton.Height));
             indexActiveButton = 0;
@@ -272,7 +272,7 @@ namespace ActualGame
             int width = GraphicsDevice.Viewport.Width;
             buttons = new Button[2];
             Texture2D resumeButton = allTextures["missingtexture"];
-            buttons[0] = new Button(resumeButton, "ResumeButton", new Rectangle(width / 2 - resumeButton.Width / 2, height / 2 - resumeButton.Height / 2, resumeButton.Width, resumeButton.Height));
+            buttons[0] = new Button(resumeButton, "ResumeButton", new Rectangle(width / 2 - resumeButton.Width / 2, height * 6 / 10 - resumeButton.Height / 2, resumeButton.Width, resumeButton.Height));
             Texture2D mainMenuButton = allTextures["ExitButton"];
             buttons[1] = new Button(mainMenuButton, "MainMenuButton", new Rectangle(width / 2 - mainMenuButton.Width / 2, height * 3 / 4 - mainMenuButton.Height / 2, mainMenuButton.Width, mainMenuButton.Height));
             indexActiveButton = 0;
