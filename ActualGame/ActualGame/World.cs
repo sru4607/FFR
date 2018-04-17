@@ -19,6 +19,7 @@ namespace ActualGame
         int width;
         int height;
         Tile[,] tiles;
+        public Player Player { get; set; }
         public List<GameObject> AllObjects { get; set; }
         public static World Current { get; set; }
         public QuadTreeNode QuadTree { get; set; }
@@ -104,6 +105,11 @@ namespace ActualGame
 
                 
             }
+        }
+
+        public void ResetWorld()
+        {
+
         }
 
         public Vector2 WhereCanIGetTo(PhysicsObject currentObject, Vector2 original, Vector2 future, Rectangle rect)
