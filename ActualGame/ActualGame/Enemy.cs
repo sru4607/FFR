@@ -57,12 +57,12 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// Creates an exact copy of this enemy without a quad tree node (used for resetting worlds)
+        /// Creates an exact copy of this enemy in a new quad tree
         /// </summary>
         /// <returns></returns>
-        public Enemy Clone()
+        public Enemy Clone(QuadTreeNode node = null)
         {
-            Enemy clone = new Enemy((int)X, (int)Y, null, mainAi.PatrolType);
+            Enemy clone = new Enemy((int)X, (int)Y, node, mainAi.PatrolType);
             clone.hp = hp;
             clone.texture = texture;
 
