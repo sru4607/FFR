@@ -154,9 +154,6 @@ namespace ActualGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-            // TODO: Add your update logic here
             prevkbState = kbState;
             kbState = Keyboard.GetState();
 
@@ -172,7 +169,7 @@ namespace ActualGame
                         currentWorld.UpdateAll(gameTime);
                         //Pauses the game if the player presses the escape key
                         if (kbState.IsKeyDown(Keys.Escape) && prevkbState.IsKeyUp(Keys.Escape))
-                            currentState = MainGameState.Pause;
+                            SwitchToPauseMenu();
                         break;
                     }
                 case (MainGameState.Menu):
@@ -315,6 +312,9 @@ namespace ActualGame
                 else
                     indexActiveButton--;
             }
+            //If the games is paused and the player presses the escape key, resumes the game (allowing them to easily toggle pause and unpause with escape)
+            else if (kbState.IsKeyDown(Keys.Escape) && prevkbState.IsKeyUp(Keys.Escape) && currentState == MainGameState.Pause)
+                currentState = MainGameState.InGame;
             //Switches the game state when a certain button is pressed
             else if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
             {
@@ -326,7 +326,7 @@ namespace ActualGame
                 else if (buttonText == "ResumeButton")
                     currentState = MainGameState.InGame;
                 else if (buttonText == "MainMenuButton")
-                    currentState = MainGameState.Menu;
+                    SwitchToMainMenu();
             }
         }
     }
