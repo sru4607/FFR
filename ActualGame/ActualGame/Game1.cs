@@ -239,11 +239,11 @@ namespace ActualGame
                         {
                             if (i < player.HP)
                             {
-                                spriteBatch.Draw(heart, new Rectangle(i * 132, 0, 128, 128), Color.White);
+                                spriteBatch.Draw(heart, new Rectangle(10+i * 70, 10, 64, 64), Color.White);
                             }
                             else
                             {
-                                spriteBatch.Draw(heart, new Rectangle(i * 132, 0, 128, 128), Color.Gray);
+                                spriteBatch.Draw(heart, new Rectangle(10+i * 70, 10, 64, 64), Color.Gray);
                             }
                         }
 
