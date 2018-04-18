@@ -45,12 +45,7 @@ namespace ActualGame
         {
             // Initialize an array of textures for use
             allTextures = new Dictionary<string, Texture2D>();
-
-            // Generic enemy used to test bugs/features
-            // testEnemy = new Enemy();
-
             
-
             
 
             
@@ -310,6 +305,7 @@ namespace ActualGame
             // Create the player in the first map & add it to the world
             player = new Player(128, 128, currentWorld.QuadTree);
             player.Texture = allTextures["PenPen"];
+
             ChangeMap("Map1");
         }
 
