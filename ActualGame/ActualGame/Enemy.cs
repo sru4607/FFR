@@ -36,7 +36,7 @@ namespace ActualGame
         {
             // Initialize the AI pattern
             mainAi = new AI(this, patrolType);
-
+            
             // Initialize hitbox parameters
             Position = new Vector2(X,Y);
             Size = new Vector2(64, 128);
@@ -63,11 +63,11 @@ namespace ActualGame
         /// Creates an exact copy of this enemy in a new quad tree
         /// </summary>
         /// <returns></returns>
-        public Enemy Clone(QuadTreeNode node = null)
+        public Enemy Clone(Texture2D text, int hp, QuadTreeNode node = null)
         {
             Enemy clone = new Enemy((int)X, (int)Y, node, mainAi.PatrolType);
             clone.hp = hp;
-            clone.texture = texture;
+            clone.texture = text;
 
             return clone;
         }
@@ -101,10 +101,10 @@ namespace ActualGame
         public override void Draw(SpriteBatch sb)
         {
             if(mainAi.FacingRight)
-                sb.Draw(Texture, Position, new Rectangle(0,0, Texture.Width, Texture.Height), Color.White,0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
+                sb.Draw(Texture, Position, new Rectangle(0,0, Texture.Width, Texture.Height), Color.Red,0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
             // Draws to the screen with a horizontal flip if the AI is facing left
             else
-                sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width/ Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
+                sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.Red, 0, Vector2.Zero, new Vector2(Width/ Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
         }
         #endregion
     }

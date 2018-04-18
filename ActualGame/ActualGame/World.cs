@@ -27,10 +27,6 @@ namespace ActualGame
         public QuadTreeNode QuadTree { get; set; }
         #endregion
 
-        #region Properties
-
-        #endregion
-
         #region Constructor
         //Creates a world with name
         public World(Dictionary<string, Texture2D> allTextures = null, String name = "", String path = "")
@@ -93,8 +89,9 @@ namespace ActualGame
                     int x = worldReader.ReadInt32();
                     int y = worldReader.ReadInt32();
                     Enemy e = new Enemy(x*64, y*64, QuadTree, PatrolType.Standing);
+                    e.Texture = allTextures["PenPen"];
                     AllObjects.Add(e);
-                    initialEnemies.Add(e.Clone());
+                    initialEnemies.Add(e.Clone(e.Texture, e.HP, QuadTree));
                     QuadTree.AddObject(e);
                 }
                 if(type == 1)
@@ -124,7 +121,7 @@ namespace ActualGame
 
             foreach (Enemy e in initialEnemies)
             {
-                Enemy clone = e.Clone(QuadTree);
+                Enemy clone = e.Clone(e.Texture, e.HP, QuadTree);
                 QuadTree.AddObject(clone);
                 AllObjects.Add(clone);
             }
