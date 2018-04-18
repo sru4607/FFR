@@ -22,6 +22,7 @@ namespace ActualGame
         int pauseRight; // Number of frames to pause when facing right during the the docile movement pattern
         double walkSpeed; // How far the enemy moves in a single frame
         bool facingRight; // 0 is facing left, 1 is facing right
+        int stunnedFrames; // Finite state variables
         #endregion
 
         #region Properties
@@ -61,6 +62,9 @@ namespace ActualGame
             // Pauses for 2 seconds on each side by default
             pauseLeft = 120;
             pauseRight = 120;
+
+            // Initializes variables used for locking a finite state
+            stunnedFrames = 0;
         }
 
         /// <summary>

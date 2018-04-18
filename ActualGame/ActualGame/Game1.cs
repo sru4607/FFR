@@ -45,12 +45,7 @@ namespace ActualGame
         {
             // Initialize an array of textures for use
             allTextures = new Dictionary<string, Texture2D>();
-
-            // Generic enemy used to test bugs/features
-            // testEnemy = new Enemy();
-
             
-
             
 
             
@@ -86,6 +81,7 @@ namespace ActualGame
             // Add all necessary textures to the dictionary
             allTextures.Add("Floor", Content.Load<Texture2D>("missingtexture"));
             allTextures.Add("PenPen", Content.Load<Texture2D>("PenPen"));
+            allTextures.Add("PenPenWalking", Content.Load<Texture2D>("PenPenWalking"));
             allTextures.Add("missingtexture", Content.Load<Texture2D>("missingtexture"));
             allTextures.Add("Enemy", Content.Load<Texture2D>("missingtexture"));
             allTextures.Add("Menu", Content.Load<Texture2D>("Menu"));
@@ -310,6 +306,7 @@ namespace ActualGame
             // Create the player in the first map & add it to the world
             player = new Player(128, 128, currentWorld.QuadTree);
             player.Texture = allTextures["PenPen"];
+            player.WalkTexture = allTextures["PenPenWalking"];
             ChangeMap("Map1");
         }
 
