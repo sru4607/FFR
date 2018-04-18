@@ -61,7 +61,7 @@ namespace ActualGame
 
             // DO NOT WRITE CODE BELOW HERE
             // Base game logic
-            mainDisplay = new Display(GraphicsDevice);
+            
             base.Initialize();
         }
 
@@ -196,6 +196,8 @@ namespace ActualGame
                         //Pauses the game if the player presses the escape key
                         if (kbState.IsKeyDown(Keys.Escape) && prevkbState.IsKeyUp(Keys.Escape))
                             SwitchToPauseMenu();
+                        mainDisplay.Update();
+                        
                         break;
                     }
                 case (MainGameState.Menu):
@@ -235,10 +237,18 @@ namespace ActualGame
         protected override void Draw(GameTime gameTime)
                 {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            
             // TODO: Add your drawing code here
-            Matrix temp = mainDisplay.MainCam.GetViewMatrix();
-            spriteBatch.Begin(transformMatrix: temp);
+            //if in game follow the player
+            if (currentState == MainGameState.InGame)
+            {
+                Matrix temp = mainDisplay.MainCam.GetViewMatrix();
+                spriteBatch.Begin(transformMatrix: temp);
+            }
+            //else draw normally
+            else
+                spriteBatch.Begin();
+            
             switch(currentState)
             {
                 case (MainGameState.Debug):
@@ -249,6 +259,12 @@ namespace ActualGame
                 case (MainGameState.InGame):
                     {
                         World.Current.Draw(spriteBatch);
+
+                        spriteBatch.End();
+
+                        //Draw all gui elements in game here
+                        spriteBatch.Begin();
+
 
                         // Draw the player's health bar
                         Texture2D heart = allTextures["Heart"];
@@ -263,6 +279,10 @@ namespace ActualGame
                                 spriteBatch.Draw(heart, new Rectangle(10+i * 70, 10, 64, 64), Color.Gray);
                             }
                         }
+                        spriteBatch.End();
+
+                        //All Elements in game must be above this line
+                        spriteBatch.Begin(transformMatrix: mainDisplay.MainCam.GetViewMatrix());
 
                         break;
                     }
@@ -314,6 +334,7 @@ namespace ActualGame
             currentState = MainGameState.InGame;
             // Create the player in the first map & add it to the world
             player = new Player(128, 128, currentWorld.QuadTree);
+            mainDisplay = new Display(GraphicsDevice, player);
             player.Texture = allTextures["PenPen"];
             player.WalkTexture = allTextures["PenPenWalking"];
             ChangeMap("Map1");
