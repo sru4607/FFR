@@ -49,9 +49,7 @@ namespace ActualGame
             // Generic enemy used to test bugs/features
             // testEnemy = new Enemy();
 
-            // Base game logic
-            mainDisplay = new Display(GraphicsDevice);
-            base.Initialize();
+            
 
             
 
@@ -61,6 +59,12 @@ namespace ActualGame
             prevkbState = kbState;
             // Initialize the maps list
             maps = new Dictionary<string, World>();
+
+
+            // DO NOT WRITE CODE BELOW HERE
+            // Base game logic
+            mainDisplay = new Display(GraphicsDevice);
+            base.Initialize();
         }
 
         /// <summary>
@@ -129,7 +133,6 @@ namespace ActualGame
                 allTextures.Add("WallsRed.png" + i, Content.Load<Texture2D>("Tiles/WallsRed" + i));
 
             // Load maps
-            maps = new Dictionary<string, World>();
             maps.Add("Map1", new World(allTextures, "Map1", "Content/Map1.map"));
 
             currentWorld = maps["Map1"];
@@ -287,6 +290,18 @@ namespace ActualGame
         }
 
         /// <summary>
+        /// A helper method to change between maps
+        /// </summary>
+        public void ChangeMap(string mapName)
+        {
+            currentWorld = maps[mapName];
+            World.Current = currentWorld;
+            currentWorld.ResetWorld();
+            currentWorld.AllObjects.Add(player);
+            currentWorld.QuadTree.AddObject(player);
+        }
+
+        /// <summary>
         /// A helper method meant to start the game
         /// </summary>
         public void StartGame()
@@ -295,8 +310,7 @@ namespace ActualGame
             // Create the player in the first map & add it to the world
             player = new Player(128, 128, currentWorld.QuadTree);
             player.Texture = allTextures["PenPen"];
-            currentWorld.AllObjects.Add(player);
-            currentWorld.QuadTree.AddObject(player);
+            ChangeMap("Map1");
         }
 
         /// <summary>
@@ -413,7 +427,7 @@ namespace ActualGame
                         StartGame();
                         break;
                     case 1:
-                        Exit();
+                        SwitchToMainMenu();
                         break;
                 }
             }

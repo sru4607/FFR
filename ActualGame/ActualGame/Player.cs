@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
-using System.Timers;
 
 namespace ActualGame
 {
@@ -25,11 +24,12 @@ namespace ActualGame
         #endregion
 
         #region Properties
+        //return if dead
         public bool IsDead
         {
             get { return state == PlayerState.Dead;}
         }
-
+        //only get MaxHealth
         public int MaxHealth
         {
             get { return maxHealth; }
@@ -69,6 +69,9 @@ namespace ActualGame
             else
                 hp -= damageAmount;
         }
+        /// <summary>
+        /// Movement with arrow keys
+        /// </summary>
         public void KeyboardMovement()
         {
             kbState = Keyboard.GetState();
@@ -108,6 +111,7 @@ namespace ActualGame
                 timeCounter -= Game1.secondsPerFrame;
             }
             KeyboardMovement();
+            //call physicsObject update
             base.Update(gm);
 
             switch (state)

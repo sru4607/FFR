@@ -78,6 +78,7 @@ namespace ActualGame
         /// <param name="gameTime">Reference to the Update(gameTime) value</param>
         public void UpdateAll(GameTime gameTime)
         {
+            //update all objects
             foreach(GameObject go in World.Current.AllObjects)
             {
                 go.Update(gameTime);
