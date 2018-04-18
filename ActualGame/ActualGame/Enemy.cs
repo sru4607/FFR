@@ -21,6 +21,8 @@ namespace ActualGame
         protected int numWalkFrames;
         protected double timeCounter;
         protected double secondsPerFrame;
+
+        
         #endregion
 
         #region Properties
@@ -76,6 +78,9 @@ namespace ActualGame
             else
             {
                 hp -= damageAmount;
+                mainAi.StunnedFrames = 10; // stuns the enemy for 10 frames
+                State = EnemyState.Damaged;
+                Movement = new Vector2(0, -5);
             }
         }
 

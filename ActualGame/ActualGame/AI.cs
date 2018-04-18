@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,6 +42,12 @@ namespace ActualGame
         public PatrolType PatrolType
         {
             get { return patrolType; }
+        }
+
+        public int StunnedFrames
+        {
+            get { return stunnedFrames; }
+            set { stunnedFrames = value; }
         }
         #endregion
 
@@ -162,6 +169,16 @@ namespace ActualGame
                             throw new NotImplementedException("Unknown PatrolState case in AI.MoveAI()");
                     }
                     break;
+
+                // If the enemy has been stunned for the number of frames, unstun them and return to docile
+                // TODO: Update this to involve swapping to aggro
+                case EnemyState.Damaged:
+                    if (stunnedFrames == 0)
+                        enemy.State = EnemyState.Docile;
+                    else
+                        stunnedFrames--;
+                    break;
+
                 default:
                     break;
             }
@@ -175,16 +192,20 @@ namespace ActualGame
                     {
                         case PatrolState.PauseLeft:
                         case PatrolState.PauseRight:
+                            enemy.Movement = new Vector2(0f, enemy.Movement.Y);
                             break;
                         case PatrolState.WalkLeft:
-                            // TODO: Add movement for walking left
+                            enemy.Movement = new Vector2((-(float)walkSpeed), enemy.Movement.Y);
                             break;
                         case PatrolState.WalkRight:
-                            // TODO: Add movement for walking right
+                            enemy.Movement = new Vector2(((float)walkSpeed), enemy.Movement.Y);
                             break;
                     }
                     break;
-                // TODO: Add Search, Aggro, Damaged, and Attack movements
+                case EnemyState.Damaged:
+                    enemy.Movement = new Vector2(0f, enemy.Movement.Y);
+                    break;
+                // TODO: Add Search, Aggro, and Attack movements
                 default:
                     throw new NotImplementedException($"AI movement not implemented for {Enum.GetName(typeof(EnemyState), enemy.State)} state in AI.MoveAI()");
             }
