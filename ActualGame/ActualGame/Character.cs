@@ -132,7 +132,7 @@ namespace ActualGame
         /// </summary>
         public void Die()
         {
-            // This method won't ever be used. The method will be passed down to whatever the object is.
+            // Should do nothing
             return;
         }
 

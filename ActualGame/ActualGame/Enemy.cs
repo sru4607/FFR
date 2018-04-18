@@ -100,7 +100,7 @@ namespace ActualGame
 
         public new void Die()
         {
-            // TODO: Implement during combat
+            // TODO: things
         }
 
 
