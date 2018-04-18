@@ -15,11 +15,27 @@ namespace ActualGame
         AI mainAi;
         EnemyState enemyState;
         int stateFrameLock;
+
+        protected int currentFrame;
+        protected Texture2D walkTexture;
+        protected int numWalkFrames;
+        protected double timeCounter;
+        protected double secondsPerFrame;
         #endregion
 
         #region Properties
         public EnemyState State { get { return enemyState; } set { enemyState = value; } }
         public int StateLock { get { return stateFrameLock; } set { stateFrameLock = value; } }
+        public Texture2D WalkTexture
+        {
+            get { return walkTexture; }
+            set
+            {
+                walkTexture = value;
+                numWalkFrames = walkTexture.Width / Texture.Width;
+                currentFrame = 0;
+            }
+        }
         #endregion
 
         #region Constructor
@@ -41,6 +57,10 @@ namespace ActualGame
             Position = new Vector2(X,Y);
             Size = new Vector2(64, 128);
             noClip = true;
+
+            // Initialize animation parameters
+            currentFrame = 0;
+            secondsPerFrame = 1.0f / 30.0f;
         }
         #endregion
 
@@ -92,6 +112,27 @@ namespace ActualGame
 
             // TODO: Add EnemyState updater
 
+            switch (mainAi.PatrolType)
+            {
+                case PatrolType.Moving:
+                    // Animation for moving enemy
+                    timeCounter += gm.ElapsedGameTime.TotalSeconds;
+
+                    if (timeCounter >= secondsPerFrame)
+                    {
+                        currentFrame++;
+
+                        if (currentFrame == numWalkFrames)
+                            currentFrame = 0;
+
+                        timeCounter -= secondsPerFrame;
+                    }
+
+                    break;
+                case PatrolType.Standing:
+                    break;
+            }
+
             base.Update(gm);
         }
         #endregion
@@ -99,11 +140,26 @@ namespace ActualGame
         #region Draw
         public override void Draw(SpriteBatch sb)
         {
-            if(mainAi.FacingRight)
-                sb.Draw(Texture, Position, new Rectangle(0,0, Texture.Width, Texture.Height), Color.White,0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
-            // Draws to the screen with a horizontal flip if the AI is facing left
-            else
-                sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width/ Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
+            switch (mainAi.PatrolType)
+            {
+                case PatrolType.Moving:
+                    if (mainAi.FacingRight)
+                    {
+                        sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Texture.Width, Texture.Height), SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Texture.Width, Texture.Height), SpriteEffects.FlipHorizontally, 0);
+                    }
+                    break;
+                case PatrolType.Standing:
+                    if (mainAi.FacingRight)
+                        sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Texture.Width, Texture.Height), SpriteEffects.None, 0);
+                    // Draws to the screen with a horizontal flip if the AI is facing left
+                    else
+                        sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Texture.Width, Texture.Height), SpriteEffects.FlipHorizontally, 0);
+                    break;
+            }
         }
         #endregion
     }

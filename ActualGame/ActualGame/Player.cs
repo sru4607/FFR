@@ -20,6 +20,12 @@ namespace ActualGame
         KeyboardState kbState;
         KeyboardState prevState;
         int maxHealth;
+
+        protected int currentFrame;
+        protected Texture2D walkTexture;
+        protected int numWalkFrames;
+        protected double timeCounter;
+        protected double secondsPerFrame;
         #endregion
 
         #region Properties
@@ -31,6 +37,17 @@ namespace ActualGame
         public int MaxHealth
         {
             get { return maxHealth; }
+        }
+
+        public Texture2D WalkTexture
+        {
+            get { return walkTexture; }
+            set
+            {
+                walkTexture = value;
+                numWalkFrames = walkTexture.Width / Texture.Width;
+                currentFrame = 0;
+            }
         }
         #endregion
 
@@ -49,6 +66,10 @@ namespace ActualGame
             state = PlayerState.Idle;
             maxHealth = 3;
             hp = 3;
+
+            // Initialize animation parameters
+            currentFrame = 0;
+            secondsPerFrame = 1.0f / 30.0f;
         }
         #endregion
 
@@ -96,18 +117,30 @@ namespace ActualGame
         #region Update
         public override void Update(GameTime gm)
         {
-            
-            KeyboardMovement();
             base.Update(gm);
             switch (state)
             {
                 case (PlayerState.Walk):
                 {
                     if (kbState.IsKeyDown(Keys.Z))
-                        {
+                    {
                             state = PlayerState.MAttack;
-                        }
-                    break;
+                    }
+
+                    // Animation for moving player
+                    timeCounter += gm.ElapsedGameTime.TotalSeconds;
+
+                    if (timeCounter >= secondsPerFrame)
+                    {
+                        currentFrame++;
+
+                        if (currentFrame == numWalkFrames)
+                            currentFrame = 0;
+
+                        timeCounter -= secondsPerFrame;
+                    }
+
+                        break;
                 }
                 case (PlayerState.Jump):
                 {
@@ -151,7 +184,16 @@ namespace ActualGame
             {
                 case (PlayerState.Walk):
                 {
-                    break;
+                    if (right)
+                    {
+                       sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Texture.Width, Texture.Height), SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Texture.Width, Texture.Height), SpriteEffects.FlipHorizontally, 0);
+
+                    }
+                        break;
                 }
                 case (PlayerState.Jump):
                 {
@@ -159,7 +201,15 @@ namespace ActualGame
                 }
                 case (PlayerState.Idle):
                 {
-                    break;
+                        if (right)
+                        {
+                            sb.Draw(Texture, Position, Color.White);
+                        }
+                        else
+                        {
+                            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Texture.Width, Texture.Height), SpriteEffects.FlipHorizontally, 0);
+                        }
+                            break;
                 }
                 case (PlayerState.MAttack):
                 {
@@ -179,7 +229,6 @@ namespace ActualGame
                     break;
                 }
             }
-            base.Draw(sb);
         }
         #endregion
 
