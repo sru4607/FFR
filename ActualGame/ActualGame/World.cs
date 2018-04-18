@@ -21,7 +21,6 @@ namespace ActualGame
         Tile[,] tiles;
         private List<Enemy> initialEnemies;
         private List<Warp> warps;
-        public Player Player { get; set; }
         public List<GameObject> AllObjects { get; set; }
         public static World Current { get; set; }
         public QuadTreeNode QuadTree { get; set; }
@@ -93,6 +92,8 @@ namespace ActualGame
                     int x = worldReader.ReadInt32();
                     int y = worldReader.ReadInt32();
                     Enemy e = new Enemy(x*64, y*64, QuadTree, PatrolType.Standing);
+                    e.Texture = allTextures["PenPen"];
+                    e.WalkTexture = allTextures["PenPenWalking"];
                     AllObjects.Add(e);
                     initialEnemies.Add(e.Clone());
                     QuadTree.AddObject(e);

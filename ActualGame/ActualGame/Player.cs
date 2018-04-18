@@ -19,8 +19,12 @@ namespace ActualGame
         KeyboardState kbState;
         KeyboardState prevState;
         int maxHealth;
-        int currentFrame;
-        double timeCounter;
+
+        protected int currentFrame;
+        protected Texture2D walkTexture;
+        protected int numWalkFrames;
+        protected double timeCounter;
+        protected double secondsPerFrame;
         #endregion
 
         #region Properties
@@ -33,6 +37,17 @@ namespace ActualGame
         public int MaxHealth
         {
             get { return maxHealth; }
+        }
+
+        public Texture2D WalkTexture
+        {
+            get { return walkTexture; }
+            set
+            {
+                walkTexture = value;
+                numWalkFrames = walkTexture.Width / Texture.Width;
+                currentFrame = 0;
+            }
         }
         #endregion
 
@@ -51,6 +66,10 @@ namespace ActualGame
             state = PlayerState.Idle;
             maxHealth = 3;
             hp = 3;
+
+            // Initialize animation parameters
+            currentFrame = 0;
+            secondsPerFrame = 1.0f / 30.0f;
         }
         #endregion
 
@@ -101,17 +120,8 @@ namespace ActualGame
         #region Update
         public override void Update(GameTime gm)
         {
-            // setup for animations
-            timeCounter += gm.ElapsedGameTime.TotalSeconds;
-            if (timeCounter >= Game1.secondsPerFrame)
-            {
-                currentFrame++;
-                if (currentFrame >= 4) currentFrame = 1;
-
-                timeCounter -= Game1.secondsPerFrame;
-            }
+            
             KeyboardMovement();
-            //call physicsObject update
             base.Update(gm);
             if(kbState.IsKeyDown(Keys.Down))
             {
@@ -121,12 +131,30 @@ namespace ActualGame
             {
                 case (PlayerState.Walk):
                 {
-                        
-                        if (kbState.IsKeyDown(Keys.Up))
+                    
+
+                    // Animation for moving player
+                    timeCounter += gm.ElapsedGameTime.TotalSeconds;
+
+                    if (timeCounter >= secondsPerFrame)
+                    {
+                        currentFrame++;
+
+                        if (currentFrame == numWalkFrames)
+                            currentFrame = 0;
+
+                        timeCounter -= secondsPerFrame;
+                    }
+
+                    if (kbState.IsKeyDown(Keys.Up))
                         {
                             state = PlayerState.Jump;
                         }
-                        if(kbState.IsKeyUp(Keys.Up) && kbState.IsKeyUp(Keys.Left) && kbState.IsKeyUp(Keys.Right))
+                        if (kbState.IsKeyDown(Keys.Right))
+                            right = true;
+                        if (kbState.IsKeyDown(Keys.Left))
+                            right = false;
+                    if (kbState.IsKeyUp(Keys.Up) && kbState.IsKeyUp(Keys.Left) && kbState.IsKeyUp(Keys.Right))
                         {
                             state = PlayerState.Idle;
                         }
@@ -139,7 +167,10 @@ namespace ActualGame
                 }
                 case (PlayerState.Jump):
                 {
-
+                        if (OnGround())
+                        {
+                            state = PlayerState.Idle;
+                        }
                         if (kbState.IsKeyDown(Keys.Z))
                         {
                             state = PlayerState.MAttack;
@@ -171,6 +202,18 @@ namespace ActualGame
                 case (PlayerState.MAttack):
                 {
                         this.MAttack();
+
+                        // setup for animations
+                        timeCounter += gm.ElapsedGameTime.TotalSeconds;
+                        if (timeCounter >= Game1.secondsPerFrame)
+                        {
+                            currentFrame++;
+                            if (currentFrame >= 4) currentFrame = 1;
+
+                            timeCounter -= Game1.secondsPerFrame;
+                        }
+
+
                         if (currentFrame == 3) // after finishing attack animation, go back to idle
                         {
                             state = PlayerState.Idle;
@@ -199,16 +242,30 @@ namespace ActualGame
             switch (state)
             {
                 case (PlayerState.Walk):
+                case PlayerState.Jump:
                 {
-                    break;
-                }
-                case (PlayerState.Jump):
-                {
-                    break;
+                    if (right)
+                    {
+                       sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
+
+                    }
+                        break;
                 }
                 case (PlayerState.Idle):
                 {
-                    break;
+                        if (right)
+                        {
+                            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
+                        }
+                        else
+                        {
+                            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
+                        }
+                            break;
                 }
                 case (PlayerState.MAttack):
                 {
@@ -228,7 +285,6 @@ namespace ActualGame
                     break;
                 }
             }
-            base.Draw(sb);
         }
         #endregion
 
