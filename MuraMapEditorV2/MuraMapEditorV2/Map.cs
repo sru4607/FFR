@@ -281,7 +281,11 @@ namespace MuraMapEditorV2
                     // Remove all events at these coordinates
 
                     foreach (GameEvent g in eventsAtLocation)
+                    {
+                        events.Remove(g);
+
                         Controls.Remove(g);
+                    }
 
                     break;
                 case EditorMode.Enemy:
