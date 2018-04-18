@@ -28,7 +28,8 @@ namespace ActualGame
         Player player;
         public static double fps;
         public static double secondsPerFrame;
-        MouseState prev;
+        MouseState prevMouse;
+        MouseState currentMouse;
         
         
         public Game1()
@@ -439,12 +440,15 @@ namespace ActualGame
                         break;
                 }
             }
+            //Menu Mouse Control
+            prevMouse = currentMouse;
+            currentMouse = Mouse.GetState();
             for (int i = 0; i < buttons.Length; i++)
             {
                 if (buttons[i].Contains(Mouse.GetState().Position))
                 {
                     indexActiveButton = i;
-                    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    if (currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released)
                     {
                         switch (indexActiveButton)
                         {
@@ -496,12 +500,15 @@ namespace ActualGame
                 else if (buttonText == "ExitButton")
                     Exit();
             }
+            //Menu Mouse Control
+            prevMouse = currentMouse;
+            currentMouse = Mouse.GetState();
             for (int i = 0; i < buttons.Length; i++)
             {
                 if (buttons[i].Contains(Mouse.GetState().Position))
                 {
                     indexActiveButton = i;
-                    if(Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    if(currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released)
                     {
                         string buttonText = buttons[indexActiveButton].Name;
                         if (buttonText == "StartButton")
@@ -551,12 +558,15 @@ namespace ActualGame
                 else if (buttonText == "MainMenuButton")
                     SwitchToMainMenu();
             }
+            //Menu Mouse Control
+            prevMouse = currentMouse;
+            currentMouse = Mouse.GetState();
             for (int i = 0; i < buttons.Length; i++)
             {
                 if (buttons[i].Contains(Mouse.GetState().Position))
                 {
                     indexActiveButton = i;
-                    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    if (currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released)
                     {
                         string buttonText = buttons[indexActiveButton].Name;
                         if (buttonText == "ResumeButton")
