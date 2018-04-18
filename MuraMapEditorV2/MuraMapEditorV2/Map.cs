@@ -301,7 +301,7 @@ namespace MuraMapEditorV2
                     {
                         enemyEvent = new GameEvent();
                         enemyEvent.EventType = EventType.Enemy;
-                        enemyEvent.Location = new Point(1 + xIndex * 32, 1 + yIndex * 32);
+                        enemyEvent.Location = new Point(1 + xIndex * 32 + AutoScrollPosition.X, 1 + yIndex * 32 + AutoScrollPosition.Y);
                         enemyEvent.Image = Properties.Resources.Enemy;
                         enemyEvent.MouseClick += new MouseEventHandler(TileClick);
                         enemyEvent.XIndex = xIndex;
