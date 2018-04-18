@@ -16,6 +16,7 @@ namespace MuraMapEditorV2
         // Fields
         private NewMapForm NewMap;
         private string currentFilePath;
+        private Size originalSize;
 
         // Property
         public Map Map
@@ -31,15 +32,7 @@ namespace MuraMapEditorV2
             MapView.Selected = TilePalette.Selected;
             MapView.CreateMap();
             NewMap = new NewMapForm(this);
-
-            // Set the working directory
-            if (!Directory.Exists("Maps"))
-                Directory.CreateDirectory("Maps");
-
-            Directory.SetCurrentDirectory("Maps");
-
-            OpenDialog.InitialDirectory = Directory.GetCurrentDirectory();
-            SaveDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            
 
         }
 
@@ -63,8 +56,10 @@ namespace MuraMapEditorV2
         {
             if (!Directory.Exists("Maps"))
                 Directory.CreateDirectory("Maps");
-            SaveDialog.InitialDirectory = Directory.GetCurrentDirectory() + "/Maps";
-            OpenDialog.InitialDirectory = Directory.GetCurrentDirectory() + "/Maps";
+            Directory.SetCurrentDirectory("Maps");
+
+            SaveDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            OpenDialog.InitialDirectory = Directory.GetCurrentDirectory();
         }
 
         private void SaveDialog_FileOk(object sender, CancelEventArgs e)
@@ -72,12 +67,12 @@ namespace MuraMapEditorV2
             currentFilePath = SaveDialog.FileName;
 
             BinaryWriter output = new BinaryWriter(File.OpenWrite(currentFilePath));
-            output.Write(MapView.Width);
-            output.Write(MapView.Height);
+            output.Write(MapView.MapWidth);
+            output.Write(MapView.MapHeight);
 
-            for (int i = 0; i<MapView.Width; i++)
+            for (int i = 0; i<MapView.MapWidth; i++)
             {
-                for (int j = 0; j<MapView.Height; j++)
+                for (int j = 0; j<MapView.MapHeight; j++)
                 {
                     output.Write(MapView[i,j].Data.Source);
                     output.Write(MapView[i, j].ImageIndex);
@@ -85,9 +80,9 @@ namespace MuraMapEditorV2
                 }
             }
 
-            output.Write(MapView.Events.Count);
+            output.Write(MapView.MapEvents.Count);
 
-            foreach (GameEvent g in MapView.Events)
+            foreach (GameEvent g in MapView.MapEvents)
             {
                 output.Write((int)g.EventType);
 
@@ -124,9 +119,9 @@ namespace MuraMapEditorV2
 
             MapView.CreateMap(input.ReadInt32(), input.ReadInt32());
 
-            for (int i = 0; i<MapView.Width; i++)
+            for (int i = 0; i<MapView.MapWidth; i++)
             {
-                for (int j = 0; j<MapView.Height; j++)
+                for (int j = 0; j<MapView.MapHeight; j++)
                 {
                     MapView[i,j].Data = Tileset.Sources[input.ReadString()];
                     MapView[i,j].ImageIndex = input.ReadInt32();
@@ -134,7 +129,7 @@ namespace MuraMapEditorV2
                 }
             }
             
-            MapView.Events = new List<GameEvent>(); // Number of Events, not yet implemented
+            MapView.MapEvents = new List<GameEvent>(); // Number of Events, not yet implemented
 
             int numEvents = input.ReadInt32();
             for (int i = 0; i<numEvents; i++)
@@ -161,7 +156,7 @@ namespace MuraMapEditorV2
                     g.WarpData = warpData;
                 }
 
-                MapView.Events.Add(g);
+                MapView.MapEvents.Add(g);
                 MapView.Controls.Add(g);
                 g.BringToFront();
             }
@@ -216,6 +211,35 @@ namespace MuraMapEditorV2
             else if (sender == WarpButton)
             {
                 MapView.Mode = EditorMode.Warp;
+            }
+        }
+
+        private void MapEditor_ResizeBegin(object sender, EventArgs e)
+        {
+            originalSize = Size;
+        }
+
+        private void MapEditor_ResizeEnd(object sender, EventArgs e)
+        {
+            if (Size.Width < 818)
+                Width = 818;
+            if (Size.Height < 620)
+                Height = 620;
+
+            int widthChange = Size.Width - originalSize.Width;
+            int heightChange = Size.Height - originalSize.Height;
+
+            MapView.Width += widthChange;
+            MapView.Height += heightChange;
+
+            foreach (Control c in Controls)
+            {
+                if (c!=MapView && c != MapLabel && c != MenuStrip)
+                {
+                    Point location = c.Location;
+                    location.X += widthChange;
+                    c.Location = location;
+                }
             }
         }
     }

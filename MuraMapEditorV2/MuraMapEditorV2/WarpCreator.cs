@@ -47,6 +47,7 @@ namespace MuraMapEditorV2
         public WarpCreator()
         {
             InitializeComponent();
+            OpenDialog.InitialDirectory = Directory.GetCurrentDirectory();
         }
 
         private void DestinationButton_Click(object sender, EventArgs e)
@@ -62,7 +63,8 @@ namespace MuraMapEditorV2
 
         private void OpenDialog_FileOk(object sender, CancelEventArgs e)
         {
-            mapName = OpenDialog.FileName;
+            string fileName = OpenDialog.FileName.Split('\\')[OpenDialog.FileName.Split('\\').Length-1];
+            mapName = fileName.Substring(0,fileName.Length-4);
 
             xOffset = 0;
             yOffset = 0;
@@ -73,7 +75,7 @@ namespace MuraMapEditorV2
         {
             try
             {
-                BinaryReader input = new BinaryReader(File.OpenRead(mapName));
+                BinaryReader input = new BinaryReader(File.OpenRead(Directory.GetCurrentDirectory() + "\\" + mapName + ".map"));
 
                 map = new PictureBox[input.ReadInt32(), input.ReadInt32()];
 
@@ -93,28 +95,13 @@ namespace MuraMapEditorV2
                 }
 
                 
-                DestinationLabel.Text = "(x,y) = (" + xOffset + "," +yOffset + ")"
-                    
-                    
-                    
-                    
-                    
-                    
-
-
-
-
-
-
-
-
-;
+                DestinationLabel.Text = "(x,y) = (" + xOffset + "," +yOffset + ")";
 
                 SetWarpButton.Enabled = true;
             }
             catch (Exception e)
             {
-                MessageBox.Show("There was an error when loading a warp event:\n" + e.Message);
+               MessageBox.Show("There was an error when loading a warp event:\n" + e.Message);
             }
         }
 
