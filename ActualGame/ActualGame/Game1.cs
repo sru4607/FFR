@@ -24,6 +24,7 @@ namespace ActualGame
         int indexActiveButton;
         KeyboardState kbState;
         KeyboardState prevkbState;
+        MouseState mState;
         Player player;
         public static double fps;
         public static double secondsPerFrame;
@@ -166,6 +167,7 @@ namespace ActualGame
         {
             prevkbState = kbState;
             kbState = Keyboard.GetState();
+            mState = Mouse.GetState();
 
             switch (currentState)
             {
@@ -198,17 +200,20 @@ namespace ActualGame
                     {
                         //Checks which button is pressed or if a new button needs to be active
                         MenuButtonLogic();
+                        UpdateMouseInButton();
                         break;
                     }
                 case (MainGameState.Pause):
                     {
                         //Checks which button is pressed or if a new button needs to be active
                         PauseButtonLogic();
+                        UpdateMouseInButton();
                         break;
                     }
                 case (MainGameState.GameOver):
                     {
                         GameOverLogic();
+                        UpdateMouseInButton();
                         break;
                     }
                 default:
@@ -315,6 +320,7 @@ namespace ActualGame
         /// </summary>
         public void SwitchToMainMenu()
         {
+            IsMouseVisible = true;
             currentState = MainGameState.Menu;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
@@ -331,6 +337,7 @@ namespace ActualGame
         /// </summary>
         public void SwitchToPauseMenu()
         {
+            IsMouseVisible = true;
             currentState = MainGameState.Pause;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
@@ -347,6 +354,7 @@ namespace ActualGame
         /// </summary>
         public void SwitchToGameOver()
         {
+            IsMouseVisible = true;
             currentState = MainGameState.GameOver;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
@@ -422,6 +430,7 @@ namespace ActualGame
                 {
                     case 0:
                         StartGame();
+                        IsMouseVisible = false;
                         break;
                     case 1:
                         SwitchToMainMenu();
@@ -431,7 +440,7 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// A helper method for all of the button logic necessary for updating
+        /// A helper method for all of the button logic necessary for updating the main menu
         /// </summary>
         public void MenuButtonLogic()
         {
@@ -455,12 +464,18 @@ namespace ActualGame
             {
                 string buttonText = buttons[indexActiveButton].Name;
                 if (buttonText == "StartButton")
+                {
                     StartGame();
+                    IsMouseVisible = false;
+                }
                 else if (buttonText == "ExitButton")
                     Exit();
             }
         }
 
+        /// <summary>
+        /// A helper method for all of the button logic necessary for updating the pause menu
+        /// </summary>
         public void PauseButtonLogic()
         {
             //Adjusts the current active button if up or down arrow is pressed
@@ -486,9 +501,27 @@ namespace ActualGame
             {
                 string buttonText = buttons[indexActiveButton].Name;
                 if (buttonText == "ResumeButton")
+                {
                     currentState = MainGameState.InGame;
+                    IsMouseVisible = false;
+                }
                 else if (buttonText == "MainMenuButton")
                     SwitchToMainMenu();
+            }
+        }
+
+        /// <summary>
+        /// A helper method to determine if the mouse is in a button and set the active button to that if so
+        /// </summary>
+        public void UpdateMouseInButton()
+        {
+            for(int c=0; c<buttons.Length; c++)
+            {
+                if (buttons[c].Rectangle.Contains(mState.Position))
+                {
+                    indexActiveButton = c;
+                    break;
+                }
             }
         }
     }
