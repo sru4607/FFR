@@ -32,6 +32,15 @@ namespace MuraMapEditorV2
             MapView.CreateMap();
             NewMap = new NewMapForm(this);
 
+            // Set the working directory
+            if (!Directory.Exists("Maps"))
+                Directory.CreateDirectory("Maps");
+
+            Directory.SetCurrentDirectory("Maps");
+
+            OpenDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            SaveDialog.InitialDirectory = Directory.GetCurrentDirectory();
+
         }
 
         private void NotImplemented(object sender, EventArgs e)
@@ -141,9 +150,15 @@ namespace MuraMapEditorV2
                 if (g.EventType == EventType.Warp)
                 {
                     WarpCreator c = new WarpCreator();
-                    c.Name = input.ReadString();
+                    c.MapName = input.ReadString();
                     c.XOffset = input.ReadInt32();
                     c.YOffset = input.ReadInt32();
+                    c.LoadMap();
+                    g.Image = Properties.Resources.Warp;
+
+                    WarpData warpData = new WarpData(c);
+
+                    g.WarpData = warpData;
                 }
 
                 MapView.Events.Add(g);

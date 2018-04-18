@@ -64,30 +64,58 @@ namespace MuraMapEditorV2
         {
             mapName = OpenDialog.FileName;
 
-            BinaryReader input = new BinaryReader(File.OpenRead(mapName));
-
-            map = new PictureBox[input.ReadInt32(), input.ReadInt32()];
-
-            for (int i = 0; i<map.GetLength(0); i++)
-            {
-                for (int j = 0; j<map.GetLength(1); j++)
-                {
-                    PictureBox p = new PictureBox();
-                    p.Size = new Size(32, 32);
-                    p.Location = new Point(12 + i * 32, 40 + j * 32);
-                    p.Image = Tileset.Sources[input.ReadString()][input.ReadInt32()];
-                    input.ReadInt32(); // Depth
-                    p.Click += new EventHandler(PictureBox_Click);
-                    map[i, j] = p;
-                    Controls.Add(p);
-                }
-            }
-
             xOffset = 0;
             yOffset = 0;
-            DestinationLabel.Text = "(x,y) = (0,0)";
+            LoadMap();
+        }
 
-            SetWarpButton.Enabled = true;
+        public void LoadMap()
+        {
+            try
+            {
+                BinaryReader input = new BinaryReader(File.OpenRead(mapName));
+
+                map = new PictureBox[input.ReadInt32(), input.ReadInt32()];
+
+                for (int i = 0; i < map.GetLength(0); i++)
+                {
+                    for (int j = 0; j < map.GetLength(1); j++)
+                    {
+                        PictureBox p = new PictureBox();
+                        p.Size = new Size(32, 32);
+                        p.Location = new Point(12 + i * 32, 40 + j * 32);
+                        p.Image = Tileset.Sources[input.ReadString()][input.ReadInt32()];
+                        input.ReadInt32(); // Depth
+                        p.Click += new EventHandler(PictureBox_Click);
+                        map[i, j] = p;
+                        Controls.Add(p);
+                    }
+                }
+
+                
+                DestinationLabel.Text = "(x,y) = (" + xOffset + "," +yOffset + ")"
+                    
+                    
+                    
+                    
+                    
+                    
+
+
+
+
+
+
+
+
+;
+
+                SetWarpButton.Enabled = true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("There was an error when loading a warp event:\n" + e.Message);
+            }
         }
 
         private void PictureBox_Click(object sender, EventArgs e)

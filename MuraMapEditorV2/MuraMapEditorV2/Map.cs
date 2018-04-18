@@ -340,7 +340,7 @@ namespace MuraMapEditorV2
                             warpEvent = new GameEvent();
                             warpEvent.EventType = EventType.Warp;
                             warpEvent.WarpData = new WarpData(creator);
-                            warpEvent.Location = new Point(1 + xIndex * 32, 1 + yIndex * 32);
+                            warpEvent.Location = new Point(1 + xIndex * 32 + AutoScrollPosition.X, 1 + yIndex * 32 + AutoScrollPosition.Y);
                             warpEvent.MouseClick += new MouseEventHandler(TileClick);
                             warpEvent.Image = Properties.Resources.Warp;
                             warpEvent.XIndex = xIndex;
