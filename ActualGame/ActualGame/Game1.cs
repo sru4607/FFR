@@ -24,6 +24,7 @@ namespace ActualGame
         int indexActiveButton;
         KeyboardState kbState;
         KeyboardState prevkbState;
+        MouseState mState;
         Player player;
         public static double fps;
         public static double secondsPerFrame;
@@ -167,6 +168,7 @@ namespace ActualGame
         {
             prevkbState = kbState;
             kbState = Keyboard.GetState();
+            mState = Mouse.GetState();
 
             switch (currentState)
             {
@@ -200,17 +202,20 @@ namespace ActualGame
 
                         //Checks which button is pressed or if a new button needs to be active
                         MenuButtonLogic();
+                        UpdateMouseInButton();
                         break;
                     }
                 case (MainGameState.Pause):
                     {
                         //Checks which button is pressed or if a new button needs to be active
                         PauseButtonLogic();
+                        UpdateMouseInButton();
                         break;
                     }
                 case (MainGameState.GameOver):
                     {
                         GameOverLogic();
+                        UpdateMouseInButton();
                         break;
                     }
                 default:
@@ -460,7 +465,7 @@ namespace ActualGame
         }
 
         /// <summary>
-        /// A helper method for all of the button logic necessary for updating
+        /// A helper method for all of the button logic necessary for updating the main menu
         /// </summary>
         public void MenuButtonLogic()
         {
@@ -567,6 +572,21 @@ namespace ActualGame
             }
 
 
+        }
+
+        /// <summary>
+        /// A helper method to determine if the mouse is in a button and set the active button to that if so
+        /// </summary>
+        public void UpdateMouseInButton()
+        {
+            for(int c=0; c<buttons.Length; c++)
+            {
+                if (buttons[c].Rectangle.Contains(mState.Position))
+                {
+                    indexActiveButton = c;
+                    break;
+                }
+            }
         }
     }
 }
