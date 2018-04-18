@@ -80,7 +80,7 @@ namespace ActualGame
                 hp -= damageAmount;
                 mainAi.StunnedFrames = 10; // stuns the enemy for 10 frames
                 State = EnemyState.Damaged;
-                Movement = new Vector2(0, 5);
+                Movement = new Vector2(0, -5);
             }
         }
 
