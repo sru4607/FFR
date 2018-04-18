@@ -43,6 +43,12 @@ namespace ActualGame
         {
             get { return patrolType; }
         }
+
+        public int StunnedFrames
+        {
+            get { return stunnedFrames; }
+            set { stunnedFrames = value; }
+        }
         #endregion
 
         #region Constructor
@@ -163,6 +169,16 @@ namespace ActualGame
                             throw new NotImplementedException("Unknown PatrolState case in AI.MoveAI()");
                     }
                     break;
+
+                // If the enemy has been stunned for the number of frames, unstun them and return to docile
+                // TODO: Update this to involve swapping to aggro
+                case EnemyState.Damaged:
+                    if (stunnedFrames == 0)
+                        enemy.State = EnemyState.Docile;
+                    else
+                        stunnedFrames--;
+                    break;
+
                 default:
                     break;
             }
@@ -186,7 +202,10 @@ namespace ActualGame
                             break;
                     }
                     break;
-                // TODO: Add Search, Aggro, Damaged, and Attack movements
+                case EnemyState.Damaged:
+                    enemy.Movement = new Vector2(0f, enemy.Movement.Y);
+                    break;
+                // TODO: Add Search, Aggro, and Attack movements
                 default:
                     throw new NotImplementedException($"AI movement not implemented for {Enum.GetName(typeof(EnemyState), enemy.State)} state in AI.MoveAI()");
             }
