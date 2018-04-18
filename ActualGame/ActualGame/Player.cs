@@ -128,10 +128,7 @@ namespace ActualGame
             {
                 case (PlayerState.Walk):
                 {
-                    if (kbState.IsKeyDown(Keys.Z))
-                        {
-                            state = PlayerState.MAttack;
-                    }
+                    
 
                     // Animation for moving player
                     timeCounter += gm.ElapsedGameTime.TotalSeconds;
@@ -146,11 +143,31 @@ namespace ActualGame
                         timeCounter -= secondsPerFrame;
                     }
 
+                    if (kbState.IsKeyDown(Keys.Up))
+                        {
+                            state = PlayerState.Jump;
+                        }
+                        if (kbState.IsKeyDown(Keys.Right))
+                            right = true;
+                        if (kbState.IsKeyDown(Keys.Left))
+                            right = false;
+                    if (kbState.IsKeyUp(Keys.Up) && kbState.IsKeyUp(Keys.Left) && kbState.IsKeyUp(Keys.Right))
+                        {
+                            state = PlayerState.Idle;
+                        }
+                        if (kbState.IsKeyDown(Keys.Z))
+                        {
+                            state = PlayerState.MAttack;
+                        }
+
                         break;
                 }
                 case (PlayerState.Jump):
                 {
-
+                        if (OnGround())
+                        {
+                            state = PlayerState.Idle;
+                        }
                         if (kbState.IsKeyDown(Keys.Z))
                         {
                             state = PlayerState.MAttack;
@@ -222,31 +239,28 @@ namespace ActualGame
             switch (state)
             {
                 case (PlayerState.Walk):
+                case PlayerState.Jump:
                 {
                     if (right)
                     {
-                       sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Texture.Width, Texture.Height), SpriteEffects.None, 0);
+                       sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
                     }
                     else
                     {
-                        sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Texture.Width, Texture.Height), SpriteEffects.FlipHorizontally, 0);
+                        sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
 
                     }
                         break;
-                }
-                case (PlayerState.Jump):
-                {
-                    break;
                 }
                 case (PlayerState.Idle):
                 {
                         if (right)
                         {
-                            sb.Draw(Texture, Position, Color.White);
+                            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
                         }
                         else
                         {
-                            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Texture.Width, Texture.Height), SpriteEffects.FlipHorizontally, 0);
+                            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
                         }
                             break;
                 }

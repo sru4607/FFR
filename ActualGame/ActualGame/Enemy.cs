@@ -88,6 +88,7 @@ namespace ActualGame
             Enemy clone = new Enemy((int)X, (int)Y, node, mainAi.PatrolType);
             clone.hp = hp;
             clone.texture = texture;
+            clone.WalkTexture = WalkTexture;
 
             return clone;
         }
