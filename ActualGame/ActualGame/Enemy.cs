@@ -56,7 +56,18 @@ namespace ActualGame
                 hp -= damageAmount;
         }
 
+        /// <summary>
+        /// Creates an exact copy of this enemy in a new quad tree
+        /// </summary>
+        /// <returns></returns>
+        public Enemy Clone(QuadTreeNode node = null)
+        {
+            Enemy clone = new Enemy((int)X, (int)Y, node, mainAi.PatrolType);
+            clone.hp = hp;
+            clone.texture = texture;
 
+            return clone;
+        }
 
         public new void Die()
         {
