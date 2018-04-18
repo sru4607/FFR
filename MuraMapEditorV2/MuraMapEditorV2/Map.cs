@@ -51,18 +51,18 @@ namespace MuraMapEditorV2
             }
         }
 
-        public List<GameEvent> Events
+        public List<GameEvent> MapEvents
         {
             get { return events; }
             set { events = value; }
         }
 
-        public int Width
+        public int MapWidth
         {
             get { return width; }
         }
 
-        public int Height
+        public int MapHeight
         {
             get { return height; }
         }
