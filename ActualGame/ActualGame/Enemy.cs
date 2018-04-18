@@ -101,7 +101,7 @@ namespace ActualGame
         public new void Die()
         {
             // TODO: Implement during combat
-            this.Position = new Vector2(1000000, 1000000);
+            World.Current.AllObjects.Remove(this);
         }
 
 

@@ -219,9 +219,9 @@ namespace ActualGame
 
                             timeCounter -= Game1.secondsPerFrame;
                         }
-                        foreach(GameObject g in World.Current.AllObjects)
+                        for(int i = 0; i<World.Current.AllObjects.Count; i++)
                         {
-                            if(g is Enemy e)
+                            if(World.Current.AllObjects[i] is Enemy e)
                             {
                                 if(AttackIntersects(e))
                                 {

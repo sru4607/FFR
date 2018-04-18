@@ -206,8 +206,8 @@ namespace ActualGame
         /// <param name="gameTime"></param>
         public void UpdateAll(GameTime gameTime)
         {
-            foreach (GameObject g in AllObjects)
-                g.Update(gameTime);
+            for(int i =0; i<AllObjects.Count;i++)
+                AllObjects[i].Update(gameTime);
         }
         #endregion
 
