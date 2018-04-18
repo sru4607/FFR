@@ -66,6 +66,7 @@ namespace ActualGame
             state = PlayerState.Idle;
             maxHealth = 3;
             hp = 3;
+            mDamage = 1;
 
             // Initialize animation parameters
             currentFrame = 0;

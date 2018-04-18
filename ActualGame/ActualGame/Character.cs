@@ -53,7 +53,7 @@ namespace ActualGame
             // TODO: Verify whether the hitbox line of code is valid or if it belongs in GameObject 
             // Also, should it use 0, 0, 32, 64; or x, y, 32, 64?
             mBox = new Rectangle((int)Position.X + (int)Size.X, (int)Position.Y + ((int)Size.Y / 4), (int)Size.X, (int)Size.Y / 2);
-            mDamage = 0;
+            mDamage = 1;
             rDamage = 0;
             stunFrames = 0;
             this.right = right;
@@ -77,7 +77,7 @@ namespace ActualGame
 
             Position = new Vector2(X, Y);
             
-            mDamage = 0;
+            mDamage = 1;
             rDamage = 0;
             stunFrames = 0;
             this.right = right;
