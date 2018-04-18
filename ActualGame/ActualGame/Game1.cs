@@ -240,7 +240,7 @@ namespace ActualGame
                     }
                 case (MainGameState.InGame):
                     {
-                        currentWorld.Draw(spriteBatch);
+                        World.Current.Draw(spriteBatch);
 
                         // Draw the player's health bar
                         Texture2D heart = allTextures["Heart"];
