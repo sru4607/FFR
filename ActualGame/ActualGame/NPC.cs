@@ -10,6 +10,7 @@ namespace ActualGame
 {
     class NPC : Character
     {
+        //WIP
 
         #region Fields
 

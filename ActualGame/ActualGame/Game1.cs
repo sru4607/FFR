@@ -25,6 +25,8 @@ namespace ActualGame
         KeyboardState kbState;
         KeyboardState prevkbState;
         Player player;
+        public static double fps;
+        public static double secondsPerFrame;
         
         
         public Game1()
@@ -73,6 +75,10 @@ namespace ActualGame
         {
             // Create a new SpriteBatch, which can be used to draw textures
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Set up animation variables
+            fps = 30.0;
+            secondsPerFrame = 1.0f / fps;
 
             // Import levels
             //levelOne.Import();

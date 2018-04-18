@@ -67,13 +67,16 @@ namespace ActualGame
         #region Methods
         public new void TakeDamage(int damageAmount)
         {
+            // TODO: Implement invincibility frames
             if (damageAmount >= hp)
             {
                 hp = 0;
                 Die();
             }
             else
+            {
                 hp -= damageAmount;
+            }
         }
 
         /// <summary>
@@ -107,10 +110,8 @@ namespace ActualGame
             // TODO: Update so rect.Y is moved in the same call
             // NOTE: Do NOT call .MoveAI() twice, it will count as two frames of movement
             // NOTE: Also only moves in the X direction right now
-            
-            //mainAi.MoveAI();
 
-            // TODO: Add EnemyState updater
+            mainAi.MoveAI();
 
             switch (mainAi.PatrolType)
             {

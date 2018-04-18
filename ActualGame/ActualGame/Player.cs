@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
-
 namespace ActualGame
 {
     //Enumeration for the FSM for the Player actions
@@ -29,11 +28,12 @@ namespace ActualGame
         #endregion
 
         #region Properties
+        //return if dead
         public bool IsDead
         {
             get { return state == PlayerState.Dead;}
         }
-
+        //only get MaxHealth
         public int MaxHealth
         {
             get { return maxHealth; }
@@ -88,15 +88,18 @@ namespace ActualGame
             else
                 hp -= damageAmount;
         }
+        /// <summary>
+        /// Movement with arrow keys
+        /// </summary>
         public void KeyboardMovement()
         {
-            KeyboardState kb = Keyboard.GetState();
+            kbState = Keyboard.GetState();
 
-            if (kb.IsKeyDown(Keys.Left))
+            if (kbState.IsKeyDown(Keys.Left) && (state == PlayerState.Walk || state == PlayerState.Jump))
             { Movement = new Vector2(-5f, Movement.Y); }
-            if (kb.IsKeyDown(Keys.Right))
+            if (kbState.IsKeyDown(Keys.Right) && (state == PlayerState.Walk || state == PlayerState.Jump))
             { Movement = new Vector2(5f, Movement.Y); }
-            if (kb.IsKeyDown(Keys.Up) && OnGround())
+            if (kbState.IsKeyDown(Keys.Up) && OnGround() && state == PlayerState.Jump)
             { Movement = new Vector2(Movement.X, -20f); }
 
         }
@@ -104,7 +107,7 @@ namespace ActualGame
         //TODO: Method to call that should update the game to signal the Player has died
         public new void Die()
         {
-
+            state = PlayerState.Dead;
         }
 
         //TODO: Method to stun the player for the amount of time chosen
@@ -117,13 +120,16 @@ namespace ActualGame
         #region Update
         public override void Update(GameTime gm)
         {
+            
+            KeyboardMovement();
             base.Update(gm);
+
             switch (state)
             {
                 case (PlayerState.Walk):
                 {
                     if (kbState.IsKeyDown(Keys.Z))
-                    {
+                        {
                             state = PlayerState.MAttack;
                     }
 
@@ -145,11 +151,28 @@ namespace ActualGame
                 case (PlayerState.Jump):
                 {
 
-
+                        if (kbState.IsKeyDown(Keys.Z))
+                        {
+                            state = PlayerState.MAttack;
+                        }
                     break;
                 }
                 case (PlayerState.Idle):
                 {
+                        if (kbState.IsKeyDown(Keys.Left))
+                        {
+                            state = PlayerState.Walk;
+                            right = false;
+                        }
+                        if (kbState.IsKeyDown(Keys.Right))
+                        {
+                            state = PlayerState.Walk;
+                            right = true;
+                        }
+                        if (kbState.IsKeyDown(Keys.Up))
+                        {
+                            state = PlayerState.Jump;
+                        }
                     if (kbState.IsKeyDown(Keys.Z))
                         {
                             state = PlayerState.MAttack;
@@ -159,6 +182,22 @@ namespace ActualGame
                 case (PlayerState.MAttack):
                 {
                         this.MAttack();
+
+                        // setup for animations
+                        timeCounter += gm.ElapsedGameTime.TotalSeconds;
+                        if (timeCounter >= Game1.secondsPerFrame)
+                        {
+                            currentFrame++;
+                            if (currentFrame >= 4) currentFrame = 1;
+
+                            timeCounter -= Game1.secondsPerFrame;
+                        }
+
+
+                        if (currentFrame == 3) // after finishing attack animation, go back to idle
+                        {
+                            state = PlayerState.Idle;
+                        }
                     break;
                 }
                 case (PlayerState.Crouch):
@@ -213,8 +252,8 @@ namespace ActualGame
                 }
                 case (PlayerState.MAttack):
                 {
-                        sb.Draw(this.Texture, mBox, Color.Red); //meant to help check to make sure MAttack was going through. As of yet, hasn't seemed to work.
-                    break;
+                        sb.Draw(Texture, this.MBox, Color.Red); // Just remove this line to make mBox invisible
+                        break;
                 }
                 case (PlayerState.Crouch):
                 {
