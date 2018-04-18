@@ -21,6 +21,8 @@ namespace ActualGame
         protected int numWalkFrames;
         protected double timeCounter;
         protected double secondsPerFrame;
+
+        
         #endregion
 
         #region Properties

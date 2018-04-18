@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -175,12 +176,13 @@ namespace ActualGame
                     {
                         case PatrolState.PauseLeft:
                         case PatrolState.PauseRight:
+                            enemy.Movement = new Vector2(0f, enemy.Movement.Y);
                             break;
                         case PatrolState.WalkLeft:
-                            // TODO: Add movement for walking left
+                            enemy.Movement = new Vector2((-(float)walkSpeed), enemy.Movement.Y);
                             break;
                         case PatrolState.WalkRight:
-                            // TODO: Add movement for walking right
+                            enemy.Movement = new Vector2(((float)walkSpeed), enemy.Movement.Y);
                             break;
                     }
                     break;
