@@ -27,6 +27,7 @@ namespace ActualGame
         Player player;
         public static double fps;
         public static double secondsPerFrame;
+        MouseState prev;
         
         
         public Game1()
@@ -196,6 +197,7 @@ namespace ActualGame
                     }
                 case (MainGameState.Menu):
                     {
+
                         //Checks which button is pressed or if a new button needs to be active
                         MenuButtonLogic();
                         break;
@@ -302,6 +304,7 @@ namespace ActualGame
         /// </summary>
         public void StartGame()
         {
+            IsMouseVisible = false;
             currentState = MainGameState.InGame;
             // Create the player in the first map & add it to the world
             player = new Player(128, 128, currentWorld.QuadTree);
@@ -315,6 +318,7 @@ namespace ActualGame
         /// </summary>
         public void SwitchToMainMenu()
         {
+            IsMouseVisible = true;
             currentState = MainGameState.Menu;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
@@ -331,6 +335,7 @@ namespace ActualGame
         /// </summary>
         public void SwitchToPauseMenu()
         {
+            IsMouseVisible = true;
             currentState = MainGameState.Pause;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
@@ -347,6 +352,7 @@ namespace ActualGame
         /// </summary>
         public void SwitchToGameOver()
         {
+            IsMouseVisible = true;
             currentState = MainGameState.GameOver;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
@@ -414,13 +420,13 @@ namespace ActualGame
                 else
                     indexActiveButton--;
             }
-
             // If the user presses enter, handle that button's logic
-            if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
+            else if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
             {
                 switch (indexActiveButton)
                 {
                     case 0:
+                        IsMouseVisible = false;
                         StartGame();
                         break;
                     case 1:
@@ -428,6 +434,29 @@ namespace ActualGame
                         break;
                 }
             }
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i].Contains(Mouse.GetState().Position))
+                {
+                    indexActiveButton = i;
+                    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    {
+                        switch (indexActiveButton)
+                        {
+                            case 0:
+                                IsMouseVisible = false;
+                                StartGame();
+                                break;
+                            case 1:
+                                SwitchToMainMenu();
+                                break;
+                        }
+                    }
+
+                }
+            }
+
+            
         }
 
         /// <summary>
@@ -455,10 +484,34 @@ namespace ActualGame
             {
                 string buttonText = buttons[indexActiveButton].Name;
                 if (buttonText == "StartButton")
+                {
+                    IsMouseVisible = false;
                     StartGame();
+                }
                 else if (buttonText == "ExitButton")
                     Exit();
             }
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i].Contains(Mouse.GetState().Position))
+                {
+                    indexActiveButton = i;
+                    if(Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    {
+                        string buttonText = buttons[indexActiveButton].Name;
+                        if (buttonText == "StartButton")
+                        {
+                            IsMouseVisible = false;
+                            StartGame();
+                        }
+                        else if (buttonText == "ExitButton")
+                            Exit();
+                    }
+                    
+                }
+            }
+           
+            
         }
 
         public void PauseButtonLogic()
@@ -486,10 +539,34 @@ namespace ActualGame
             {
                 string buttonText = buttons[indexActiveButton].Name;
                 if (buttonText == "ResumeButton")
+                {
+                    IsMouseVisible = false;
                     currentState = MainGameState.InGame;
+                }
                 else if (buttonText == "MainMenuButton")
                     SwitchToMainMenu();
             }
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i].Contains(Mouse.GetState().Position))
+                {
+                    indexActiveButton = i;
+                    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    {
+                        string buttonText = buttons[indexActiveButton].Name;
+                        if (buttonText == "ResumeButton")
+                        {
+                            IsMouseVisible = false;
+                            currentState = MainGameState.InGame;
+                        }
+                        else if (buttonText == "MainMenuButton")
+                            SwitchToMainMenu();
+                    }
+
+                }
+            }
+
+
         }
     }
 }

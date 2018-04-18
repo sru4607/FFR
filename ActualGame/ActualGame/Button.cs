@@ -39,5 +39,10 @@ namespace ActualGame
             get { return rectangle; }
             set { rectangle = value; }
         }
+        //returns if button contains point p
+        public bool Contains(Point p)
+        {
+            return rectangle.Contains(p);
+        }
     }
 }
