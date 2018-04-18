@@ -237,7 +237,7 @@ namespace ActualGame
         /// <returns>True if the enemy can walk forward, else false</returns>
         private bool AbleToMove()
         {
-            if (enemy.AtEdge(enemy.Texture.Width) || enemy.AtWall(enemy.Texture.Width))
+            if (!enemy.AtEdge(enemy.Texture.Width) || enemy.AtWall(enemy.Texture.Width))
                 return false;
             return true;
         }

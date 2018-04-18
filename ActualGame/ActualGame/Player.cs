@@ -218,7 +218,16 @@ namespace ActualGame
 
                             timeCounter -= Game1.secondsPerFrame;
                         }
-
+                        foreach(GameObject g in World.Current.AllObjects)
+                        {
+                            if(g is Enemy e)
+                            {
+                                if(AttackIntersects(e))
+                                {
+                                    e.TakeDamage(10);
+                                }
+                            }
+                        }
 
                         if (currentFrame == 3) // after finishing attack animation, go back to idle
                         {

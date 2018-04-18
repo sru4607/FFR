@@ -58,7 +58,7 @@ namespace ActualGame
             // Initialize hitbox parameters
             Position = new Vector2(X,Y);
             Size = new Vector2(64, 128);
-            noClip = true;
+            noClip = false;
 
             // Initialize animation parameters
             currentFrame = 0;
@@ -101,6 +101,7 @@ namespace ActualGame
         public new void Die()
         {
             // TODO: Implement during combat
+            this.Position = new Vector2(1000000, 1000000);
         }
 
 
