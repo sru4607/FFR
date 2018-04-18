@@ -95,12 +95,12 @@ namespace ActualGame
         {
             kbState = Keyboard.GetState();
 
-            if (kbState.IsKeyDown(Keys.Left) && (state == PlayerState.Walk || state == PlayerState.Jump))
+            if (kbState.IsKeyDown(Keys.Left) && kbState.IsKeyUp(Keys.Right) && (state == PlayerState.Walk || state == PlayerState.Jump))
             { Movement = new Vector2(-5f, Movement.Y); }
-            if (kbState.IsKeyDown(Keys.Right) && (state == PlayerState.Walk || state == PlayerState.Jump))
+            if (kbState.IsKeyDown(Keys.Right) && kbState.IsKeyUp(Keys.Left) && (state == PlayerState.Walk || state == PlayerState.Jump))
             { Movement = new Vector2(5f, Movement.Y); }
             if (kbState.IsKeyDown(Keys.Up) && OnGround() && state == PlayerState.Jump)
-            { Movement = new Vector2(Movement.X, -20f); }
+            { Movement = new Vector2(Movement.X, -30f); }
 
         }
 
