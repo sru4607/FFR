@@ -8,23 +8,25 @@ namespace ActualGame
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    enum MainGameState {Debug, Menu, Pause, Quit, InGame, GameOver }
+    enum MainGameState {Debug, Menu, Pause, InGame, GameOver }
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         // Enemy testEnemy; // Unused - kept for example documentation
         Display mainDisplay;
-        World levelOne;
         MainGameState currentState;
         Dictionary<string, Texture2D> allTextures;
         Debug debugger;
         Dictionary<string, World> maps;
         World currentWorld;
-        Button[] menuButtons;
-        int indexActiveMenuButton;
+        Button[] buttons;
+        int indexActiveButton;
         KeyboardState kbState;
         KeyboardState prevkbState;
+        Player player;
+        public static double fps;
+        public static double secondsPerFrame;
         
         
         public Game1()
@@ -47,26 +49,22 @@ namespace ActualGame
             // Generic enemy used to test bugs/features
             // testEnemy = new Enemy();
 
-            // Base game logic
-            mainDisplay = new Display(GraphicsDevice);
-            base.Initialize();
+            
 
-            // Set the initial state of the game
-            currentState = MainGameState.Debug;
+            
 
-            // Values used for debugging purposes
-            debugger = new Debug(allTextures, GraphicsDevice);
-            debugger.InstantiateAll();
-
-            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            graphics.IsFullScreen = true;
-            graphics.ApplyChanges();
+            
 
             kbState = Keyboard.GetState();
             prevkbState = kbState;
             // Initialize the maps list
             maps = new Dictionary<string, World>();
+
+
+            // DO NOT WRITE CODE BELOW HERE
+            // Base game logic
+            mainDisplay = new Display(GraphicsDevice);
+            base.Initialize();
         }
 
         /// <summary>
@@ -77,6 +75,10 @@ namespace ActualGame
         {
             // Create a new SpriteBatch, which can be used to draw textures
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Set up animation variables
+            fps = 30.0;
+            secondsPerFrame = 1.0f / fps;
 
             // Import levels
             //levelOne.Import();
@@ -89,46 +91,59 @@ namespace ActualGame
             allTextures.Add("Menu", Content.Load<Texture2D>("Menu"));
             allTextures.Add("StartButton", Content.Load<Texture2D>("StartButton"));
             allTextures.Add("ExitButton", Content.Load<Texture2D>("ExitButton"));
+            allTextures.Add("PauseMenu", Content.Load<Texture2D>("PauseMenu"));
+            allTextures.Add("ResumeButton", Content.Load<Texture2D>("ResumeButton"));
+            allTextures.Add("MainMenuButton", Content.Load<Texture2D>("MainMenuButton"));
+            allTextures.Add("GameOverBackground", Content.Load<Texture2D>("GameOverBackground"));
+            allTextures.Add("GameOverRetry", Content.Load<Texture2D>("GameOverRetry"));
+            allTextures.Add("GameOverExit", Content.Load<Texture2D>("GameOverExit"));
+            allTextures.Add("Heart", Content.Load<Texture2D>("Heart"));
 
             // Load tiles systemmatically
             // BrickWall
             for (int i = 0; i < 16; i++)
-                allTextures.Add("BrickWall" + i, Content.Load<Texture2D>("Tiles/BrickWall" + i));
+                allTextures.Add("BrickWall.png" + i, Content.Load<Texture2D>("Tiles/BrickWall" + i));
 
             // BrickWallBlue
             for (int i = 0; i < 16; i++)
-                allTextures.Add("BrickWallBlue" + i, Content.Load<Texture2D>("Tiles/BrickWallBlue" + i));
+                allTextures.Add("BrickWallBlue.png" + i, Content.Load<Texture2D>("Tiles/BrickWallBlue" + i));
 
             // BrickWallRed
             for (int i = 0; i < 16; i++)
-                allTextures.Add("BrickWallRed" + i, Content.Load<Texture2D>("Tiles/BrickWallRed" + i));
+                allTextures.Add("BrickWallRed.png" + i, Content.Load<Texture2D>("Tiles/BrickWallRed" + i));
 
             // holder
             for (int i = 0; i < 16; i++)
-                allTextures.Add("holder" + i, Content.Load<Texture2D>("Tiles/holder" + i));
+                allTextures.Add("holder.png" + i, Content.Load<Texture2D>("Tiles/holder" + i));
 
             // temp
             for (int i = 0; i < 16; i++)
-                allTextures.Add("temp" + i, Content.Load<Texture2D>("Tiles/temp" + i));
+                allTextures.Add("temp.png" + i, Content.Load<Texture2D>("Tiles/temp" + i));
 
             // Walls
             for (int i = 0; i < 16; i++)
-                allTextures.Add("Walls" + i, Content.Load<Texture2D>("Tiles/Walls" + i));
+                allTextures.Add("Walls.png" + i, Content.Load<Texture2D>("Tiles/Walls" + i));
 
             // WallsGreen
             for (int i = 0; i < 16; i++)
-                allTextures.Add("WallsGreen" + i, Content.Load<Texture2D>("Tiles/WallsGreen" + i));
+                allTextures.Add("WallsGreen.png" + i, Content.Load<Texture2D>("Tiles/WallsGreen" + i));
 
             // WallsRed
             for (int i = 0; i < 16; i++)
-                allTextures.Add("WallsRed" + i, Content.Load<Texture2D>("Tiles/WallsRed" + i));
+                allTextures.Add("WallsRed.png" + i, Content.Load<Texture2D>("Tiles/WallsRed" + i));
 
             // Load maps
-            //maps.Add("Map1", new World(allTextures, "Map1", "Content/Map1.map"));
+            maps.Add("Map1", new World(allTextures, "Map1", "Content/Map1.map"));
 
-            //currentWorld = maps["Map1"];
-
+            currentWorld = maps["Map1"];
+            World.Current = currentWorld;
             //levelOne = new World(allTextures, "Level One", "level1.txt");
+
+            // Change the game to fullscreen and start the main menu
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            graphics.IsFullScreen = true;
+            graphics.ApplyChanges();
 
             SwitchToMainMenu();
 
@@ -153,9 +168,6 @@ namespace ActualGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-            // TODO: Add your update logic here
             prevkbState = kbState;
             kbState = Keyboard.GetState();
 
@@ -163,49 +175,44 @@ namespace ActualGame
             {
                 case (MainGameState.Debug):
                     {
+                        if(debugger == null)
+                        {
+                            // Values used for debugging purposes
+                            debugger = new Debug(allTextures, GraphicsDevice);
+                            debugger.InstantiateAll();
+                        }
                         debugger.UpdateAll(gameTime);
                         break;
                     }
                 case (MainGameState.InGame):
                     {
+                       
                         currentWorld.UpdateAll(gameTime);
+
+                        // Switch to the game over screen if the player is dead or I say so
+                        if (player.IsDead || kbState.IsKeyDown(Keys.Delete))
+                            SwitchToGameOver();
+
+                        //Pauses the game if the player presses the escape key
+                        if (kbState.IsKeyDown(Keys.Escape) && prevkbState.IsKeyUp(Keys.Escape))
+                            SwitchToPauseMenu();
                         break;
                     }
                 case (MainGameState.Menu):
                     {
-                        //Adjusts the current active button if up or down arrow is pressed
-                        if(kbState.IsKeyDown(Keys.Down) && prevkbState.IsKeyUp(Keys.Down) && kbState.IsKeyUp(Keys.Up))
-                        {
-                            if (indexActiveMenuButton == menuButtons.Length - 1)
-                                indexActiveMenuButton = 0;
-                            else
-                                indexActiveMenuButton++;
-                        }
-                        else if(kbState.IsKeyDown(Keys.Up) && prevkbState.IsKeyUp(Keys.Up) && kbState.IsKeyUp(Keys.Down))
-                        {
-                            if (indexActiveMenuButton == 0)
-                                indexActiveMenuButton = menuButtons.Length - 1;
-                            else
-                                indexActiveMenuButton--;
-                        }
-                        //Switches the game state when a certain button is pressed
-                        else if(kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
-                        {
-                            string buttonText = menuButtons[indexActiveMenuButton].Name;
-                            if (buttonText == "StartButton")
-                                currentState = MainGameState.InGame;
-                            else if (buttonText == "ExitButton")
-                                Exit();
-                        }
+                        //Checks which button is pressed or if a new button needs to be active
+                        MenuButtonLogic();
                         break;
                     }
                 case (MainGameState.Pause):
                     {
-
+                        //Checks which button is pressed or if a new button needs to be active
+                        PauseButtonLogic();
                         break;
                     }
-                case (MainGameState.Quit):
+                case (MainGameState.GameOver):
                     {
+                        GameOverLogic();
                         break;
                     }
                 default:
@@ -231,43 +238,79 @@ namespace ActualGame
             switch(currentState)
             {
                 case (MainGameState.Debug):
-                {
-                    debugger.Draw(spriteBatch);
-                    break;
-                }
-                case (MainGameState.InGame):
-                {
-                        currentWorld.Draw(spriteBatch);
-                    break;
-                }
-                case (MainGameState.Menu):
-                {
-                    spriteBatch.Draw(allTextures["Menu"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
-                    for(int c=0; c<menuButtons.Length; c++)
                     {
-                        if (indexActiveMenuButton == c)
-                            spriteBatch.Draw(menuButtons[c].Texture, menuButtons[c].Rectangle, Color.White);
-                        else
-                            spriteBatch.Draw(menuButtons[c].Texture, menuButtons[c].Rectangle, Color.Gray);
+                        debugger.Draw(spriteBatch);
+                        break;
                     }
-                    break;
-                }
-                case (MainGameState.Pause):
-                {
+                case (MainGameState.InGame):
+                    {
+                        currentWorld.Draw(spriteBatch);
 
-                    break;
-                }
-                case (MainGameState.Quit):
-                {
-                    break;
-                }
+                        // Draw the player's health bar
+                        Texture2D heart = allTextures["Heart"];
+                        for (int i = 0; i<player.MaxHealth; i++)
+                        {
+                            if (i < player.HP)
+                            {
+                                spriteBatch.Draw(heart, new Rectangle(10+i * 70, 10, 64, 64), Color.White);
+                            }
+                            else
+                            {
+                                spriteBatch.Draw(heart, new Rectangle(10+i * 70, 10, 64, 64), Color.Gray);
+                            }
+                        }
+
+                        break;
+                    }
+                case (MainGameState.Menu):
+                    {
+                        spriteBatch.Draw(allTextures["Menu"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                        DrawButtons();
+                        break;
+                    }
+                case (MainGameState.Pause):
+                    {
+                        spriteBatch.Draw(allTextures["PauseMenu"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                        DrawButtons();
+                        break;
+                    }
+                case (MainGameState.GameOver):
+                    {
+                        GraphicsDevice.Clear(Color.Red);
+                        DrawGameOver(spriteBatch);
+                        break;
+                    }
                 default:
-                {
-                    break;
-                }
+                    {
+                        break;
+                    }
             }
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// A helper method to change between maps
+        /// </summary>
+        public void ChangeMap(string mapName)
+        {
+            currentWorld = maps[mapName];
+            World.Current = currentWorld;
+            currentWorld.ResetWorld();
+            currentWorld.AllObjects.Add(player);
+            currentWorld.QuadTree.AddObject(player);
+        }
+
+        /// <summary>
+        /// A helper method meant to start the game
+        /// </summary>
+        public void StartGame()
+        {
+            currentState = MainGameState.InGame;
+            // Create the player in the first map & add it to the world
+            player = new Player(128, 128, currentWorld.QuadTree);
+            player.Texture = allTextures["PenPen"];
+            ChangeMap("Map1");
         }
 
         /// <summary>
@@ -278,12 +321,178 @@ namespace ActualGame
             currentState = MainGameState.Menu;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
-            menuButtons = new Button[2];
+            buttons = new Button[2];
             Texture2D startButton = allTextures["StartButton"];
-            menuButtons[0] = new Button(startButton, "StartButton", new Rectangle(width / 2 - startButton.Width / 2, height / 2 - startButton.Height / 2, startButton.Width, startButton.Height));
+            buttons[0] = new Button(startButton, "StartButton", new Rectangle(width / 2 - startButton.Width / 2, height * 6 / 10 - startButton.Height / 2, startButton.Width, startButton.Height));
             Texture2D exitButton = allTextures["ExitButton"];
-            menuButtons[1] = new Button(exitButton, "ExitButton", new Rectangle(width / 2 - exitButton.Width / 2, height * 3 / 4 - exitButton.Height / 2, exitButton.Width, exitButton.Height));
-            indexActiveMenuButton = 0;
+            buttons[1] = new Button(exitButton, "ExitButton", new Rectangle(width / 2 - exitButton.Width / 2, height * 3 / 4 - exitButton.Height / 2, exitButton.Width, exitButton.Height));
+            indexActiveButton = 0;
+        }
+
+        /// <summary>
+        /// A helper method that will intialize the pause menu whenever it is called
+        /// </summary>
+        public void SwitchToPauseMenu()
+        {
+            currentState = MainGameState.Pause;
+            int height = GraphicsDevice.Viewport.Height;
+            int width = GraphicsDevice.Viewport.Width;
+            buttons = new Button[2];
+            Texture2D resumeButton = allTextures["ResumeButton"];
+            buttons[0] = new Button(resumeButton, "ResumeButton", new Rectangle(width / 2 - resumeButton.Width / 2, height * 6 / 10 - resumeButton.Height / 2, resumeButton.Width, resumeButton.Height));
+            Texture2D mainMenuButton = allTextures["MainMenuButton"];
+            buttons[1] = new Button(mainMenuButton, "MainMenuButton", new Rectangle(width / 2 - mainMenuButton.Width / 2, height * 3 / 4 - mainMenuButton.Height / 2, mainMenuButton.Width, mainMenuButton.Height));
+            indexActiveButton = 0;
+        }
+
+        /// <summary>
+        /// A helper method that initializes the game over state when called
+        /// </summary>
+        public void SwitchToGameOver()
+        {
+            currentState = MainGameState.GameOver;
+            int height = GraphicsDevice.Viewport.Height;
+            int width = GraphicsDevice.Viewport.Width;
+            Texture2D background = allTextures["GameOverBackground"];
+
+            // scale the buttons to the size of the screen
+            float scale = (float)height / (float)background.Height;
+
+            buttons = new Button[2];
+            Texture2D retry = allTextures["GameOverRetry"];
+            Texture2D exit = allTextures["GameOverExit"];
+            buttons[0] = new Button(retry, "Retry", new Rectangle((int)(width/2 - (scale * retry.Width) / 2), (int)(.65 * height), (int)(retry.Width * scale), (int)(retry.Height*scale)));
+            buttons[1] = new Button(exit, "Exit", new Rectangle((int)(width / 2 - (scale * exit.Width) / 2), (int)(.8 * height), (int)(exit.Width * scale), (int)(exit.Height * scale)));
+            indexActiveButton = 0;
+        }
+
+        /// <summary>
+        /// A helper method that draws the game over state
+        /// </summary>
+        public void DrawGameOver(SpriteBatch spriteBatch)
+        {
+            int width = GraphicsDevice.Viewport.Width;
+            int height = GraphicsDevice.Viewport.Height;
+            Texture2D background = allTextures["GameOverBackground"];
+
+            // Get a scale factor so you can properly draw the background
+            float scale = (float)height / (float)background.Height;
+            spriteBatch.Draw(background, new Rectangle((int)(width/2 - (scale*background.Width)/2), 0, (int)(scale*background.Width), (int)(scale*background.Height)), Color.White);
+
+            DrawButtons();
+        }
+
+
+        /// <summary>
+        /// A helper method to draw all of the buttons in the buttons array
+        /// </summary>
+        public void DrawButtons()
+        {
+            for (int c = 0; c < buttons.Length; c++)
+            {
+                if (indexActiveButton == c)
+                    spriteBatch.Draw(buttons[c].Texture, buttons[c].Rectangle, Color.White);
+                else
+                    spriteBatch.Draw(buttons[c].Texture, buttons[c].Rectangle, Color.Gray);
+            }
+        }
+
+        /// <summary>
+        /// A helper method for game over button logic
+        /// </summary>
+        public void GameOverLogic()
+        {
+            // Adjust the currently selected button
+            if (kbState.IsKeyDown(Keys.Down) && prevkbState.IsKeyUp(Keys.Down) && kbState.IsKeyUp(Keys.Up))
+            {
+                if (indexActiveButton == buttons.Length - 1)
+                    indexActiveButton = 0;
+                else
+                    indexActiveButton++;
+            }
+            else if (kbState.IsKeyDown(Keys.Up) && prevkbState.IsKeyUp(Keys.Up) && kbState.IsKeyUp(Keys.Down))
+            {
+                if (indexActiveButton == 0)
+                    indexActiveButton = buttons.Length - 1;
+                else
+                    indexActiveButton--;
+            }
+
+            // If the user presses enter, handle that button's logic
+            if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
+            {
+                switch (indexActiveButton)
+                {
+                    case 0:
+                        StartGame();
+                        break;
+                    case 1:
+                        SwitchToMainMenu();
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// A helper method for all of the button logic necessary for updating
+        /// </summary>
+        public void MenuButtonLogic()
+        {
+            //Adjusts the current active button if up or down arrow is pressed
+            if (kbState.IsKeyDown(Keys.Down) && prevkbState.IsKeyUp(Keys.Down) && kbState.IsKeyUp(Keys.Up))
+            {
+                if (indexActiveButton == buttons.Length - 1)
+                    indexActiveButton = 0;
+                else
+                    indexActiveButton++;
+            }
+            else if (kbState.IsKeyDown(Keys.Up) && prevkbState.IsKeyUp(Keys.Up) && kbState.IsKeyUp(Keys.Down))
+            {
+                if (indexActiveButton == 0)
+                    indexActiveButton = buttons.Length - 1;
+                else
+                    indexActiveButton--;
+            }
+            //Switches the game state when a certain button is pressed
+            else if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
+            {
+                string buttonText = buttons[indexActiveButton].Name;
+                if (buttonText == "StartButton")
+                    StartGame();
+                else if (buttonText == "ExitButton")
+                    Exit();
+            }
+        }
+
+        public void PauseButtonLogic()
+        {
+            //Adjusts the current active button if up or down arrow is pressed
+            if (kbState.IsKeyDown(Keys.Down) && prevkbState.IsKeyUp(Keys.Down) && kbState.IsKeyUp(Keys.Up))
+            {
+                if (indexActiveButton == buttons.Length - 1)
+                    indexActiveButton = 0;
+                else
+                    indexActiveButton++;
+            }
+            else if (kbState.IsKeyDown(Keys.Up) && prevkbState.IsKeyUp(Keys.Up) && kbState.IsKeyUp(Keys.Down))
+            {
+                if (indexActiveButton == 0)
+                    indexActiveButton = buttons.Length - 1;
+                else
+                    indexActiveButton--;
+            }
+            //If the games is paused and the player presses the escape key, resumes the game (allowing them to easily toggle pause and unpause with escape)
+            else if (kbState.IsKeyDown(Keys.Escape) && prevkbState.IsKeyUp(Keys.Escape) && currentState == MainGameState.Pause)
+                currentState = MainGameState.InGame;
+            //Switches the game state when a certain button is pressed
+            else if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
+            {
+                string buttonText = buttons[indexActiveButton].Name;
+                if (buttonText == "ResumeButton")
+                    currentState = MainGameState.InGame;
+                else if (buttonText == "MainMenuButton")
+                    SwitchToMainMenu();
+            }
         }
     }
 }

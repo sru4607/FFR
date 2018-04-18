@@ -47,12 +47,24 @@ namespace ActualGame
             allObjects[1].Position = new Vector2(200, 00);
             allObjects[1].Size = new Vector2(64, 128);
             allObjects[1].LoadTexture(allTexts["Floor"]);
-            
+
+            //creates a player
+            allObjects.Add(new Player(400, 100, node));
+            allObjects[1].Position = new Vector2(200, 00);
+            allObjects[1].Size = new Vector2(64, 128);
+            allObjects[1].LoadTexture(allTexts["Floor"]);
+
             //creates an enemy
-            //allObjects.Add(new Enemy(300, 100, node, PatrolType.Standing));
-            //allObjects[2].Position = new Vector2(300, 0);
-           // allObjects[2].Size = new Vector2(64, 128);
-            //allObjects[2].LoadTexture(allTexts["Floor"]);
+            allObjects.Add(new Enemy(300, 100, node, PatrolType.Moving));
+            allObjects[2].Position = new Vector2(300, 0);
+            allObjects[2].Size = new Vector2(64, 128);
+            allObjects[2].LoadTexture(allTexts["Floor"]);
+
+            //creates an enemy
+            allObjects.Add(new Enemy(500, 100, node, PatrolType.Moving));
+            allObjects[3].Position = new Vector2(300, 0);
+            allObjects[3].Size = new Vector2(64, 128);
+            allObjects[3].LoadTexture(allTexts["Floor"]);
 
             debug.AllObjects = allObjects;
 
@@ -66,6 +78,7 @@ namespace ActualGame
         /// <param name="gameTime">Reference to the Update(gameTime) value</param>
         public void UpdateAll(GameTime gameTime)
         {
+            //update all objects
             foreach(GameObject go in World.Current.AllObjects)
             {
                 go.Update(gameTime);

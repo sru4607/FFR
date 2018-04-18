@@ -52,7 +52,7 @@ namespace ActualGame
             hp = 1;
             // TODO: Verify whether the hitbox line of code is valid or if it belongs in GameObject 
             // Also, should it use 0, 0, 32, 64; or x, y, 32, 64?
-            mBox = new Rectangle((int)Position.X + 32, (int)Position.Y, 32, 56);
+            mBox = new Rectangle((int)Position.X + (int)Size.X, (int)Position.Y + ((int)Size.Y / 4), (int)Size.X, (int)Size.Y / 2);
             mDamage = 0;
             rDamage = 0;
             stunFrames = 0;
@@ -163,6 +163,9 @@ namespace ActualGame
         /// </summary>
         public override void Update(GameTime gm)
             {
+            if (right) { mBox.X = (int)Position.X + (int)Size.X; }
+            else { mBox.X = (int)Position.X - (int)Size.X; }
+            mBox.Y = (int)Position.Y + (int)Size.Y / 6;
                 base.Update(gm);
             }
         #endregion
