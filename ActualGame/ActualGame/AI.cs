@@ -69,8 +69,8 @@ namespace ActualGame
         /// <param name="enemy">Reference to the enemy that the AI is controlling</param>
         /// <param name="patrolType">Pattern of movement</param>
         /// <param name="walkSpeed">The distance traveled in one frame of movement</param>
-        /// <param name="pauseLeft"></param>
-        /// <param name="pauseRight"></param>
+        /// <param name="pauseLeft">The number of frames for the enemy to pause after stopping while facing left</param>
+        /// <param name="pauseRight">The number of frames for the enemy to pause after stopping while facing right</param>
         public AI(Enemy enemy, PatrolType patrolType, double walkSpeed, int pauseLeft = 120, int pauseRight = 120)
         {
             this.enemy = enemy;
