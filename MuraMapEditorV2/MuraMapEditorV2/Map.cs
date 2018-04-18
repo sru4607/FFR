@@ -360,5 +360,10 @@ namespace MuraMapEditorV2
         {
             return new Point(1 + xIndex * 32, 1 + yIndex * 32);
         }
+
+        public void SetupGameEvent(GameEvent g)
+        {
+            g.MouseClick += new MouseEventHandler(TileClick);
+        }
     }
 }

@@ -127,12 +127,16 @@ namespace MuraMapEditorV2
             
             MapView.Events = new List<GameEvent>(); // Number of Events, not yet implemented
 
-            for (int i = 0; i<input.ReadInt32(); i++)
+            int numEvents = input.ReadInt32();
+            for (int i = 0; i<numEvents; i++)
             {
                 GameEvent g = new GameEvent();
                 g.EventType = (EventType)input.ReadInt32();
                 g.XIndex = input.ReadInt32();
                 g.YIndex = input.ReadInt32();
+                g.Location = new Point(1 + g.XIndex * 32, 1 + g.YIndex * 32);
+                g.Image = Properties.Resources.Enemy;
+                Map.SetupGameEvent(g);
 
                 if (g.EventType == EventType.Warp)
                 {
@@ -141,6 +145,10 @@ namespace MuraMapEditorV2
                     c.XOffset = input.ReadInt32();
                     c.YOffset = input.ReadInt32();
                 }
+
+                MapView.Events.Add(g);
+                MapView.Controls.Add(g);
+                g.BringToFront();
             }
 
             input.Close();
