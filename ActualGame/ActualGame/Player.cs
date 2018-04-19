@@ -12,7 +12,7 @@ namespace ActualGame
     //Enumeration for the FSM for the Player actions
     public enum PlayerState { Walk, Jump, Idle, MAttack, Crouch, Interact, Dead}
 
-    class Player : Character, ICombat
+    public class Player : Character, ICombat
     {
         #region Fields
         PlayerState state;

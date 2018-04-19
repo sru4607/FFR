@@ -133,8 +133,10 @@ namespace ActualGame
 
             // Load maps
             maps.Add("Map1", new World(allTextures, "Map1", "Content/Map1.map"));
+            maps.Add("RedMap", new World(allTextures, "RedMap", "Content/RedMap.map"));
+            maps.Add("BlueMap", new World(allTextures, "BlueMap", "Content/BlueMap.map"));
 
-            currentWorld = maps["Map1"];
+            currentWorld = maps["BlueMap"];
             World.Current = currentWorld;
             //levelOne = new World(allTextures, "Level One", "level1.txt");
 
@@ -186,7 +188,10 @@ namespace ActualGame
                     }
                 case (MainGameState.InGame):
                     {
-                       
+                        if (currentWorld != World.Current)
+                            ChangeMap();
+
+
                         currentWorld.UpdateAll(gameTime);
 
                         // Switch to the game over screen if the player is dead or I say so
@@ -197,6 +202,9 @@ namespace ActualGame
                         if (kbState.IsKeyDown(Keys.Escape) && prevkbState.IsKeyUp(Keys.Escape))
                             SwitchToPauseMenu();
                         mainDisplay.Update();
+
+                        if (kbState.IsKeyDown(Keys.Space) && prevkbState.IsKeyUp(Keys.Space))
+                            currentWorld.CheckWarps(player);
                         
                         break;
                     }
@@ -342,10 +350,9 @@ namespace ActualGame
         /// <summary>
         /// A helper method to change between maps
         /// </summary>
-        public void ChangeMap(string mapName)
+        public void ChangeMap()
         {
-            currentWorld = maps[mapName];
-            World.Current = currentWorld;
+            currentWorld = World.Current;
             currentWorld.ResetWorld();
             currentWorld.AllObjects.Add(player);
             currentWorld.QuadTree.AddObject(player);
@@ -363,7 +370,8 @@ namespace ActualGame
             mainDisplay = new Display(GraphicsDevice, player);
             player.Texture = allTextures["PenPen"];
             player.WalkTexture = allTextures["PenPenWalking"];
-            ChangeMap("Map1");
+            World.Current = maps["BlueMap"];
+            ChangeMap();
         }
 
         /// <summary>

@@ -184,3 +184,9 @@
 /processorParam:TextureFormat=Color
 /build:PauseMenu.png
 
+#begin BlueMap.map
+/copy:BlueMap.map
+
+#begin RedMap.map
+/copy:RedMap.map
+
