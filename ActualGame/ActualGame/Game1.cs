@@ -240,7 +240,7 @@ namespace ActualGame
             
             // TODO: Add your drawing code here
             //if in game follow the player
-            if (currentState == MainGameState.InGame)
+            if (currentState == MainGameState.InGame || currentState == MainGameState.Pause)
             {
                 Matrix temp = mainDisplay.MainCam.GetViewMatrix();
                 spriteBatch.Begin(transformMatrix: temp);
@@ -294,6 +294,32 @@ namespace ActualGame
                     }
                 case (MainGameState.Pause):
                     {
+                        World.Current.Draw(spriteBatch);
+
+
+                        //Draw all gui elements in game here
+
+
+                        
+
+                        //All Elements in game must be above this line
+                        spriteBatch.End();
+                        spriteBatch.Begin();
+
+                        // Draw the player's health bar
+                        Texture2D heart = allTextures["Heart"];
+                        for (int i = 0; i < player.MaxHealth; i++)
+                        {
+                            if (i < player.HP)
+                            {
+                                spriteBatch.Draw(heart, new Rectangle(10 + i * 70, 10, 64, 64), Color.White);
+                            }
+                            else
+                            {
+                                spriteBatch.Draw(heart, new Rectangle(10 + i * 70, 10, 64, 64), Color.Gray);
+                            }
+                        }
+
                         spriteBatch.Draw(allTextures["PauseMenu"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                         DrawButtons();
                         break;

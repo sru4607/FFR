@@ -285,7 +285,7 @@ namespace ActualGame
                 }
                 case (PlayerState.MAttack):
                 {
-                        sb.Draw(Texture, MBox, Color.Red); // Just remove this line to make mBox invisible
+                        //sb.Draw(Texture, MBox, Color.Red); // Just remove this line to make mBox invisible
                         if (right)
                         {
                             sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
