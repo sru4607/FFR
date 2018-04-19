@@ -184,9 +184,6 @@
 /processorParam:TextureFormat=Color
 /build:PauseMenu.png
 
-#begin BlueMap.map
-/copy:BlueMap.map
-
 #begin RedMap.map
 /copy:RedMap.map
 
@@ -201,4 +198,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Penguin.png
+
+#begin BlueMap.map
+/copy:BlueMap.map
 

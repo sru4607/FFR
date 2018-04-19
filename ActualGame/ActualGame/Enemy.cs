@@ -109,6 +109,28 @@ namespace ActualGame
         {
             // TODO: Implement during combat
         }
+
+        public bool CharacterBlocked()
+        {
+            List<QuadTreeNode> parents = node.GetParents();
+            Rectangle temp = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            GameObject cha;
+            if (right) temp.Offset(5, 0);
+            else temp.Offset(-5, 0);
+            for (int i = 0; i < parents.Count; i++)
+            {
+                for (int j = 0; j < parents[i].Objects.Count; j++)
+                {
+                    cha = parents[i].Objects[j];
+                    Rectangle chaRect = new Rectangle((int)cha.Position.X, (int)cha.Position.Y, (int)cha.Size.X, (int)cha.Size.Y);
+                    if (temp.Intersects(chaRect))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         #endregion
 
         #region Update

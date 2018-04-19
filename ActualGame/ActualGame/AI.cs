@@ -239,7 +239,16 @@ namespace ActualGame
         /// <returns>True if the enemy can walk forward, else false</returns>
         private bool AbleToMove()
         {
-            return !(enemy.AtEdge(FacingRight) || enemy.AtWall(FacingRight));
+            return !(enemy.AtEdge(FacingRight) || enemy.AtWall(FacingRight) || CharacterBlocked());
+        }
+
+        /// <summary>
+        /// Checks to see if a character is blocking the way
+        /// </summary>
+        /// <returns>true if no character is in the way, false otherwise</returns>
+        private bool CharacterBlocked()
+        {
+            return enemy.CharacterBlocked();
         }
         #endregion
     }
