@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ActualGame
 {
-    class Character : PhysicsObject, ICombat
+    public class Character : PhysicsObject, ICombat
     {
         #region Fields
         protected int hp;

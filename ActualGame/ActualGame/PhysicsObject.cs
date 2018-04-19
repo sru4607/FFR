@@ -9,11 +9,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ActualGame
 {
-    class PhysicsObject : GameObject
+    public class PhysicsObject : GameObject
     {
         //Thanks for help from XNAFan's Blog for some physics code guides
         public Vector2 Movement { get; set; }
-        private Vector2 prevLocation;
+        public Vector2 prevLocation { get; set; }
 
         //just use the gameobject constructor
         public PhysicsObject()
