@@ -18,7 +18,7 @@ namespace ActualGame
         MainGameState currentState;
         Dictionary<string, Texture2D> allTextures;
         Debug debugger;
-        Dictionary<string, World> maps;
+        public static Dictionary<string, World> maps;
         World currentWorld;
         Button[] buttons;
         int indexActiveButton;

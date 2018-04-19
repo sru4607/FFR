@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ActualGame
 {
-    class World
+    public class World
     {
         //For reading & displaying tiles
 
@@ -102,7 +102,7 @@ namespace ActualGame
                     String destination = worldReader.ReadString();
                     int xOffset = worldReader.ReadInt32();
                     int yOffset = worldReader.ReadInt32();
-                    Warp w = new Warp();
+                    Warp w = new Warp(x, y, destination, xOffset, yOffset, QuadTree);
                     AllObjects.Add(w);
                     warps.Add(w);
                 }

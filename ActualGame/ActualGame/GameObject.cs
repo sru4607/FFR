@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ActualGame
 {
-    class GameObject
+    public class GameObject
     {
         #region Fields
         // Fields

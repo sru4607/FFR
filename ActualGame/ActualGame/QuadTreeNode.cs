@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace ActualGame
 {
-    class QuadTreeNode
+    public class QuadTreeNode
     {
         #region Constants
         //The maximum amount of objects before the node divides
