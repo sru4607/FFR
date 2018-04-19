@@ -24,6 +24,10 @@ namespace ActualGame
         public List<GameObject> AllObjects { get; set; }
         public static World Current { get; set; }
         public QuadTreeNode QuadTree { get; set; }
+        public float WorldMinX { get; set; }
+        public float WorldMinY { get; set; }
+        public float WorldMaxX { get; set; }
+        public float WorldMaxY { get; set; }
         #endregion
 
         #region Constructor
@@ -109,6 +113,32 @@ namespace ActualGame
 
                 
             }
+
+            //Finds Bounds of the world
+            WorldMinX = float.MaxValue;
+            WorldMinY = float.MaxValue;
+            WorldMaxY = float.MinValue;
+            WorldMaxX = float.MinValue;
+            foreach(Tile t in tiles)
+            {
+                if(t.X < WorldMinX)
+                {
+                    WorldMinX = t.X;
+                }
+                if (t.Y < WorldMinY)
+                {
+                    WorldMinY = t.Y;
+                }
+                if (t.X + t.Size.X > WorldMaxX)
+                {
+                    WorldMaxX = t.X + t.Size.X;
+                }
+                if (t.Y + t.Size.Y > WorldMaxY)
+                {
+                    WorldMaxY = t.Y + t.Size.Y;
+                }
+            }
+
         }
 
         /// <summary>

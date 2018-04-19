@@ -70,8 +70,25 @@ namespace ActualGame
                     mainCam.Position = new Vector2(mainCam.Position.X - 0.1f, mainCam.Position.Y);
                 }
             }
-            
-                
+            //Resets view based on if camera sees out of bounds
+            if(mainCam.Position.X < World.Current.WorldMinX)
+            {
+                mainCam.Position = new Vector2(World.Current.WorldMinX, mainCam.Position.Y);
+            }
+            if (mainCam.Position.Y < World.Current.WorldMinY)
+            {
+                mainCam.Position = new Vector2(mainCam.Position.X, World.Current.WorldMinY);
+            }
+            if (mainCam.Position.X + mainCam.BoundingRectangle.Width > World.Current.WorldMaxX)
+            {
+                mainCam.Position = new Vector2(World.Current.WorldMaxX - mainCam.BoundingRectangle.Width, mainCam.Position.Y);
+            }
+            if (mainCam.Position.X + mainCam.BoundingRectangle.Width > World.Current.WorldMaxY)
+            {
+                mainCam.Position = new Vector2(mainCam.Position.X,World.Current.WorldMaxY - mainCam.BoundingRectangle.Height);
+            }
+
+
 
         }
         #endregion
