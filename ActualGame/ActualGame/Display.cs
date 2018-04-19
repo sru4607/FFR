@@ -59,10 +59,18 @@ namespace ActualGame
         {
 
             mainCam.Position = new Vector2(mainCam.Position.X, parent.Y - temp.DisplayMode.Height / 2);
-            if(Math.Abs(mainCam.Position.X - parent.X)>1225)
+            while(Math.Abs(mainCam.Position.X - (parent.X))>1225 || Math.Abs(mainCam.Position.X - parent.X)<600)
             {
-                mainCam.Position = new Vector2(mainCam.Position.X + parent.Movement.X, mainCam.Position.Y);
+                if(Math.Abs(mainCam.Position.X - (parent.X)) > 1225)
+                {
+                    mainCam.Position = new Vector2(mainCam.Position.X + 0.1f, mainCam.Position.Y);
+                }
+                else
+                {
+                    mainCam.Position = new Vector2(mainCam.Position.X - 0.1f, mainCam.Position.Y);
+                }
             }
+            
                 
 
         }
