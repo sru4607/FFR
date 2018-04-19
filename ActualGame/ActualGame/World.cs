@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ActualGame
 {
-    class World
+    public class World
     {
         //For reading & displaying tiles
 
@@ -97,12 +97,12 @@ namespace ActualGame
                 if(type == 1)
                 {
                     //Warp
-                    int x = worldReader.ReadInt32();
-                    int y = worldReader.ReadInt32();
+                    int x = worldReader.ReadInt32() * 64;
+                    int y = worldReader.ReadInt32() * 64;
                     String destination = worldReader.ReadString();
-                    int xOffset = worldReader.ReadInt32();
-                    int yOffset = worldReader.ReadInt32();
-                    Warp w = new Warp();
+                    int xOffset = worldReader.ReadInt32() * 64;
+                    int yOffset = worldReader.ReadInt32() * 64;
+                    Warp w = new Warp(x, y, destination, xOffset, yOffset, QuadTree);
                     AllObjects.Add(w);
                     warps.Add(w);
                 }
@@ -196,6 +196,19 @@ namespace ActualGame
             return false;
         }
 
+        public void CheckWarps(Player player)
+        {
+            Rectangle playerLocation = new Rectangle((int)player.Position.X, (int)player.Position.Y, (int)player.Size.X, (int)player.Size.Y);
+            foreach (Warp w in warps)
+            {
+                if (playerLocation.Intersects(new Rectangle((int)w.Position.X, (int)w.Position.Y, (int)w.Size.X, (int)w.Size.Y)))
+                {
+                    Current = Game1.maps[w.Destination];
+                    player.Position = w.DestinationPosition;
+                    return;
+                }
+            }
+        }
 
         #endregion
 
@@ -223,7 +236,8 @@ namespace ActualGame
             }
             foreach(GameObject g in AllObjects)
             {
-                g.Draw(sb);
+                if (!(g is Warp))
+                  g.Draw(sb);
             }
         }
         #endregion
