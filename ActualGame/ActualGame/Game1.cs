@@ -30,6 +30,7 @@ namespace ActualGame
         public static double secondsPerFrame;
         MouseState prevMouse;
         MouseState currentMouse;
+        Controls controls;
         
         
         public Game1()
@@ -57,6 +58,9 @@ namespace ActualGame
             prevkbState = kbState;
             // Initialize the maps list
             maps = new Dictionary<string, World>();
+
+            //Initializes all of the controls
+            controls = new Controls();
 
 
             // DO NOT WRITE CODE BELOW HERE
@@ -198,8 +202,8 @@ namespace ActualGame
                         if (player.IsDead || kbState.IsKeyDown(Keys.Delete))
                             SwitchToGameOver();
 
-                        //Pauses the game if the player presses the escape key
-                        if (kbState.IsKeyDown(Keys.Escape) && prevkbState.IsKeyUp(Keys.Escape))
+                        //Pauses the game if the player presses the pause key
+                        if (kbState.IsKeyDown(controls.Pause) && prevkbState.IsKeyUp(controls.Pause))
                             SwitchToPauseMenu();
                         mainDisplay.Update();
 
