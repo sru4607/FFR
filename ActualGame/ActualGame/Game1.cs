@@ -152,6 +152,8 @@ namespace ActualGame
 
             SwitchToMainMenu();
 
+            
+
             // Sync in-game objects with their dictionary textures
             // EX: testEnemy.LoadTexture(allTextures["missingtexture"]);
 
@@ -203,7 +205,7 @@ namespace ActualGame
                             SwitchToGameOver();
 
                         //Pauses the game if the player presses the pause key
-                        if (kbState.IsKeyDown(controls.Pause) && prevkbState.IsKeyUp(controls.Pause))
+                        if (kbState.IsKeyDown(Controls.Pause) && prevkbState.IsKeyUp(Controls.Pause))
                             SwitchToPauseMenu();
                         mainDisplay.Update();
 

@@ -12,14 +12,19 @@ namespace ActualGame
     class Controls
     {
         #region Fields
-        private Dictionary<string, Keys> listOfControls;
+        //Static so we have only one set of controls referenced throughout the game
+        private static Dictionary<string, Keys> listOfControls;
         #endregion
+
+
+
+
 
         #region Properties
         /// <summary>
         /// A property to get or set the key that will make the Player move left
         /// </summary>
-        public Keys Left
+        public static Keys Left
         {
             get { return listOfControls["left"]; }
             set
@@ -32,7 +37,7 @@ namespace ActualGame
         /// <summary>
         /// A property to get or set the key that will make the Player move right
         /// </summary>
-        public Keys Right
+        public static Keys Right
         {
             get { return listOfControls["right"]; }
             set
@@ -45,7 +50,7 @@ namespace ActualGame
         /// <summary>
         /// A property to get or set the key that will make the Player jump
         /// </summary>
-        public Keys Jump
+        public static Keys Jump
         {
             get { return listOfControls["jump"]; }
             set
@@ -58,7 +63,7 @@ namespace ActualGame
         /// <summary>
         /// A property to get or set the key that will make the Player attack
         /// </summary>
-        public Keys Attack
+        public static Keys Attack
         {
             get { return listOfControls["attack"]; }
             set
@@ -71,7 +76,7 @@ namespace ActualGame
         /// <summary>
         /// A property to get or set the key that will pause the game
         /// </summary>
-        public Keys Pause
+        public static Keys Pause
         {
             get { return listOfControls["pause"]; }
             set
@@ -107,11 +112,12 @@ namespace ActualGame
         /// A method to see if there are any conflicting controls for a potential change
         /// </summary>
         /// <returns>True if the change is allowed; false otherwise</returns>
-        public bool CanChangeToKey(Keys key, string controlName)
+        public static bool CanChangeToKey(Keys key, string controlName)
         {
             foreach(KeyValuePair<string, Keys> control in listOfControls)
             {
-                if (controlName != control.Key && key != control.Value)
+                //if the control name is not the key but the controls match do not change the control
+                if (controlName != control.Key && key == control.Value)
                     return false;
             }
             return true;
