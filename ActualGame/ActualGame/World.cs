@@ -152,7 +152,6 @@ namespace ActualGame
             foreach (Enemy e in initialEnemies)
             {
                 Enemy clone = e.Clone(e.Texture, e.HP, QuadTree);
-                QuadTree.AddObject(clone);
                 AllObjects.Add(clone);
             }
 

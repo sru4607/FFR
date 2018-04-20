@@ -22,6 +22,7 @@ namespace ActualGame
         protected double timeCounter;
         protected double secondsPerFrame;
 
+        Rectangle temp;
         
         #endregion
 
@@ -112,18 +113,19 @@ namespace ActualGame
 
         public bool CharacterBlocked()
         {
+            //node = node.GetContainingQuad(this);
             List<QuadTreeNode> parents = node.GetParents();
-            Rectangle temp = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            temp = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
             GameObject cha;
-            if (right) temp.Offset(5, 0);
-            else temp.Offset(-5, 0);
+            if (mainAi.FacingRight) temp.Offset(20, 0);
+            else temp.Offset(-20, 0);
             for (int i = 0; i < parents.Count; i++)
             {
                 for (int j = 0; j < parents[i].Objects.Count; j++)
                 {
                     cha = parents[i].Objects[j];
                     Rectangle chaRect = new Rectangle((int)cha.Position.X, (int)cha.Position.Y, (int)cha.Size.X, (int)cha.Size.Y);
-                    if (temp.Intersects(chaRect))
+                    if (cha != this && temp.Intersects(chaRect))
                     {
                         return true;
                     }
@@ -139,6 +141,7 @@ namespace ActualGame
             // TODO: Update so rect.Y is moved in the same call
             // NOTE: Do NOT call .MoveAI() twice, it will count as two frames of movement
             // NOTE: Also only moves in the X direction right now
+            base.Update(gm);
 
             mainAi.MoveAI();
 
@@ -163,13 +166,13 @@ namespace ActualGame
                     break;
             }
 
-            base.Update(gm);
         }
         #endregion
 
         #region Draw
         public override void Draw(SpriteBatch sb)
         {
+
             switch (mainAi.PatrolType)
             {
                 case PatrolType.Moving:
@@ -184,12 +187,15 @@ namespace ActualGame
                     break;
                 case PatrolType.Standing:
                     if (mainAi.FacingRight)
-                        sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
+                        sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.Red, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
                     // Draws to the screen with a horizontal flip if the AI is facing left
                     else
-                        sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
+                        sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.Red, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
+
                     break;
             }
+            sb.Draw(Texture, temp, Color.Red);
+
         }
         #endregion
     }

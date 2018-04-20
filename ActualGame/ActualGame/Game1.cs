@@ -139,6 +139,7 @@ namespace ActualGame
             maps.Add("Map1", new World(allTextures, "Map1", "Content/Map1.map"));
             maps.Add("RedMap", new World(allTextures, "RedMap", "Content/RedMap.map"));
             maps.Add("BlueMap", new World(allTextures, "BlueMap", "Content/BlueMap.map"));
+            maps.Add("PathTest", new World(allTextures, "PathTest", "Content/PathTest.map"));
 
             currentWorld = maps["BlueMap"];
             World.Current = currentWorld;
