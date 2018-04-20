@@ -65,7 +65,7 @@ namespace ActualGame
 
             // DO NOT WRITE CODE BELOW HERE
             // Base game logic
-            
+
             base.Initialize();
         }
 
@@ -605,7 +605,7 @@ namespace ActualGame
                     indexActiveButton--;
             }
             //If the games is paused and the player presses the escape key, resumes the game (allowing them to easily toggle pause and unpause with escape)
-            else if (kbState.IsKeyDown(Keys.Escape) && prevkbState.IsKeyUp(Keys.Escape) && currentState == MainGameState.Pause)
+            else if (kbState.IsKeyDown(Controls.Pause) && prevkbState.IsKeyUp(Controls.Pause) && currentState == MainGameState.Pause)
                 currentState = MainGameState.InGame;
             //Switches the game state when a certain button is pressed
             else if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
