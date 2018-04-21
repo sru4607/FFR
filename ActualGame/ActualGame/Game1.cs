@@ -90,7 +90,7 @@ namespace ActualGame
             allTextures.Add("PenPen", Content.Load<Texture2D>("PenPen"));
             allTextures.Add("PenPenWalking", Content.Load<Texture2D>("PenPenWalking"));
             allTextures.Add("missingtexture", Content.Load<Texture2D>("missingtexture"));
-            allTextures.Add("Enemy", Content.Load<Texture2D>("missingtexture"));
+            allTextures.Add("Enemy", Content.Load<Texture2D>("Penguin"));
             allTextures.Add("Menu", Content.Load<Texture2D>("Menu"));
             allTextures.Add("StartButton", Content.Load<Texture2D>("StartButton"));
             allTextures.Add("ExitButton", Content.Load<Texture2D>("ExitButton"));
