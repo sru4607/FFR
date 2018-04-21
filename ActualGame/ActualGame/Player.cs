@@ -12,8 +12,11 @@ namespace ActualGame
     //Enumeration for the FSM for the Player actions
     public enum PlayerState { Walk, Jump, Idle, MAttack, Crouch, Interact, Dead}
 
-    class Player : Character, ICombat
+    public class Player : Character, ICombat
+
     {
+
+        //player references the static class Controls for each control
         #region Fields
         PlayerState state;
         KeyboardState kbState;
@@ -96,17 +99,17 @@ namespace ActualGame
         {
             kbState = Keyboard.GetState();
 
-            if (kbState.IsKeyDown(Keys.Left) && kbState.IsKeyUp(Keys.Right) && (state == PlayerState.Walk || state == PlayerState.Jump))
+            if (kbState.IsKeyDown(Controls.Left) && kbState.IsKeyUp(Controls.Right) && (state == PlayerState.Walk || state == PlayerState.Jump))
             {
                 Movement = new Vector2(-5f, Movement.Y);
                 right = false;
             }
-            if (kbState.IsKeyDown(Keys.Right) && kbState.IsKeyUp(Keys.Left) && (state == PlayerState.Walk || state == PlayerState.Jump))
+            if (kbState.IsKeyDown(Controls.Right) && kbState.IsKeyUp(Controls.Left) && (state == PlayerState.Walk || state == PlayerState.Jump))
             {
                 Movement = new Vector2(5f, Movement.Y);
                 right = true;
             }
-            if (kbState.IsKeyDown(Keys.Up) && OnGround() && state == PlayerState.Jump)
+            if (kbState.IsKeyDown(Controls.Jump) && OnGround() && state == PlayerState.Jump)
             { Movement = new Vector2(Movement.X, -30f); }
 
         }
@@ -153,15 +156,15 @@ namespace ActualGame
                         timeCounter -= secondsPerFrame;
                     }
 
-                    if (kbState.IsKeyDown(Keys.Up))
+                    if (kbState.IsKeyDown(Controls.Jump))
                         {
                             state = PlayerState.Jump;
                         }
-                        if (kbState.IsKeyDown(Keys.Right))
+                        if (kbState.IsKeyDown(Controls.Right))
                             right = true;
-                        if (kbState.IsKeyDown(Keys.Left))
+                        if (kbState.IsKeyDown(Controls.Left))
                             right = false;
-                    if (kbState.IsKeyUp(Keys.Up) && kbState.IsKeyUp(Keys.Left) && kbState.IsKeyUp(Keys.Right))
+                    if (kbState.IsKeyUp(Controls.Jump) && kbState.IsKeyUp(Controls.Left) && kbState.IsKeyUp(Controls.Right))
                         {
                             state = PlayerState.Idle;
                         }
@@ -178,7 +181,7 @@ namespace ActualGame
                         {
                             state = PlayerState.Idle;
                         }
-                        if (kbState.IsKeyDown(Keys.Z))
+                        if (kbState.IsKeyDown(Controls.Attack))
                         {
                             state = PlayerState.MAttack;
                         }
@@ -186,21 +189,21 @@ namespace ActualGame
                 }
                 case (PlayerState.Idle):
                 {
-                        if (kbState.IsKeyDown(Keys.Left))
+                        if (kbState.IsKeyDown(Controls.Left))
                         {
                             state = PlayerState.Walk;
                             right = false;
                         }
-                        if (kbState.IsKeyDown(Keys.Right))
+                        if (kbState.IsKeyDown(Controls.Right))
                         {
                             state = PlayerState.Walk;
                             right = true;
                         }
-                        if (kbState.IsKeyDown(Keys.Up))
+                        if (kbState.IsKeyDown(Controls.Jump))
                         {
                             state = PlayerState.Jump;
                         }
-                    if (kbState.IsKeyDown(Keys.Z))
+                    if (kbState.IsKeyDown(Controls.Attack))
                         {
                             state = PlayerState.MAttack;
                         }
@@ -219,7 +222,16 @@ namespace ActualGame
 
                             timeCounter -= Game1.secondsPerFrame;
                         }
-
+                        for(int i = 0; i<World.Current.AllObjects.Count; i++)
+                        {
+                            if(World.Current.AllObjects[i] is Enemy e)
+                            {
+                                if(AttackIntersects(e))
+                                {
+                                    e.TakeDamage(10);
+                                }
+                            }
+                        }
 
                         if (currentFrame == 3) // after finishing attack animation, go back to idle
                         {
@@ -276,7 +288,7 @@ namespace ActualGame
                 }
                 case (PlayerState.MAttack):
                 {
-                        sb.Draw(Texture, MBox, Color.Red); // Just remove this line to make mBox invisible
+                        //sb.Draw(Texture, MBox, Color.Red); // Just remove this line to make mBox invisible
                         if (right)
                         {
                             sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);

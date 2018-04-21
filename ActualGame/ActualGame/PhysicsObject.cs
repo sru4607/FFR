@@ -9,11 +9,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ActualGame
 {
-    class PhysicsObject : GameObject
+    public class PhysicsObject : GameObject
     {
         //Thanks for help from XNAFan's Blog for some physics code guides
         public Vector2 Movement { get; set; }
-        private Vector2 prevLocation;
+        public Vector2 prevLocation { get; set; }
 
         //just use the gameobject constructor
         public PhysicsObject()
@@ -31,7 +31,7 @@ namespace ActualGame
         //Adjust movement based on physics
         public override void Update(GameTime gm)
         {
-            
+            base.Update(gm);
             Gravity();
             Friction();
             MoveAsPossible(gm);
@@ -77,40 +77,34 @@ namespace ActualGame
 
         }
         //check if you are at the edge of the platform
-        public bool AtEdge(int distExtra = 0)
+        public bool AtEdge(bool right,int distExtra = 0)
         {
-            Rectangle Right = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
-            Right.Offset(distExtra, 1);
-            Rectangle Left = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
-            Left.Offset(-distExtra, 1);
-            if (World.Current.HasRoomForRectangle(Right, null))
+            Rectangle temp = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            if (right)
             {
-                return true;
+                temp.Offset(Size.X + distExtra, 1);
+                return !World.Current.HasRoomForRectangle(temp, null);
             }
-            if (World.Current.HasRoomForRectangle(Left, null))
+            else
             {
-                return true;
+                temp.Offset(-Size.X - distExtra, 1);
+                return !World.Current.HasRoomForRectangle(temp, null);
             }
-            return false;
-
         }
         //check if you are at the wall
-        public bool AtWall(int distExtra = 1)
+        public bool AtWall(bool right, int distExtra = 0)
         {
-            Rectangle Right = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
-            Right.Offset(distExtra, 0);
-            if(World.Current.HasRoomForRectangle(Right, null))
+            Rectangle temp = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            if (right)
             {
-                return true;   
+                temp.Offset(distExtra, 0);
+                return !World.Current.HasRoomForRectangle(temp, null);
             }
-            Rectangle Left = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
-            Left.Offset(-distExtra, 0);
-            if (World.Current.HasRoomForRectangle(Left, null))
+            else
             {
-                return true;
+                temp.Offset(-distExtra, 0);
+                return !World.Current.HasRoomForRectangle(temp, null);
             }
-            return false;
-
         }
 
         //if blocked take away velocity

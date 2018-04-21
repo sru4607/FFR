@@ -18,15 +18,19 @@ namespace ActualGame
         MainGameState currentState;
         Dictionary<string, Texture2D> allTextures;
         Debug debugger;
-        Dictionary<string, World> maps;
+        public static Dictionary<string, World> maps;
         World currentWorld;
         Button[] buttons;
         int indexActiveButton;
         KeyboardState kbState;
         KeyboardState prevkbState;
+        MouseState mState;
         Player player;
         public static double fps;
         public static double secondsPerFrame;
+        MouseState prevMouse;
+        MouseState currentMouse;
+        Controls controls;
         
         
         public Game1()
@@ -55,10 +59,13 @@ namespace ActualGame
             // Initialize the maps list
             maps = new Dictionary<string, World>();
 
+            //Initializes all of the controls
+            controls = new Controls();
+
 
             // DO NOT WRITE CODE BELOW HERE
             // Base game logic
-            mainDisplay = new Display(GraphicsDevice);
+
             base.Initialize();
         }
 
@@ -83,7 +90,7 @@ namespace ActualGame
             allTextures.Add("PenPen", Content.Load<Texture2D>("PenPen"));
             allTextures.Add("PenPenWalking", Content.Load<Texture2D>("PenPenWalking"));
             allTextures.Add("missingtexture", Content.Load<Texture2D>("missingtexture"));
-            allTextures.Add("Enemy", Content.Load<Texture2D>("missingtexture"));
+            allTextures.Add("Enemy", Content.Load<Texture2D>("Penguin"));
             allTextures.Add("Menu", Content.Load<Texture2D>("Menu"));
             allTextures.Add("StartButton", Content.Load<Texture2D>("StartButton"));
             allTextures.Add("ExitButton", Content.Load<Texture2D>("ExitButton"));
@@ -130,8 +137,11 @@ namespace ActualGame
 
             // Load maps
             maps.Add("Map1", new World(allTextures, "Map1", "Content/Map1.map"));
+            maps.Add("RedMap", new World(allTextures, "RedMap", "Content/RedMap.map"));
+            maps.Add("BlueMap", new World(allTextures, "BlueMap", "Content/BlueMap.map"));
+            maps.Add("PathTest", new World(allTextures, "PathTest", "Content/PathTest.map"));
 
-            currentWorld = maps["Map1"];
+            currentWorld = maps["BlueMap"];
             World.Current = currentWorld;
             //levelOne = new World(allTextures, "Level One", "level1.txt");
 
@@ -142,6 +152,8 @@ namespace ActualGame
             graphics.ApplyChanges();
 
             SwitchToMainMenu();
+
+            
 
             // Sync in-game objects with their dictionary textures
             // EX: testEnemy.LoadTexture(allTextures["missingtexture"]);
@@ -166,6 +178,7 @@ namespace ActualGame
         {
             prevkbState = kbState;
             kbState = Keyboard.GetState();
+            mState = Mouse.GetState();
 
             switch (currentState)
             {
@@ -182,33 +195,45 @@ namespace ActualGame
                     }
                 case (MainGameState.InGame):
                     {
-                       
+                        if (currentWorld != World.Current)
+                            ChangeMap();
+
+
                         currentWorld.UpdateAll(gameTime);
 
                         // Switch to the game over screen if the player is dead or I say so
                         if (player.IsDead || kbState.IsKeyDown(Keys.Delete))
                             SwitchToGameOver();
 
-                        //Pauses the game if the player presses the escape key
-                        if (kbState.IsKeyDown(Keys.Escape) && prevkbState.IsKeyUp(Keys.Escape))
+                        //Pauses the game if the player presses the pause key
+                        if (kbState.IsKeyDown(Controls.Pause) && prevkbState.IsKeyUp(Controls.Pause))
                             SwitchToPauseMenu();
+                        mainDisplay.Update();
+
+                        if (kbState.IsKeyDown(Keys.Space) && prevkbState.IsKeyUp(Keys.Space))
+                            currentWorld.CheckWarps(player);
+                        
                         break;
                     }
                 case (MainGameState.Menu):
                     {
+
                         //Checks which button is pressed or if a new button needs to be active
                         MenuButtonLogic();
+                        UpdateMouseInButton();
                         break;
                     }
                 case (MainGameState.Pause):
                     {
                         //Checks which button is pressed or if a new button needs to be active
                         PauseButtonLogic();
+                        UpdateMouseInButton();
                         break;
                     }
                 case (MainGameState.GameOver):
                     {
                         GameOverLogic();
+                        UpdateMouseInButton();
                         break;
                     }
                 default:
@@ -227,10 +252,18 @@ namespace ActualGame
         protected override void Draw(GameTime gameTime)
                 {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            
             // TODO: Add your drawing code here
-            Matrix temp = mainDisplay.MainCam.GetViewMatrix();
-            spriteBatch.Begin(transformMatrix: temp);
+            //if in game follow the player
+            if (currentState == MainGameState.InGame || currentState == MainGameState.Pause)
+            {
+                Matrix temp = mainDisplay.MainCam.GetViewMatrix();
+                spriteBatch.Begin(transformMatrix: temp);
+            }
+            //else draw normally
+            else
+                spriteBatch.Begin();
+            
             switch(currentState)
             {
                 case (MainGameState.Debug):
@@ -241,6 +274,12 @@ namespace ActualGame
                 case (MainGameState.InGame):
                     {
                         World.Current.Draw(spriteBatch);
+
+                        spriteBatch.End();
+
+                        //Draw all gui elements in game here
+                        spriteBatch.Begin();
+
 
                         // Draw the player's health bar
                         Texture2D heart = allTextures["Heart"];
@@ -255,6 +294,10 @@ namespace ActualGame
                                 spriteBatch.Draw(heart, new Rectangle(10+i * 70, 10, 64, 64), Color.Gray);
                             }
                         }
+                        spriteBatch.End();
+
+                        //All Elements in game must be above this line
+                        spriteBatch.Begin(transformMatrix: mainDisplay.MainCam.GetViewMatrix());
 
                         break;
                     }
@@ -266,6 +309,32 @@ namespace ActualGame
                     }
                 case (MainGameState.Pause):
                     {
+                        World.Current.Draw(spriteBatch);
+
+
+                        //Draw all gui elements in game here
+
+
+                        
+
+                        //All Elements in game must be above this line
+                        spriteBatch.End();
+                        spriteBatch.Begin();
+
+                        // Draw the player's health bar
+                        Texture2D heart = allTextures["Heart"];
+                        for (int i = 0; i < player.MaxHealth; i++)
+                        {
+                            if (i < player.HP)
+                            {
+                                spriteBatch.Draw(heart, new Rectangle(10 + i * 70, 10, 64, 64), Color.White);
+                            }
+                            else
+                            {
+                                spriteBatch.Draw(heart, new Rectangle(10 + i * 70, 10, 64, 64), Color.Gray);
+                            }
+                        }
+
                         spriteBatch.Draw(allTextures["PauseMenu"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                         DrawButtons();
                         break;
@@ -288,10 +357,9 @@ namespace ActualGame
         /// <summary>
         /// A helper method to change between maps
         /// </summary>
-        public void ChangeMap(string mapName)
+        public void ChangeMap()
         {
-            currentWorld = maps[mapName];
-            World.Current = currentWorld;
+            currentWorld = World.Current;
             currentWorld.ResetWorld();
             currentWorld.AllObjects.Add(player);
             currentWorld.QuadTree.AddObject(player);
@@ -302,12 +370,15 @@ namespace ActualGame
         /// </summary>
         public void StartGame()
         {
+            IsMouseVisible = false;
             currentState = MainGameState.InGame;
             // Create the player in the first map & add it to the world
             player = new Player(128, 128, currentWorld.QuadTree);
+            mainDisplay = new Display(GraphicsDevice, player);
             player.Texture = allTextures["PenPen"];
             player.WalkTexture = allTextures["PenPenWalking"];
-            ChangeMap("Map1");
+            World.Current = maps["BlueMap"];
+            ChangeMap();
         }
 
         /// <summary>
@@ -315,6 +386,7 @@ namespace ActualGame
         /// </summary>
         public void SwitchToMainMenu()
         {
+            IsMouseVisible = true;
             currentState = MainGameState.Menu;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
@@ -331,6 +403,7 @@ namespace ActualGame
         /// </summary>
         public void SwitchToPauseMenu()
         {
+            IsMouseVisible = true;
             currentState = MainGameState.Pause;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
@@ -347,6 +420,7 @@ namespace ActualGame
         /// </summary>
         public void SwitchToGameOver()
         {
+            IsMouseVisible = true;
             currentState = MainGameState.GameOver;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
@@ -414,13 +488,13 @@ namespace ActualGame
                 else
                     indexActiveButton--;
             }
-
             // If the user presses enter, handle that button's logic
-            if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
+            else if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
             {
                 switch (indexActiveButton)
                 {
                     case 0:
+                        IsMouseVisible = false;
                         StartGame();
                         break;
                     case 1:
@@ -428,10 +502,36 @@ namespace ActualGame
                         break;
                 }
             }
+            //Menu Mouse Control
+            prevMouse = currentMouse;
+            currentMouse = Mouse.GetState();
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i].Contains(Mouse.GetState().Position))
+                {
+                    indexActiveButton = i;
+                    if (currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released)
+                    {
+                        switch (indexActiveButton)
+                        {
+                            case 0:
+                                IsMouseVisible = false;
+                                StartGame();
+                                break;
+                            case 1:
+                                SwitchToMainMenu();
+                                break;
+                        }
+                    }
+
+                }
+            }
+
+            
         }
 
         /// <summary>
-        /// A helper method for all of the button logic necessary for updating
+        /// A helper method for all of the button logic necessary for updating the main menu
         /// </summary>
         public void MenuButtonLogic()
         {
@@ -455,10 +555,37 @@ namespace ActualGame
             {
                 string buttonText = buttons[indexActiveButton].Name;
                 if (buttonText == "StartButton")
+                {
+                    IsMouseVisible = false;
                     StartGame();
+                }
                 else if (buttonText == "ExitButton")
                     Exit();
             }
+            //Menu Mouse Control
+            prevMouse = currentMouse;
+            currentMouse = Mouse.GetState();
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i].Contains(Mouse.GetState().Position))
+                {
+                    indexActiveButton = i;
+                    if(currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released)
+                    {
+                        string buttonText = buttons[indexActiveButton].Name;
+                        if (buttonText == "StartButton")
+                        {
+                            IsMouseVisible = false;
+                            StartGame();
+                        }
+                        else if (buttonText == "ExitButton")
+                            Exit();
+                    }
+                    
+                }
+            }
+           
+            
         }
 
         public void PauseButtonLogic()
@@ -479,16 +606,58 @@ namespace ActualGame
                     indexActiveButton--;
             }
             //If the games is paused and the player presses the escape key, resumes the game (allowing them to easily toggle pause and unpause with escape)
-            else if (kbState.IsKeyDown(Keys.Escape) && prevkbState.IsKeyUp(Keys.Escape) && currentState == MainGameState.Pause)
+            else if (kbState.IsKeyDown(Controls.Pause) && prevkbState.IsKeyUp(Controls.Pause) && currentState == MainGameState.Pause)
                 currentState = MainGameState.InGame;
             //Switches the game state when a certain button is pressed
             else if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
             {
                 string buttonText = buttons[indexActiveButton].Name;
                 if (buttonText == "ResumeButton")
+                {
+                    IsMouseVisible = false;
                     currentState = MainGameState.InGame;
+                }
                 else if (buttonText == "MainMenuButton")
                     SwitchToMainMenu();
+            }
+            //Menu Mouse Control
+            prevMouse = currentMouse;
+            currentMouse = Mouse.GetState();
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i].Contains(Mouse.GetState().Position))
+                {
+                    indexActiveButton = i;
+                    if (currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released)
+                    {
+                        string buttonText = buttons[indexActiveButton].Name;
+                        if (buttonText == "ResumeButton")
+                        {
+                            IsMouseVisible = false;
+                            currentState = MainGameState.InGame;
+                        }
+                        else if (buttonText == "MainMenuButton")
+                            SwitchToMainMenu();
+                    }
+
+                }
+            }
+
+
+        }
+
+        /// <summary>
+        /// A helper method to determine if the mouse is in a button and set the active button to that if so
+        /// </summary>
+        public void UpdateMouseInButton()
+        {
+            for(int c=0; c<buttons.Length; c++)
+            {
+                if (buttons[c].Rectangle.Contains(mState.Position))
+                {
+                    indexActiveButton = c;
+                    break;
+                }
             }
         }
     }

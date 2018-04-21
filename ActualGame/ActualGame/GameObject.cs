@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ActualGame
 {
-    class GameObject
+    public class GameObject
     {
         #region Fields
         // Fields
@@ -141,8 +141,6 @@ namespace ActualGame
         virtual public void Update(GameTime gm)
         {
             node = node.GetContainingQuad(this);
-            if (this is PhysicsObject temp)
-                ((PhysicsObject)temp).Update(gm);
 
         }
         #endregion

@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ActualGame
 {
-    class World
+    public class World
     {
         //For reading & displaying tiles
 
@@ -24,6 +24,10 @@ namespace ActualGame
         public List<GameObject> AllObjects { get; set; }
         public static World Current { get; set; }
         public QuadTreeNode QuadTree { get; set; }
+        public float WorldMinX { get; set; }
+        public float WorldMinY { get; set; }
+        public float WorldMaxX { get; set; }
+        public float WorldMaxY { get; set; }
         #endregion
 
         #region Constructor
@@ -88,8 +92,7 @@ namespace ActualGame
                     int x = worldReader.ReadInt32();
                     int y = worldReader.ReadInt32();
                     Enemy e = new Enemy(x*64, y*64, QuadTree, PatrolType.Standing);
-                    e.Texture = allTextures["PenPen"];
-                    e.WalkTexture = allTextures["PenPenWalking"];
+                    e.Texture = allTextures["Enemy"];
                     AllObjects.Add(e);
                     initialEnemies.Add(e.Clone(e.Texture, e.HP, QuadTree));
                     QuadTree.AddObject(e);
@@ -97,18 +100,44 @@ namespace ActualGame
                 if(type == 1)
                 {
                     //Warp
-                    int x = worldReader.ReadInt32();
-                    int y = worldReader.ReadInt32();
+                    int x = worldReader.ReadInt32() * 64;
+                    int y = worldReader.ReadInt32() * 64;
                     String destination = worldReader.ReadString();
-                    int xOffset = worldReader.ReadInt32();
-                    int yOffset = worldReader.ReadInt32();
-                    Warp w = new Warp();
+                    int xOffset = worldReader.ReadInt32() * 64;
+                    int yOffset = worldReader.ReadInt32() * 64;
+                    Warp w = new Warp(x, y, destination, xOffset, yOffset, QuadTree);
                     AllObjects.Add(w);
                     warps.Add(w);
                 }
 
                 
             }
+
+            //Finds Bounds of the world
+            WorldMinX = float.MaxValue;
+            WorldMinY = float.MaxValue;
+            WorldMaxY = float.MinValue;
+            WorldMaxX = float.MinValue;
+            foreach(Tile t in tiles)
+            {
+                if(t.X < WorldMinX)
+                {
+                    WorldMinX = t.X;
+                }
+                if (t.Y < WorldMinY)
+                {
+                    WorldMinY = t.Y;
+                }
+                if (t.X + t.Size.X > WorldMaxX)
+                {
+                    WorldMaxX = t.X + t.Size.X;
+                }
+                if (t.Y + t.Size.Y > WorldMaxY)
+                {
+                    WorldMaxY = t.Y + t.Size.Y;
+                }
+            }
+
         }
 
         /// <summary>
@@ -122,7 +151,6 @@ namespace ActualGame
             foreach (Enemy e in initialEnemies)
             {
                 Enemy clone = e.Clone(e.Texture, e.HP, QuadTree);
-                QuadTree.AddObject(clone);
                 AllObjects.Add(clone);
             }
 
@@ -196,6 +224,19 @@ namespace ActualGame
             return false;
         }
 
+        public void CheckWarps(Player player)
+        {
+            Rectangle playerLocation = new Rectangle((int)player.Position.X, (int)player.Position.Y, (int)player.Size.X, (int)player.Size.Y);
+            foreach (Warp w in warps)
+            {
+                if (playerLocation.Intersects(new Rectangle((int)w.Position.X, (int)w.Position.Y, (int)w.Size.X, (int)w.Size.Y)))
+                {
+                    Current = Game1.maps[w.Destination];
+                    player.Position = w.DestinationPosition;
+                    return;
+                }
+            }
+        }
 
         #endregion
 
@@ -206,8 +247,8 @@ namespace ActualGame
         /// <param name="gameTime"></param>
         public void UpdateAll(GameTime gameTime)
         {
-            foreach (GameObject g in AllObjects)
-                g.Update(gameTime);
+            for(int i =0; i<AllObjects.Count;i++)
+                AllObjects[i].Update(gameTime);
         }
         #endregion
 
@@ -223,7 +264,8 @@ namespace ActualGame
             }
             foreach(GameObject g in AllObjects)
             {
-                g.Draw(sb);
+                if (!(g is Warp))
+                  g.Draw(sb);
             }
         }
         #endregion

@@ -192,8 +192,10 @@ namespace ActualGame
                     {
                         case PatrolState.PauseLeft:
                         case PatrolState.PauseRight:
-                            enemy.Movement = new Vector2(0f, enemy.Movement.Y);
-                            break;
+                            {
+                                enemy.Movement = new Vector2(0f, enemy.Movement.Y);
+                                break;
+                            }
                         case PatrolState.WalkLeft:
                             enemy.Movement = new Vector2((-(float)walkSpeed), enemy.Movement.Y);
                             break;
@@ -237,9 +239,16 @@ namespace ActualGame
         /// <returns>True if the enemy can walk forward, else false</returns>
         private bool AbleToMove()
         {
-            if (enemy.AtEdge(enemy.Texture.Width) || enemy.AtWall(enemy.Texture.Width))
-                return false;
-            return true;
+            return (!enemy.AtEdge(FacingRight) && !enemy.AtWall(FacingRight) && !CharacterBlocked());
+        }
+
+        /// <summary>
+        /// Checks to see if a character is blocking the way
+        /// </summary>
+        /// <returns>true if no character is in the way, false otherwise</returns>
+        private bool CharacterBlocked()
+        {
+            return enemy.CharacterBlocked();
         }
         #endregion
     }

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace ActualGame
 {
-    class QuadTreeNode
+    public class QuadTreeNode
     {
         #region Constants
         //The maximum amount of objects before the node divides
@@ -194,7 +194,11 @@ namespace ActualGame
                 }
                 return this;
             }
-
+            //Passes the check to the parent if the object isn't within the quad
+            if (Parent != null)
+            {
+                return Parent.GetContainingQuad(gameObject);
+            }
             //Returns null if this quad doesn't completely contain the parameter rectangle
             return null;
         }
@@ -207,6 +211,7 @@ namespace ActualGame
         {
             List<QuadTreeNode> parents = new List<QuadTreeNode>();
             QuadTreeNode current = this;
+            parents.Add(current);
             while(current.Parent != null)
             {
                 parents.Add(current.Parent);
