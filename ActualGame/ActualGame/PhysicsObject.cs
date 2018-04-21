@@ -31,7 +31,7 @@ namespace ActualGame
         //Adjust movement based on physics
         public override void Update(GameTime gm)
         {
-            
+            base.Update(gm);
             Gravity();
             Friction();
             MoveAsPossible(gm);

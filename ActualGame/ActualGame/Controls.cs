@@ -114,6 +114,9 @@ namespace ActualGame
         /// <returns>True if the change is allowed; false otherwise</returns>
         public static bool CanChangeToKey(Keys key, string controlName)
         {
+            //Enter is used for other operations so it cannot be a control key
+            if (key == Keys.Enter)
+                return false;
             foreach(KeyValuePair<string, Keys> control in listOfControls)
             {
                 //if the control name is not the key but the controls match do not change the control
