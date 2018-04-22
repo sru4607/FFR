@@ -205,3 +205,15 @@
 #begin PathTest.map
 /copy:PathTest.map
 
+#begin Electown_Lead.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Electown_Lead.ogg
+
+#begin Electown.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Electown.ogg
+

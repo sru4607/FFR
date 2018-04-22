@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 
 namespace ActualGame
@@ -26,6 +27,8 @@ namespace ActualGame
         KeyboardState prevkbState;
         MouseState mState;
         Player player;
+        Dictionary<string, Soundtrack> tracks;
+        Soundtrack currentTrack;
         public static double fps;
         public static double secondsPerFrame;
         MouseState prevMouse;
@@ -49,8 +52,8 @@ namespace ActualGame
         {
             // Initialize an array of textures for use
             allTextures = new Dictionary<string, Texture2D>();
-            
-            
+
+            tracks = new Dictionary<string, Soundtrack>();
 
             
 
@@ -153,7 +156,12 @@ namespace ActualGame
 
             SwitchToMainMenu();
 
-            
+            Soundtrack elecTown = new Soundtrack(Content.Load<Song>("Electown"), 150, 16, 4);
+            elecTown.SetLead(Content.Load<Song>("Electown_Lead"), 150, 4, 4);
+
+            tracks.Add("Electown", elecTown);
+
+            currentTrack = elecTown;
 
             // Sync in-game objects with their dictionary textures
             // EX: testEnemy.LoadTexture(allTextures["missingtexture"]);
@@ -198,7 +206,7 @@ namespace ActualGame
                         if (currentWorld != World.Current)
                             ChangeMap();
 
-
+                        currentTrack.Update();
                         currentWorld.UpdateAll(gameTime);
 
                         // Switch to the game over screen if the player is dead or I say so
@@ -386,6 +394,7 @@ namespace ActualGame
         /// </summary>
         public void SwitchToMainMenu()
         {
+            Soundtrack.Stop();
             IsMouseVisible = true;
             currentState = MainGameState.Menu;
             int height = GraphicsDevice.Viewport.Height;
@@ -420,6 +429,7 @@ namespace ActualGame
         /// </summary>
         public void SwitchToGameOver()
         {
+            Soundtrack.Stop();
             IsMouseVisible = true;
             currentState = MainGameState.GameOver;
             int height = GraphicsDevice.Viewport.Height;
