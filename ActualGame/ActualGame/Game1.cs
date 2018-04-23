@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 
@@ -34,6 +35,8 @@ namespace ActualGame
         MouseState prevMouse;
         MouseState currentMouse;
         Controls controls;
+        SoundEffect laugh;
+        
         
         
         public Game1()
@@ -156,10 +159,15 @@ namespace ActualGame
 
             SwitchToMainMenu();
 
+            // NOTE: ElecTown is an arrangement of a track from Megaman Battle Network 4 by Capcom. Cannot be used in the main game
+
             Soundtrack elecTown = new Soundtrack(Content.Load<Song>("Electown"), 150, 16, 4);
             elecTown.SetLead(Content.Load<Song>("Electown_Lead"), 150, 4, 4);
 
             tracks.Add("Electown", elecTown);
+
+            laugh = Content.Load<SoundEffect>("Laugh");
+
 
             currentTrack = elecTown;
 
@@ -430,6 +438,7 @@ namespace ActualGame
         public void SwitchToGameOver()
         {
             Soundtrack.Stop();
+            laugh.Play();
             IsMouseVisible = true;
             currentState = MainGameState.GameOver;
             int height = GraphicsDevice.Viewport.Height;
