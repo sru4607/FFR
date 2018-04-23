@@ -60,7 +60,7 @@ namespace ActualGame
             }
             else
             {
-                if (MediaPlayer.PlayPosition >= currentSection.Length)
+                if (MediaPlayer.PlayPosition >= currentSection.Length || MediaPlayer.State == MediaState.Stopped)
                 {
                     currentSection = currentSection.Next;
                     MediaPlayer.Play(currentSection.Song);
