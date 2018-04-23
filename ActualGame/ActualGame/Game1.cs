@@ -28,8 +28,8 @@ namespace ActualGame
         KeyboardState prevkbState;
         MouseState mState;
         Player player;
-        Dictionary<string, Soundtrack> tracks;
-        Soundtrack currentTrack;
+        //Dictionary<string, Soundtrack> tracks;
+        //Soundtrack currentTrack;
         public static double fps;
         public static double secondsPerFrame;
         MouseState prevMouse;
@@ -56,7 +56,7 @@ namespace ActualGame
             // Initialize an array of textures for use
             allTextures = new Dictionary<string, Texture2D>();
 
-            tracks = new Dictionary<string, Soundtrack>();
+           // tracks = new Dictionary<string, Soundtrack>();
 
             
 
@@ -164,12 +164,12 @@ namespace ActualGame
             Soundtrack elecTown = new Soundtrack(Content.Load<Song>("Electown"), 150, 16, 4);
             elecTown.SetLead(Content.Load<Song>("Electown_Lead"), 150, 4, 4);
 
-            tracks.Add("Electown", elecTown);
+          //  tracks.Add("Electown", elecTown);
 
             laugh = Content.Load<SoundEffect>("Laugh");
 
 
-            currentTrack = elecTown;
+          //  currentTrack = elecTown;
 
             // Sync in-game objects with their dictionary textures
             // EX: testEnemy.LoadTexture(allTextures["missingtexture"]);
@@ -214,7 +214,7 @@ namespace ActualGame
                         if (currentWorld != World.Current)
                             ChangeMap();
 
-                        currentTrack.Update();
+                    //    currentTrack.Update();
                         currentWorld.UpdateAll(gameTime);
 
                         // Switch to the game over screen if the player is dead or I say so
@@ -394,6 +394,7 @@ namespace ActualGame
             player.Texture = allTextures["PenPen"];
             player.WalkTexture = allTextures["PenPenWalking"];
             World.Current = maps["BlueMap"];
+         //   tracks["Electown"].Start();
             ChangeMap();
         }
 

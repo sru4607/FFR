@@ -15,6 +15,8 @@ namespace ActualGame
         private List<Section> loop;
         private Section trail;
 
+        public bool IsPlaying { get; private set; }
+
         // Constructor
         public Soundtrack(Song loopStart, int loopBpm, int loopMeasures, int loopBeatsPerMeasure)
         {
@@ -43,9 +45,16 @@ namespace ActualGame
             this.trail = new Section(trail, bpm, measures, beatsPerMeasure);
         }
 
+        public void Start()
+        {
+            MediaPlayer.Play(lead.Song);
+            currentSection = lead;
+            IsPlaying = false;
+        }
+
         public void Update()
         {
-            if (!(loop.Contains(currentSection) || (lead != null && currentSection == lead) || (trail!=null && currentSection == trail)))
+            if (MediaPlayer.State == MediaState.Stopped || !(loop.Contains(currentSection) || (lead != null && currentSection == lead) || (trail!=null && currentSection == trail)))
             {
                 if (lead != null)
                 {
@@ -60,11 +69,14 @@ namespace ActualGame
             }
             else
             {
+                //MediaPlayer.Pause();
                 if (MediaPlayer.PlayPosition >= currentSection.Length || MediaPlayer.State == MediaState.Stopped)
                 {
+                    MediaPlayer.Stop();
                     currentSection = currentSection.Next;
-                    MediaPlayer.Play(currentSection.Song);
+                    MediaPlayer.Play(currentSection.Song, TimeSpan.Zero);
                 }
+                //MediaPlayer.Resume();
             }
         }
 
@@ -72,6 +84,7 @@ namespace ActualGame
         {
             currentSection = null;
             MediaPlayer.Stop();
+            MediaPlayer.Queue.Equals(null);
         }
 
         // Private Section class used to track the flow of the song
@@ -89,7 +102,7 @@ namespace ActualGame
 
                 int length = measures * beatsPerMeasure * 60 *1000 / bpm;
 
-                int milliseconds = length % 1000;
+                int milliseconds = length % 1000 - 50;
                 length /= 1000;
                 int seconds = length % 60;
                 length /= 60;
