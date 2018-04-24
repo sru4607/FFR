@@ -83,7 +83,7 @@ namespace ActualGame
             {
                 mainCam.Position = new Vector2(World.Current.WorldMaxX - mainCam.BoundingRectangle.Width, mainCam.Position.Y);
             }
-            if (mainCam.Position.X + mainCam.BoundingRectangle.Width > World.Current.WorldMaxY)
+            if (mainCam.Position.Y + mainCam.BoundingRectangle.Height > World.Current.WorldMaxY)
             {
                 mainCam.Position = new Vector2(mainCam.Position.X,World.Current.WorldMaxY - mainCam.BoundingRectangle.Height);
             }
