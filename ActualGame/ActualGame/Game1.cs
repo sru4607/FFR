@@ -10,7 +10,7 @@ namespace ActualGame
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    enum MainGameState {Debug, Menu, Pause, InGame, GameOver }
+    enum MainGameState {Debug, Menu, Pause, InGame, GameOver, Options }
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
@@ -36,7 +36,8 @@ namespace ActualGame
         MouseState currentMouse;
         Controls controls;
         SoundEffect laugh;
-        
+        MainGameState returnFromOptions;
+        bool changingOption;
         
         
         public Game1()
@@ -67,7 +68,7 @@ namespace ActualGame
 
             //Initializes all of the controls
             controls = new Controls();
-
+            changingOption = false;
 
             // DO NOT WRITE CODE BELOW HERE
             // Base game logic
@@ -107,6 +108,7 @@ namespace ActualGame
             allTextures.Add("GameOverRetry", Content.Load<Texture2D>("GameOverRetry"));
             allTextures.Add("GameOverExit", Content.Load<Texture2D>("GameOverExit"));
             allTextures.Add("Heart", Content.Load<Texture2D>("Heart"));
+            allTextures.Add("Button", Content.Load<Texture2D>("Button"));
 
             // Load tiles systemmatically
             // BrickWall
@@ -458,6 +460,34 @@ namespace ActualGame
         }
 
         /// <summary>
+        /// A helper method to switch to the options menu and provide the game state to return to afterwards (INCOMPLETE)
+        /// </summary>
+        public void SwitchToOptions()
+        {
+            returnFromOptions = currentState;
+            currentState = MainGameState.Options;
+            IsMouseVisible = true;
+            currentState = MainGameState.Pause;
+            int height = GraphicsDevice.Viewport.Height;
+            int width = GraphicsDevice.Viewport.Width;
+            //Values need to be adjusted; they are currently not going to look as intended
+            buttons = new Button[6];
+            Texture2D leftControl = allTextures["Button"];
+            buttons[0] = new Button(leftControl, "LeftControl", new Rectangle(width / 2 - leftControl.Width / 2, height * 2 / 14 - leftControl.Height / 2, leftControl.Width, leftControl.Height));
+            Texture2D rightControl = allTextures["Button"];
+            buttons[1] = new Button(rightControl, "RightControl", new Rectangle(width / 2 - rightControl.Width / 2, height * 4 / 14 - rightControl.Height / 2, rightControl.Width, rightControl.Height));
+            Texture2D jumpControl = allTextures["Button"];
+            buttons[2] = new Button(jumpControl, "JumpControl", new Rectangle(width / 2 - jumpControl.Width / 2, height * 6 / 14 - jumpControl.Height / 2, jumpControl.Width, jumpControl.Height));
+            Texture2D attackControl = allTextures["Button"];
+            buttons[3] = new Button(attackControl, "AttackControl", new Rectangle(width / 2 - attackControl.Width / 2, height * 8 / 14 - attackControl.Height / 2, attackControl.Width, attackControl.Height));
+            Texture2D pauseControl = allTextures["Button"];
+            buttons[4] = new Button(pauseControl, "PauseControl", new Rectangle(width / 2 - pauseControl.Width / 2, height * 10 / 14 - pauseControl.Height / 2, pauseControl.Width, pauseControl.Height));
+            Texture2D exitButton = allTextures["ExitButton"];
+            buttons[5] = new Button(exitButton, "ExitButton", new Rectangle(width / 2 - exitButton.Width / 2, height * 12 / 14 - exitButton.Height / 2, exitButton.Width, exitButton.Height));
+            indexActiveButton = 0;
+        }
+
+        /// <summary>
         /// A helper method that draws the game over state
         /// </summary>
         public void DrawGameOver(SpriteBatch spriteBatch)
@@ -485,6 +515,69 @@ namespace ActualGame
                     spriteBatch.Draw(buttons[c].Texture, buttons[c].Rectangle, Color.White);
                 else
                     spriteBatch.Draw(buttons[c].Texture, buttons[c].Rectangle, Color.Gray);
+            }
+        }
+
+        /// <summary>
+        /// A helper method for options menu logic (INCOMPLETE)
+        /// </summary>
+        public void OptionsLogic()
+        {
+            //Only allows changes if a button is not selected
+            if(!changingOption)
+            {
+                //Adjusts the current active button if up or down arrow is pressed
+                if (kbState.IsKeyDown(Keys.Down) && prevkbState.IsKeyUp(Keys.Down) && kbState.IsKeyUp(Keys.Up))
+                {
+                    if (indexActiveButton == buttons.Length - 1)
+                        indexActiveButton = 0;
+                    else
+                        indexActiveButton++;
+                }
+                else if (kbState.IsKeyDown(Keys.Up) && prevkbState.IsKeyUp(Keys.Up) && kbState.IsKeyUp(Keys.Down))
+                {
+                    if (indexActiveButton == 0)
+                        indexActiveButton = buttons.Length - 1;
+                    else
+                        indexActiveButton--;
+                }
+                //Switches the game state if the exit button is pressed, or prepares to change an option
+                else if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
+                {
+                    string buttonText = buttons[indexActiveButton].Name;
+                    if (buttonText == "ExitButton")
+                        currentState = returnFromOptions;
+                    else
+                        changingOption = true;
+                }
+                //Menu Mouse Control
+                prevMouse = currentMouse;
+                currentMouse = Mouse.GetState();
+                for (int i = 0; i < buttons.Length; i++)
+                {
+                    if (buttons[i].Contains(Mouse.GetState().Position))
+                    {
+                        indexActiveButton = i;
+                        if (currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released)
+                        {
+                            string buttonText = buttons[indexActiveButton].Name;
+                            if (buttonText == "ExitButton")
+                                currentState = returnFromOptions;
+                            else
+                                changingOption = true;
+                        }
+                    }
+                }
+            }
+            //Attempts to change the control selected to a single key pressed, if possible
+            else
+            {
+                Keys controlChange;
+                if(kbState != prevkbState)
+                {
+                    //Method needs to be completed to check if only a single key has been pressed, and if so attempt to edit that control to the key
+                    changingOption = false;
+                }
             }
         }
 
