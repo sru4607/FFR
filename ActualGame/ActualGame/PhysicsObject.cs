@@ -92,18 +92,18 @@ namespace ActualGame
             }
         }
         //check if you are at the wall
-        public bool AtWall(bool right, int distExtra = 0)
+        public bool AtWall(bool right, int distExtra = 1)
         {
             Rectangle temp = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
             if (right)
             {
                 temp.Offset(distExtra, 0);
-                return !World.Current.HasRoomForRectangle(temp, null);
+                return World.Current.HasRoomForRectangle(temp, this);
             }
             else
             {
                 temp.Offset(-distExtra, 0);
-                return !World.Current.HasRoomForRectangle(temp, null);
+                return World.Current.HasRoomForRectangle(temp, this);
             }
         }
 
