@@ -36,7 +36,10 @@ namespace ActualGame
         #endregion
 
         #region Methods
-
+        public override void Die()
+        {
+            // Doesn't do anything, fixes a weird bug
+        }
         #endregion
 
         #region Update

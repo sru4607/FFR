@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ActualGame
 {
-    public class Character : PhysicsObject, ICombat
+    public abstract class Character : PhysicsObject, ICombat
     {
         #region Fields
         protected int hp;
@@ -130,11 +130,7 @@ namespace ActualGame
         /// <summary>
         /// The Character dies
         /// </summary>
-        public void Die()
-        {
-            // Should do nothing
-            return;
-        }
+        public abstract void Die();
 
         /// <summary>
         /// The Character's hp reduces

@@ -253,7 +253,7 @@ namespace ActualGame
                             Rectangle temp = new Rectangle((int)enemy.X + 64, (int)enemy.Y, 32, 64);
                             if(temp.Intersects(new Rectangle((int)Game1.player.position.X, (int)Game1.player.position.Y, (int)Game1.player.Size.X, (int)Game1.player.Size.Y)))
                             {
-                                Game1.player.HP--;
+                                Game1.player.TakeDamage(1);
                             }
                         }
                         else
@@ -261,7 +261,7 @@ namespace ActualGame
                             Rectangle temp = new Rectangle((int)enemy.X - 64, (int)enemy.Y, 32, 64);
                             if (temp.Intersects(new Rectangle((int)Game1.player.position.X, (int)Game1.player.position.Y, (int)Game1.player.Size.X, (int)Game1.player.Size.Y)))
                             {
-                                Game1.player.HP--;
+                                Game1.player.TakeDamage(1);
                             }
                         }
                     }

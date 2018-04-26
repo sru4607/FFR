@@ -84,13 +84,9 @@ namespace ActualGame
         /// <param name="damageAmount">The amount of damage taken</param>
         public new void TakeDamage(int damageAmount)
         {
-            if (damageAmount > hp)
-            {
-                hp = 0;
+            hp -= damageAmount;
+            if (hp <= 0)
                 Die();
-            }
-            else
-                hp -= damageAmount;
         }
         /// <summary>
         /// Movement with arrow keys
@@ -115,7 +111,7 @@ namespace ActualGame
         }
 
         //TODO: Method to call that should update the game to signal the Player has died
-        public new void Die()
+        public override void Die()
         {
             state = PlayerState.Dead;
         }

@@ -94,7 +94,7 @@ namespace ActualGame
             return clone;
         }
 
-        public new void Die()
+        public override void Die()
         {
             // TODO: Implement during combat
             World.Current.AllObjects.Remove(this);
