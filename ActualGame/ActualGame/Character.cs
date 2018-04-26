@@ -49,7 +49,7 @@ namespace ActualGame
             // Defaults to a width of 64 and height of 128
             : base(x, y, 64, 128, node)
         {
-            hp = 1;
+            hp = 100;
             // TODO: Verify whether the hitbox line of code is valid or if it belongs in GameObject 
             // Also, should it use 0, 0, 32, 64; or x, y, 32, 64?
             mBox = new Rectangle((int)Position.X + (int)Size.X, (int)Position.Y + ((int)Size.Y / 4), (int)Size.X, (int)Size.Y / 2);

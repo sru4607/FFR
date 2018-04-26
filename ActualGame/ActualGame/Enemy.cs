@@ -140,11 +140,47 @@ namespace ActualGame
 
             mainAi.MoveAI();
 
-            switch (mainAi.PatrolType)
+            switch (this.State)
             {
-                case PatrolType.Moving:
-                    // Animation for moving enemy
-                    source.Y = 1;
+                case EnemyState.Docile:
+                    switch (mainAi.PatrolType)
+                    {
+                        case PatrolType.Moving:
+                            // Animation for moving enemy
+                            source.Y = 1;
+                            source.Width = singleTextWidth;
+                            source.Height = singleTextHeight;
+                            if (currentFrame % 15 == 0)
+                            {
+                                source.X += singleTextWidth;
+                                if (currentFrame == 60)
+                                {
+                                    currentFrame = 0;
+                                    source.X = 0;
+                                }
+                            }
+                            currentFrame++;
+
+                            break;
+                        case PatrolType.Standing:
+                            source.Y = singleTextHeight + 1;
+                            source.Width = singleTextWidth;
+                            source.Height = singleTextHeight;
+                            if (currentFrame % 15 == 0)
+                            {
+                                source.X += singleTextWidth;
+                                if (currentFrame == 60)
+                                {
+                                    currentFrame = 0;
+                                    source.X = 0;
+                                }
+                            }
+                            currentFrame++;
+                            break;
+                    }
+                    break;
+                case EnemyState.Aggro:
+                    source.Y = singleTextHeight + 1;
                     source.Width = singleTextWidth;
                     source.Height = singleTextHeight;
                     if (currentFrame % 15 == 0)
@@ -157,16 +193,15 @@ namespace ActualGame
                         }
                     }
                     currentFrame++;
-
                     break;
-                case PatrolType.Standing:
-                    source.Y = singleTextHeight + 1;
+                case EnemyState.Attack:
+                    source.Y = 4*singleTextHeight + 1;
                     source.Width = singleTextWidth;
                     source.Height = singleTextHeight;
                     if (currentFrame % 15 == 0)
                     {
-                        source.X += singleTextWidth;
-                        if(currentFrame == 60)
+                        source.X += singleTextWidth*2;
+                        if (currentFrame == 60)
                         {
                             currentFrame = 0;
                             source.X = 0;
@@ -174,7 +209,61 @@ namespace ActualGame
                     }
                     currentFrame++;
                     break;
+                case EnemyState.Damaged:
+                    source.Y = 5*singleTextHeight + 1;
+                    source.Width = singleTextWidth;
+                    source.Height = singleTextHeight;
+                    if (currentFrame % 15 == 0)
+                    {
+                        source.X += singleTextWidth;
+                        if (currentFrame == 60)
+                        {
+                            currentFrame = 0;
+                            source.X = 0;
+                        }
+                    }
+                    currentFrame++;
+                    break;
+                case EnemyState.Search:
+                    switch (mainAi.PatrolType)
+                    {
+                        case PatrolType.Moving:
+                            // Animation for moving enemy
+                            source.Y = 1;
+                            source.Width = singleTextWidth;
+                            source.Height = singleTextHeight;
+                            if (currentFrame % 15 == 0)
+                            {
+                                source.X += singleTextWidth;
+                                if (currentFrame == 60)
+                                {
+                                    currentFrame = 0;
+                                    source.X = 0;
+                                }
+                            }
+                            currentFrame++;
+
+                            break;
+                        case PatrolType.Standing:
+                            source.Y = singleTextHeight + 1;
+                            source.Width = singleTextWidth;
+                            source.Height = singleTextHeight;
+                            if (currentFrame % 15 == 0)
+                            {
+                                source.X += singleTextWidth;
+                                if (currentFrame == 60)
+                                {
+                                    currentFrame = 0;
+                                    source.X = 0;
+                                }
+                            }
+                            currentFrame++;
+                            break;
+                    }
+                    break;
             }
+
+           
 
         }
         #endregion
@@ -183,36 +272,29 @@ namespace ActualGame
         public override void Draw(SpriteBatch sb)
         {
 
-            //switch (mainAi.PatrolType)
-            //{
-            //    case PatrolType.Moving:
-            //        if (mainAi.FacingRight)
-            //        {
-            //            sb.Draw(texture, position, source, Color.Red, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
-            //        }
-            //        else
-            //        {
-            //            sb.Draw(texture, position, source, Color.Red, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
-            //        }
-            //        break;
-            //    case PatrolType.Standing:
-            //        if (mainAi.FacingRight)
-            //            sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth /4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
-            //        // Draws to the screen with a horizontal flip if the AI is facing left
-            //        else
-            //            sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
-            //        break;
-            //}
+
             switch (State)
             {
                 case EnemyState.Docile:
-                    if (mainAi.FacingRight)
+                    switch (mainAi.PatrolType)
                     {
-                        sb.Draw(texture, position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
-                    }
-                    else
-                    {
-                        sb.Draw(texture, position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
+                        case PatrolType.Moving:
+                            if (mainAi.FacingRight)
+                            {
+                                sb.Draw(texture, position, source, Color.Red, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
+                            }
+                            else
+                            {
+                                sb.Draw(texture, position, source, Color.Red, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
+                            }
+                            break;
+                        case PatrolType.Standing:
+                            if (mainAi.FacingRight)
+                                sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
+                            // Draws to the screen with a horizontal flip if the AI is facing left
+                            else
+                                sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
+                            break;
                     }
                     break;
                 case EnemyState.Aggro:

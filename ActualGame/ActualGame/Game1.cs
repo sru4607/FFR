@@ -27,7 +27,7 @@ namespace ActualGame
         KeyboardState kbState;
         KeyboardState prevkbState;
         MouseState mState;
-        Player player;
+        public static Player player;
         //Dictionary<string, Soundtrack> tracks;
         //Soundtrack currentTrack;
         public static double fps;
