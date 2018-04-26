@@ -152,8 +152,12 @@ namespace ActualGame
             maps.Add("RedMap", new World(allTextures, "RedMap", "Content/RedMap.map"));
             maps.Add("BlueMap", new World(allTextures, "BlueMap", "Content/BlueMap.map"));
             maps.Add("PathTest", new World(allTextures, "PathTest", "Content/PathTest.map"));
+            maps.Add("Tutorial1", new World(allTextures, "Tutorial1", "Content/Tutorial1.map"));
+            maps.Add("Tutorial2", new World(allTextures, "Tutorial2", "Content/Tutorial2.map"));
+            maps.Add("Actual1", new World(allTextures, "Actual1", "Content/Actual1.map"));
+            maps.Add("Actual2", new World(allTextures, "Actual2", "Content/Actual2.map"));
 
-            currentWorld = maps["BlueMap"];
+            currentWorld = maps["Tutorial1"];
             World.Current = currentWorld;
             //levelOne = new World(allTextures, "Level One", "level1.txt");
 
@@ -399,7 +403,7 @@ namespace ActualGame
             mainDisplay = new Display(GraphicsDevice, player);
             player.Texture = allTextures["PenPen"];
             player.WalkTexture = allTextures["PenPenWalking"];
-            World.Current = maps["BlueMap"];
+            World.Current = maps["Tutorial1"];
          //   tracks["Electown"].Start();
             ChangeMap();
         }

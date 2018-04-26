@@ -2347,3 +2347,15 @@
 /processorParam:TextureFormat=Color
 /build:Tiles/Portal15.png
 
+#begin Tutorial1.map
+/copy:Tutorial1.map
+
+#begin Tutorial2.map
+/copy:Tutorial2.map
+
+#begin Actual1.map
+/copy:Actual1.map
+
+#begin Actual2.map
+/copy:Actual2.map
+

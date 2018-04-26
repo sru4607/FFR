@@ -201,7 +201,7 @@ namespace ActualGame
             return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
         }
 
-        public bool HasRoomForRectangle(Rectangle rectangleToCheck, GameObject currentObject, int i = 1)
+        public bool HasRoomForRectangle(Rectangle rectangleToCheck, GameObject currentObject, bool i = true)
         { if (tiles != null && tiles.Length > 0)
             {
                 //Tile objects collision if noCLip is false, the object is not the one we are using, and they intersect
@@ -213,7 +213,7 @@ namespace ActualGame
                     }
                 }
             }
-            if (i != 0)
+            if (i)
             {
                 //Game objects collision if noCLip is false, the object is not the one we are using, and they intersect
                 foreach (GameObject obj in Current.AllObjects)
