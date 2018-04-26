@@ -283,7 +283,11 @@ namespace ActualGame
         private EnemyState UpdateAggro()
         {
             // TODO: Update this code to scan for the player
-            if(Math.Abs(Game1.player.Y - enemy.Y) < 20)
+            if(enemy.State == EnemyState.Attack)
+            {
+                return EnemyState.Attack;
+            }
+            if(Math.Abs(Game1.player.X - enemy.X) < 1000 && Math.Abs(Game1.player.Y - enemy.Y) < 20)
             {
                 return EnemyState.Aggro;
             }
