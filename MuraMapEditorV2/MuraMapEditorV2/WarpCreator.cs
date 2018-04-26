@@ -97,7 +97,8 @@ namespace MuraMapEditorV2
                         Controls.Add(p);
                     }
                 }
-
+                this.Width = 24 + map.GetLength(0)*32;
+                this.Height = 52 + map.GetLength(1)*32;
                 
                 DestinationLabel.Text = "(x,y) = (" + xOffset + "," +yOffset + ")";
 
