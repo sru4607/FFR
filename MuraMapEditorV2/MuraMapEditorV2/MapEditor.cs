@@ -125,7 +125,7 @@ namespace MuraMapEditorV2
                 {
                     MapView[i,j].Data = Tileset.Sources[input.ReadString()];
                     MapView[i,j].ImageIndex = input.ReadInt32();
-                    input.ReadInt32(); // Depth, currently useless for reading into this program
+                    input.ReadInt32(); // Depth, the program already knows this value for the given material
                 }
             }
             
