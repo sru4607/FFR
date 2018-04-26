@@ -24,6 +24,7 @@ namespace ActualGame
         private const int singleTextWidth = 32;
         protected double timeCounter;
         protected double secondsPerFrame;
+        EnemyState prev;
 
         Rectangle temp;
         
@@ -137,9 +138,13 @@ namespace ActualGame
             // NOTE: Do NOT call .MoveAI() twice, it will count as two frames of movement
             // NOTE: Also only moves in the X direction right now
             base.Update(gm);
-
+            prev = State;
             mainAi.MoveAI();
-
+            if (prev != State)
+            {
+                currentFrame = 0;
+                source.X = 0;
+            }
             switch (this.State)
             {
                 case EnemyState.Docile:
@@ -159,6 +164,7 @@ namespace ActualGame
                                     source.X = 0;
                                 }
                             }
+                            
                             currentFrame++;
 
                             break;
@@ -195,7 +201,7 @@ namespace ActualGame
                     currentFrame++;
                     break;
                 case EnemyState.Attack:
-                    source.Y = 4*singleTextHeight + 1;
+                    source.Y = 3*singleTextHeight + 1;
                     source.Width = singleTextWidth;
                     source.Height = singleTextHeight;
                     if (currentFrame % 15 == 0)
@@ -210,7 +216,7 @@ namespace ActualGame
                     currentFrame++;
                     break;
                 case EnemyState.Damaged:
-                    source.Y = 5*singleTextHeight + 1;
+                    source.Y = 4*singleTextHeight + 1;
                     source.Width = singleTextWidth;
                     source.Height = singleTextHeight;
                     if (currentFrame % 15 == 0)
@@ -262,7 +268,14 @@ namespace ActualGame
                     }
                     break;
             }
+            if(source.X == 0 || source.X == 32 || source.X == 64 || source.X == 96)
+            {
 
+            }
+            else
+            {
+                source.X = 0;
+            }
            
 
         }
@@ -299,18 +312,24 @@ namespace ActualGame
                     break;
                 case EnemyState.Aggro:
                     if (mainAi.FacingRight)
-                        sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
+                        sb.Draw(texture, Position, source, Color.Red, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
                     // Draws to the screen with a horizontal flip if the AI is facing left
                     else
-                        sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
+                        sb.Draw(texture, Position, source, Color.Red, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
                     break;
 
                 case EnemyState.Attack:
                     if (mainAi.FacingRight)
+                    {
                         sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
+                        sb.Draw(texture, new Vector2(Position.X + 64, position.Y), new Rectangle(source.X + 32, source.Y, source.Width, source.Height), Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
+                    }
                     // Draws to the screen with a horizontal flip if the AI is facing left
                     else
-                        sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
+                    {
+                        sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
+                        sb.Draw(texture, new Vector2(Position.X - 64 , position.Y), new Rectangle(source.X + 32, source.Y, source.Width, source.Height), Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
+                    }
                     break;
 
                 case EnemyState.Damaged:
@@ -318,7 +337,7 @@ namespace ActualGame
                         sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
                     // Draws to the screen with a horizontal flip if the AI is facing left
                     else
-                        sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
+                        sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
                     break;
 
                 case EnemyState.Search:
@@ -326,7 +345,7 @@ namespace ActualGame
                         sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
                     // Draws to the screen with a horizontal flip if the AI is facing left
                     else
-                        sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
+                        sb.Draw(texture, Position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
                     break;
             }
 

@@ -40,7 +40,7 @@ namespace ActualGame
             warps = new List<Warp>();
 
             // Load the world
-            if (path!= "")
+            if (path != "")
                 Import(allTextures, path);
         }
         #endregion
@@ -53,14 +53,14 @@ namespace ActualGame
             BinaryReader worldReader = new BinaryReader(temp);
             width = worldReader.ReadInt32();
             height = worldReader.ReadInt32();
-            QuadTree = new QuadTreeNode(0,0,width*64, height*64);
+            QuadTree = new QuadTreeNode(0, 0, width * 64, height * 64);
             //load tiles
             tiles = new Tile[width, height];
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    String  source = worldReader.ReadString();
+                    String source = worldReader.ReadString();
                     int index = worldReader.ReadInt32();
                     int depth = worldReader.ReadInt32();
 
@@ -86,18 +86,18 @@ namespace ActualGame
             for (int i = 0; i < events; i++)
             {
                 int type = worldReader.ReadInt32();
-                if(type == 0)
+                if (type == 0)
                 {
                     //Enemy
                     int x = worldReader.ReadInt32();
                     int y = worldReader.ReadInt32();
-                    Enemy e = new Enemy(x*64, y*64, QuadTree, PatrolType.Standing);
+                    Enemy e = new Enemy(x * 64, y * 64, QuadTree, PatrolType.Standing);
                     e.Texture = allTextures["Enemy"];
                     AllObjects.Add(e);
                     initialEnemies.Add(e.Clone(e.Texture, e.HP, QuadTree));
                     QuadTree.AddObject(e);
                 }
-                if(type == 1)
+                if (type == 1)
                 {
                     //Warp
                     int x = worldReader.ReadInt32() * 64;
@@ -110,7 +110,7 @@ namespace ActualGame
                     warps.Add(w);
                 }
 
-                
+
             }
 
             //Finds Bounds of the world
@@ -118,9 +118,9 @@ namespace ActualGame
             WorldMinY = float.MaxValue;
             WorldMaxY = float.MinValue;
             WorldMaxX = float.MinValue;
-            foreach(Tile t in tiles)
+            foreach (Tile t in tiles)
             {
-                if(t.X < WorldMinX)
+                if (t.X < WorldMinX)
                 {
                     WorldMinX = t.X;
                 }
@@ -154,7 +154,7 @@ namespace ActualGame
                 AllObjects.Add(clone);
             }
 
-            foreach(Warp w in warps)
+            foreach (Warp w in warps)
             {
                 AllObjects.Add(w);
             }
@@ -201,8 +201,8 @@ namespace ActualGame
             return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
         }
 
-        public bool HasRoomForRectangle(Rectangle rectangleToCheck, GameObject currentObject)
-        {   if (tiles != null && tiles.Length > 0)
+        public bool HasRoomForRectangle(Rectangle rectangleToCheck, GameObject currentObject, int i = 1)
+        { if (tiles != null && tiles.Length > 0)
             {
                 //Tile objects collision if noCLip is false, the object is not the one we are using, and they intersect
                 foreach (Tile tile in Current.tiles)
@@ -213,13 +213,17 @@ namespace ActualGame
                     }
                 }
             }
-        //Game objects collision if noCLip is false, the object is not the one we are using, and they intersect
-            foreach (GameObject obj in Current.AllObjects)
+            if (i != 0)
             {
-                if (!obj.NoClip && obj != currentObject && (new Rectangle((int)obj.X, (int)obj.Y, (int)obj.Width, (int)obj.Height)).Intersects(rectangleToCheck))
+                //Game objects collision if noCLip is false, the object is not the one we are using, and they intersect
+                foreach (GameObject obj in Current.AllObjects)
                 {
-                    return true;
+                    if (!obj.NoClip && obj != currentObject && (new Rectangle((int)obj.X, (int)obj.Y, (int)obj.Width, (int)obj.Height)).Intersects(rectangleToCheck))
+                    {
+                        return true;
+                    }
                 }
+                return false;
             }
             return false;
         }
@@ -262,9 +266,10 @@ namespace ActualGame
                     t.Draw(sb);
                 }
             }
+            Game1.player.Draw(sb);
             foreach(GameObject g in AllObjects)
             {
-                if (!(g is Warp))
+                if (!(g is Warp) && !(g is Player))
                   g.Draw(sb);
             }
         }

@@ -102,13 +102,13 @@ namespace ActualGame
         /// </summary>
         public void MoveAI()
         {
+            enemy.State = UpdateAggro();
             // Update the current finite state
-            switch(enemy.State)
+            switch (enemy.State)
             {
+
                 case EnemyState.Docile:
                     // Check to see whether something causes the enemy to leave a Docile state
-                    enemy.State = UpdateAggro();
-
                     // Make normal Docile movement patterns if the enemy's still docile
                     switch (patrolState)
                     {
@@ -207,6 +207,68 @@ namespace ActualGame
                 case EnemyState.Damaged:
                     enemy.Movement = new Vector2(0f, enemy.Movement.Y);
                     break;
+                case EnemyState.Aggro:
+                    if(Math.Abs(Game1.player.X - enemy.X) < 96)
+                    {
+                        enemy.State = EnemyState.Attack;
+                        frameCounter = 0;
+                    }
+                    else if(Game1.player.X > enemy.X)
+                    {
+                        FacingRight = true;
+                        enemy.Right = true;
+                        patrolState = PatrolState.WalkRight;
+                        if (AbleToMove())
+                            enemy.Movement = new Vector2(((float)walkSpeed), enemy.Movement.Y);
+                    }
+                    else
+                    { 
+                        FacingRight = false;
+                        enemy.Right = false;
+                        patrolState = PatrolState.WalkLeft;
+                        if (AbleToMove())
+                            enemy.Movement = new Vector2((-(float)walkSpeed), enemy.Movement.Y);
+                    }   
+                    break;
+                case EnemyState.Attack:
+                    frameCounter++;
+                    if(frameCounter == 60)
+                    {
+                        enemy.State = EnemyState.Aggro;
+                    }
+                    if (Game1.player.X > enemy.X)
+                    {
+                        FacingRight = true;
+                        patrolState = PatrolState.WalkRight;
+                    }
+                    else
+                    {
+                        FacingRight = false;
+                        patrolState = PatrolState.WalkLeft;
+                    }
+                    if (frameCounter == 45)
+                    {
+                        if(facingRight)
+                        {
+                            Rectangle temp = new Rectangle((int)enemy.X + 64, (int)enemy.Y, 32, 64);
+                            if(temp.Intersects(new Rectangle((int)Game1.player.position.X, (int)Game1.player.position.Y, (int)Game1.player.Size.X, (int)Game1.player.Size.Y)))
+                            {
+                                Game1.player.HP--;
+                            }
+                        }
+                        else
+                        {
+                            Rectangle temp = new Rectangle((int)enemy.X - 64, (int)enemy.Y, 32, 64);
+                            if (temp.Intersects(new Rectangle((int)Game1.player.position.X, (int)Game1.player.position.Y, (int)Game1.player.Size.X, (int)Game1.player.Size.Y)))
+                            {
+                                Game1.player.HP--;
+                            }
+                        }
+                    }
+                    break;
+                case EnemyState.Search:
+
+                    break;
                 // TODO: Add Search, Aggro, and Attack movements
                 default:
                     throw new NotImplementedException($"AI movement not implemented for {Enum.GetName(typeof(EnemyState), enemy.State)} state in AI.MoveAI()");
@@ -221,7 +283,7 @@ namespace ActualGame
         private EnemyState UpdateAggro()
         {
             // TODO: Update this code to scan for the player
-            if(Game1.player.X < 100 && Math.Abs(Game1.player.Y - enemy.Y) < 20)
+            if(Math.Abs(Game1.player.Y - enemy.Y) < 20)
             {
                 return EnemyState.Aggro;
             }

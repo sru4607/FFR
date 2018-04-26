@@ -83,12 +83,12 @@ namespace ActualGame
             if (right)
             {
                 temp.Offset(Size.X + distExtra, 1);
-                return !World.Current.HasRoomForRectangle(temp, this);
+                return !World.Current.HasRoomForRectangle(temp, this, 0);
             }
             else
             {
                 temp.Offset(-Size.X - distExtra, 1);
-                return !World.Current.HasRoomForRectangle(temp, this);
+                return !World.Current.HasRoomForRectangle(temp, this, 0);
             }
         }
         //check if you are at the wall
