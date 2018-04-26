@@ -232,7 +232,7 @@ namespace ActualGame
                     break;
                 case EnemyState.Attack:
                     frameCounter++;
-                    if(frameCounter == 60)
+                    if(frameCounter == 30)
                     {
                         enemy.State = EnemyState.Aggro;
                     }
@@ -246,7 +246,7 @@ namespace ActualGame
                         FacingRight = false;
                         patrolState = PatrolState.WalkLeft;
                     }
-                    if (frameCounter == 45)
+                    if (frameCounter == 25)
                     {
                         if(facingRight)
                         {

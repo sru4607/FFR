@@ -207,7 +207,7 @@ namespace ActualGame
                     if (currentFrame % 15 == 0)
                     {
                         source.X += singleTextWidth*2;
-                        if (currentFrame == 60)
+                        if (currentFrame == 30)
                         {
                             currentFrame = 0;
                             source.X = 0;
