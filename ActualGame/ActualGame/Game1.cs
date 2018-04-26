@@ -311,6 +311,10 @@ namespace ActualGame
                             {
                                 spriteBatch.Draw(heart, new Rectangle(10+i * 70, 10, 64, 64), Color.Gray);
                             }
+                            if(player.HP == 0)
+                            {
+                                currentState = MainGameState.GameOver;
+                            }
                         }
                         spriteBatch.End();
 
