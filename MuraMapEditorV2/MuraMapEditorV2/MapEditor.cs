@@ -171,6 +171,7 @@ namespace MuraMapEditorV2
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NewMap.ShowDialog();
+            currentFilePath = null;
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
