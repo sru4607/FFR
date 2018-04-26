@@ -243,7 +243,7 @@ namespace ActualGame
         /// <returns>True if the enemy can walk forward, else false</returns>
         private bool AbleToMove()
         {
-            return (!enemy.AtEdge(FacingRight) && !enemy.AtWall(FacingRight) && !CharacterBlocked());
+            return !(enemy.AtEdge(FacingRight) || enemy.AtWall(FacingRight) || CharacterBlocked());
         }
 
         /// <summary>
