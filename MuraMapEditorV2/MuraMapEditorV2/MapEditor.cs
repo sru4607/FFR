@@ -123,7 +123,11 @@ namespace MuraMapEditorV2
             {
                 for (int j = 0; j<MapView.MapHeight; j++)
                 {
-                    MapView[i,j].Data = Tileset.Sources[input.ReadString()];
+                    // Quick fix to enable modifying maps made before code changes to fit the current format
+                    string name = input.ReadString();
+                    if (name.Contains('.'))
+                        name = name.Split('.')[0];
+                    MapView[i,j].Data = Tileset.Sources[name];
                     MapView[i,j].ImageIndex = input.ReadInt32();
                     input.ReadInt32(); // Depth, the program already knows this value for the given material
                 }

@@ -56,6 +56,7 @@ namespace MuraMapEditorV2
             for (int i = 0; i < bitmaskNames.Length; i++)
             {
                 string sourceName = bitmaskNames[i].Split('\\')[bitmaskNames[i].Split('\\').Length - 1];
+                sourceName = sourceName.Split('.')[0];
                 if (sourceName == "Portal")
                     tiles[i + tileNames.Length] = new TileData(new Bitmap(bitmaskNames[i]), sourceName, true, -1);
                 else

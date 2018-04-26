@@ -86,7 +86,11 @@ namespace MuraMapEditorV2
                         PictureBox p = new PictureBox();
                         p.Size = new Size(32, 32);
                         p.Location = new Point(12 + i * 32, 40 + j * 32);
-                        p.Image = Tileset.Sources[input.ReadString()][input.ReadInt32()];
+                        // Quick fix to enable modifying maps made before code changes to fit the current format
+                        string name = input.ReadString();
+                        if (name.Contains('.'))
+                            name = name.Split('.')[0];
+                        p.Image = Tileset.Sources[name][input.ReadInt32()];
                         input.ReadInt32(); // Depth
                         p.Click += new EventHandler(PictureBox_Click);
                         map[i, j] = p;

@@ -23,7 +23,7 @@ namespace ActualGame
         public Tile(Texture2D texture, int depth)
         {
             Texture = texture;
-            if (texture != null)
+            if (depth == 0)
                 noClip = false;
             else
                 noClip = true;

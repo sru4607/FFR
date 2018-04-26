@@ -58,7 +58,7 @@ namespace MuraMapEditorV2
         public TileData(Bitmap source, string sourceName, bool isBitmask = false, int depth = 0)
         {
             this.source = sourceName;
-            depth = 0;
+            this.depth = depth;
             if (isBitmask)
             {
                 #region BitmaskAlgorithm
