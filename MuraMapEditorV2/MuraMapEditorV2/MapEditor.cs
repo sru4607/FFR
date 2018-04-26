@@ -178,12 +178,12 @@ namespace MuraMapEditorV2
             if (currentFilePath != null)
             {
                 BinaryWriter output = new BinaryWriter(File.OpenWrite(currentFilePath));
-                output.Write(MapView.Width);
-                output.Write(MapView.Height);
+                output.Write(MapView.MapWidth);
+                output.Write(MapView.MapHeight);
 
-                for (int i = 0; i < MapView.Width; i++)
+                for (int i = 0; i < MapView.MapWidth; i++)
                 {
-                    for (int j = 0; j < MapView.Height; j++)
+                    for (int j = 0; j < MapView.MapHeight; j++)
                     {
                         output.Write(MapView[i, j].Data.Source);
                         output.Write(MapView[i, j].ImageIndex);
@@ -191,7 +191,27 @@ namespace MuraMapEditorV2
                     }
                 }
 
-                output.Write(0);
+                output.Write(MapView.MapEvents.Count);
+
+                foreach (GameEvent g in MapView.MapEvents)
+                {
+                    output.Write((int)g.EventType);
+
+                    switch (g.EventType)
+                    {
+                        case EventType.Enemy:
+                            output.Write(g.XIndex);
+                            output.Write(g.YIndex);
+                            break;
+                        case EventType.Warp:
+                            output.Write(g.XIndex);
+                            output.Write(g.YIndex);
+                            output.Write(g.WarpData.MapName);
+                            output.Write(g.WarpData.XOffset);
+                            output.Write(g.WarpData.YOffset);
+                            break;
+                    }
+                }
 
 
                 output.Close();
