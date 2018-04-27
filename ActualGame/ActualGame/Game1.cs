@@ -36,7 +36,7 @@ namespace ActualGame
         MouseState currentMouse;
         Controls controls;
         SoundEffect laugh;
-        Boss currentBoss;
+        Boss temp;
         MainGameState returnFromOptions;
         bool changingOption;
         
@@ -158,7 +158,6 @@ namespace ActualGame
             maps.Add("Tutorial2", new World(allTextures, "Tutorial2", "Content/Tutorial2.map"));
             maps.Add("Actual1", new World(allTextures, "Actual1", "Content/Actual1.map"));
             maps.Add("Actual2", new World(allTextures, "Actual2", "Content/Actual2.map"));
-            maps.Add("BossMap", new World(allTextures, "BossMap", "Content/BossMap.map"));
 
             currentWorld = maps["Tutorial1"];
             World.Current = currentWorld;
@@ -170,6 +169,7 @@ namespace ActualGame
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
+            temp = new Boss(allTextures["Blank"]);
 
             SwitchToMainMenu();
 
@@ -360,7 +360,7 @@ namespace ActualGame
 
                         //Draw all gui elements in game here
                         spriteBatch.Begin();
-                        currentBoss.DrawHealthBar(spriteBatch);
+                        temp.DrawHealthBar(spriteBatch);
 
                         // Draw the player's health bar
                         Texture2D heart = allTextures["Heart"];
