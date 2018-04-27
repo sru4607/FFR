@@ -11,66 +11,88 @@ namespace ActualGame
 {
     class Debug
     {
-        #region fields
+        #region Fields
         Dictionary<String, Texture2D > allTexts;
         List<GameObject> allObjects = new List<GameObject>();
+        World debug;
+        QuadTreeNode node;
         #endregion
 
-        #region constructor
-        public Debug(Dictionary<String, Texture2D> temp)
+        #region Constructor
+        /// <summary>
+        /// Creates a new Debug instance
+        /// </summary>
+        /// <param name="temp">???</param>
+        public Debug(Dictionary<String, Texture2D> temp, GraphicsDevice device)
         {
             allTexts = temp;
+            node = new QuadTreeNode(0, 0, device.Viewport.Width, device.Viewport.Height);
+
         }
         #endregion
 
         #region method
         public void InstantiateAll()
         {
+            debug = new World();
+            World.Current = debug;
+            
             //creates a floor
-            allObjects.Add(new GameObject());
+            allObjects.Add(new GameObject(80, 300, 500, 64, node));
             allObjects[0].LoadTexture(allTexts["Floor"]);
-            allObjects[0].X = 80;
-            allObjects[0].Y = 300;
-            allObjects[0].Width = 500;
-            allObjects[0].Height = 64;
-            allObjects[0].hitbox = new BoundingRectangle(new Point(), 0, 0);
-            ((BoundingRectangle)allObjects[0].hitbox).GetRect = allObjects[0].Rect;
+            allObjects[0].NoClip = false;
 
             //creates a player
-            allObjects.Add(new Player());
-            allObjects[1].LoadTexture(allTexts["PenPen"]);
-            allObjects[1].X = 100;
-            allObjects[1].Y = 100;
-            allObjects[1].Width = 64;
-            allObjects[1].Height = 128;
-            ((BoundingRectangle)(allObjects[1].hitbox)).GetRect = allObjects[1].Rect;
+            allObjects.Add(new Player(100, 100, node));
+            allObjects[1].Position = new Vector2(200, 00);
+            allObjects[1].Size = new Vector2(64, 128);
+            allObjects[1].LoadTexture(allTexts["Floor"]);
+
+            //creates a player
+            allObjects.Add(new Player(400, 100, node));
+            allObjects[1].Position = new Vector2(200, 00);
+            allObjects[1].Size = new Vector2(64, 128);
+            allObjects[1].LoadTexture(allTexts["Floor"]);
 
             //creates an enemy
-            allObjects.Add(new Enemy());
-            allObjects[2].LoadTexture(allTexts["PenPen"]);
-            allObjects[2].X = 300;
-            allObjects[2].Y = 100;
-            allObjects[2].Width = 64;
-            allObjects[2].Height = 128;
-            allObjects[2].HitBox = null;
+            allObjects.Add(new Enemy(300, 100, node, PatrolType.Moving));
+            allObjects[2].Position = new Vector2(300, 0);
+            allObjects[2].Size = new Vector2(64, 128);
+            allObjects[2].LoadTexture(allTexts["Floor"]);
+
+            //creates an enemy
+            allObjects.Add(new Enemy(500, 100, node, PatrolType.Moving));
+            allObjects[3].Position = new Vector2(300, 0);
+            allObjects[3].Size = new Vector2(64, 128);
+            allObjects[3].LoadTexture(allTexts["Floor"]);
+
+            debug.AllObjects = allObjects;
 
         }
         #endregion
 
         #region Update
-        public void UpdateAll()
+        /// <summary>
+        /// Updates all GameObjects stored in the Debug object
+        /// </summary>
+        /// <param name="gameTime">Reference to the Update(gameTime) value</param>
+        public void UpdateAll(GameTime gameTime)
         {
-            for(int i = 0; i < allObjects.Count; i++)
+            //update all objects
+            foreach(GameObject go in World.Current.AllObjects)
             {
-                allObjects[i].Update();
+                go.Update(gameTime);
             }
-            allObjects[1].Collision(allObjects);
         }
         #endregion
 
         #region Draw
         public void Draw(SpriteBatch sb)
         {
+            if(World.Current != null)
+            {
+                World.Current.Draw(sb);
+            }
             foreach (GameObject go in allObjects)
             {
                 go.Draw(sb);

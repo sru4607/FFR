@@ -45,6 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameEvent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GameEvent.Designer.cs">
+      <DependentUpon>GameEvent.cs</DependentUpon>
+    </Compile>
     <Compile Include="MapEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,6 +91,16 @@
     <Compile Include="Toolstrip.Designer.cs">
       <DependentUpon>Toolstrip.cs</DependentUpon>
     </Compile>
+    <Compile Include="WarpCreator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WarpCreator.Designer.cs">
+      <DependentUpon>WarpCreator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WarpData.cs" />
+    <EmbeddedResource Include="GameEvent.resx">
+      <DependentUpon>GameEvent.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MapEditor.resx">
       <DependentUpon>MapEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -110,6 +126,9 @@
     <EmbeddedResource Include="Tile.resx">
       <DependentUpon>Tile.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="WarpCreator.resx">
+      <DependentUpon>WarpCreator.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -125,6 +144,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug\Assets\Cursor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Assets\None.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Assets\Enemy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Assets\Warp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

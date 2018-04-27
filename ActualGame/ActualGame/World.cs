@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace ActualGame
 {
-    class World
+    public class World
     {
         //For reading & displaying tiles
 
@@ -15,50 +18,261 @@ namespace ActualGame
         String name;
         int width;
         int height;
-        String path;
-        Tile[,] loadedTiles;
-        #endregion
-
-        #region Properties
-
+        Tile[,] tiles;
+        private List<Enemy> initialEnemies;
+        private List<Warp> warps;
+        public List<GameObject> AllObjects { get; set; }
+        public static World Current { get; set; }
+        public QuadTreeNode QuadTree { get; set; }
+        public float WorldMinX { get; set; }
+        public float WorldMinY { get; set; }
+        public float WorldMaxX { get; set; }
+        public float WorldMaxY { get; set; }
         #endregion
 
         #region Constructor
         //Creates a world with name
-        public World(String name, String path)
+        public World(Dictionary<string, Texture2D> allTextures = null, String name = "", String path = "")
         {
             this.name = name;
-            this.path = path;
+            AllObjects = new List<GameObject>();
+            initialEnemies = new List<Enemy>();
+            warps = new List<Warp>();
+
+            // Load the world
+            if (path != "")
+                Import(allTextures, path);
         }
         #endregion
 
         #region Methods
-        //Imports a world saved in loadedTiles with width and height all generated from a previously created binary file
-        public void Import()
+        //Imports a world saved in tiles with width and height all generated from a previously created binary file
+        public void Import(Dictionary<string, Texture2D> allTextures, string filePath)
         {
-            FileStream temp = new FileStream(path, FileMode.Open);
+            FileStream temp = new FileStream(filePath, FileMode.Open);
             BinaryReader worldReader = new BinaryReader(temp);
-            width = worldReader.Read();
-            height = worldReader.Read();
-            loadedTiles = new Tile[height, width];
+            width = worldReader.ReadInt32();
+            height = worldReader.ReadInt32();
+            QuadTree = new QuadTreeNode(0, 0, width * 64, height * 64);
+            //load tiles
+            tiles = new Tile[width, height];
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    //Read information from file 
-                    loadedTiles[j, i] = new Tile();
+                    String source = worldReader.ReadString();
+                    int index = worldReader.ReadInt32();
+                    int depth = worldReader.ReadInt32();
+
+
+                    // Set the texture based on the source
+                    Texture2D texture;
+
+                    if (source == "Default")
+                        texture = null;
+                    else
+                        texture = allTextures[source + index];
+
+                    Tile t = new Tile(texture, depth);
+                    t.Position = new Vector2(i * 64, j * 64);
+                    t.Size = new Vector2(64, 64);
+                    tiles[i, j] = t;
+                    QuadTree.AddObject(t);
+                }
+            }
+
+            int events = worldReader.ReadInt32();
+
+            for (int i = 0; i < events; i++)
+            {
+                int type = worldReader.ReadInt32();
+                if (type == 0)
+                {
+                    //Enemy
+                    int x = worldReader.ReadInt32();
+                    int y = worldReader.ReadInt32();
+                    Enemy e = new Enemy(x * 64, y * 64, QuadTree, PatrolType.Standing);
+                    e.Texture = allTextures["Enemy"];
+                    AllObjects.Add(e);
+                    initialEnemies.Add(e.Clone(e.Texture, e.HP, QuadTree));
+                    QuadTree.AddObject(e);
+                }
+                if (type == 1)
+                {
+                    //Warp
+                    int x = worldReader.ReadInt32() * 64;
+                    int y = worldReader.ReadInt32() * 64;
+                    String destination = worldReader.ReadString();
+                    int xOffset = worldReader.ReadInt32() * 64;
+                    int yOffset = worldReader.ReadInt32() * 64;
+                    Warp w = new Warp(x, y, destination, xOffset, yOffset, QuadTree);
+                    AllObjects.Add(w);
+                    warps.Add(w);
+                }
+
+
+            }
+
+            //Finds Bounds of the world
+            WorldMinX = float.MaxValue;
+            WorldMinY = float.MaxValue;
+            WorldMaxY = float.MinValue;
+            WorldMaxX = float.MinValue;
+            foreach (Tile t in tiles)
+            {
+                if (t.X < WorldMinX)
+                {
+                    WorldMinX = t.X;
+                }
+                if (t.Y < WorldMinY)
+                {
+                    WorldMinY = t.Y;
+                }
+                if (t.X + t.Size.X > WorldMaxX)
+                {
+                    WorldMaxX = t.X + t.Size.X;
+                }
+                if (t.Y + t.Size.Y > WorldMaxY)
+                {
+                    WorldMaxY = t.Y + t.Size.Y;
                 }
             }
 
         }
+
+        /// <summary>
+        /// Resets each world to the state it was in when first loaded
+        /// </summary>
+        public void ResetWorld()
+        {
+            AllObjects.Clear();
+            QuadTree = new QuadTreeNode(0, 0, width * 64, height * 64);
+
+            foreach (Enemy e in initialEnemies)
+            {
+                Enemy clone = e.Clone(e.Texture, e.HP, QuadTree);
+                AllObjects.Add(clone);
+            }
+
+            foreach (Warp w in warps)
+            {
+                AllObjects.Add(w);
+            }
+        }
+        //Returns the position closest you can get to, between the original and future position based on other objects
+        public Vector2 WhereCanIGetTo(PhysicsObject currentObject, Vector2 original, Vector2 future, Rectangle rect)
+        {
+            Vector2 MovementToTry = future - original;
+            Vector2 FurthestAvailableLocationSoFar = original;
+            int NumberOfStepsToBreakMovementInto = (int)(MovementToTry.Length() * 2) + 1;
+            bool IsDiagonalMove = MovementToTry.X != 0 && MovementToTry.Y != 0;
+            Vector2 OneStep = MovementToTry / NumberOfStepsToBreakMovementInto;
+            Rectangle Rect = rect;
+            //splits distance into steps
+            for (int i = 1; i <= NumberOfStepsToBreakMovementInto; i++)
+            {
+                Vector2 positionToTry = original + OneStep * i;
+                Rectangle newBoundary = CreateRectangleAtPosition(positionToTry, Rect.Width, Rect.Height);
+                if (!HasRoomForRectangle(newBoundary, currentObject)) { FurthestAvailableLocationSoFar = positionToTry; }
+                else
+                {
+                    //if movement is diagonal
+                    if (IsDiagonalMove)
+                    {
+                        int stepsLeft = NumberOfStepsToBreakMovementInto - (i - 1);
+                        //break into horizontal movement
+                        Vector2 remainingHorizontalMovement = OneStep.X * Vector2.UnitX * stepsLeft;
+                        FurthestAvailableLocationSoFar =
+                            WhereCanIGetTo(currentObject, FurthestAvailableLocationSoFar, FurthestAvailableLocationSoFar + remainingHorizontalMovement, Rect);
+                        //break into vertical movement
+                        Vector2 remainingVerticalMovement = OneStep.Y * Vector2.UnitY * stepsLeft;
+                        FurthestAvailableLocationSoFar =
+                            WhereCanIGetTo(currentObject, FurthestAvailableLocationSoFar, FurthestAvailableLocationSoFar + remainingVerticalMovement, Rect);
+                    }
+                    break;
+
+                }
+            }
+            return FurthestAvailableLocationSoFar;
+        }
+        //Create a rectangle at the vector with width and height
+        private Rectangle CreateRectangleAtPosition(Vector2 positionToTry, int width, int height)
+        {
+            return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
+        }
+
+        public bool HasRoomForRectangle(Rectangle rectangleToCheck, GameObject currentObject, bool i = true)
+        { if (tiles != null && tiles.Length > 0)
+            {
+                //Tile objects collision if noCLip is false, the object is not the one we are using, and they intersect
+                foreach (Tile tile in Current.tiles)
+                {
+                    if (!tile.noClip && (new Rectangle((int)tile.X, (int)tile.Y, (int)tile.Width, (int)tile.Height)).Intersects(rectangleToCheck))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (i)
+            {
+                //Game objects collision if noCLip is false, the object is not the one we are using, and they intersect
+                foreach (GameObject obj in Current.AllObjects)
+                {
+                    if (!obj.NoClip && obj != currentObject && (new Rectangle((int)obj.X, (int)obj.Y, (int)obj.Width, (int)obj.Height)).Intersects(rectangleToCheck))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+
+        public void CheckWarps(Player player)
+        {
+            Rectangle playerLocation = new Rectangle((int)player.Position.X, (int)player.Position.Y, (int)player.Size.X, (int)player.Size.Y);
+            foreach (Warp w in warps)
+            {
+                if (playerLocation.Intersects(new Rectangle((int)w.Position.X, (int)w.Position.Y, (int)w.Size.X, (int)w.Size.Y)))
+                {
+                    Current = Game1.maps[w.Destination];
+                    player.Position = w.DestinationPosition;
+                    return;
+                }
+            }
+        }
+
         #endregion
 
         #region Update
-
+        /// <summary>
+        /// Updates all objects on the given map
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public void UpdateAll(GameTime gameTime)
+        {
+            for(int i =0; i<AllObjects.Count;i++)
+                AllObjects[i].Update(gameTime);
+        }
         #endregion
 
         #region Draw
-
+        public void Draw(SpriteBatch sb)
+        {
+            if (tiles != null)
+            {
+                foreach (Tile t in tiles)
+                {
+                    t.Draw(sb);
+                }
+            }
+            Game1.player.Draw(sb);
+            foreach(GameObject g in AllObjects)
+            {
+                if (!(g is Warp) && !(g is Player))
+                  g.Draw(sb);
+            }
+        }
         #endregion
 
 

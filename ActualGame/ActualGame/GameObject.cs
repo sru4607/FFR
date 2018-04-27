@@ -9,216 +9,150 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ActualGame
 {
-    class GameObject
+    public class GameObject
     {
         #region Fields
         // Fields
-        protected Rectangle rect;
-        protected double velX;
-        protected double velY;
-        protected Texture2D texture;
-        protected Rectangle prev;
-        protected int step;
-        static float grav = 9.8f;
-        protected bool physicsObject = false;
-        public BoundingShapes hitbox;
+        public Vector2 position;
+        public Vector2 size;
+        public Texture2D texture;
         public bool noClip = false;
+        protected QuadTreeNode node;
         #endregion
 
         #region Properties
         /// <summary>
-        /// 
+        /// Get and set for the GameObject's 2D position in the world
+        /// </summary>
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
+        /// <summary>
+        /// Get and set for the width/height of the GameObject
+        /// </summary>
+        public Vector2 Size
+        {
+            get { return size; }
+            set { size = value; }
+        }
+
+        /// <summary>
+        /// Get and set for the texture of the object
+        /// </summary>
+        public Texture2D Texture
+        {
+            get { return texture; }
+            set { texture = value; }
+        }
+
+        /// <summary>
+        /// Get and set for whether the game object can collide with the player
         /// </summary>
         public bool NoClip
         {
             get { return noClip; }
             set { noClip = value; }
         }
-        public bool Finished
+        
+        /// <summary>
+        /// Get and set for the X value of the game object hitbox's top-left corner
+        /// </summary>
+        public float X
         {
-            get
-            {
-                return step >= 15;
-            }
-        }
-
-        public int X
-        {
-            get { return rect.X; }
-            set { rect = new Rectangle(value, Rect.Y, Rect.Width, Rect.Height); }
+            get { return Position.X; }
+            set { Position = new Vector2(value, Position.Y); }
         }
 
         /// <summary>
-        /// 
+        /// Get and set for the Y value of the game object hitbox's top-left corner
         /// </summary>
-        public int Y
+        public float Y
         {
-            get { return rect.Y; }
-            set { rect = new Rectangle(Rect.X, value, Rect.Width, Rect.Height); }
+            get { return Position.Y; }
+            set { Position = new Vector2(Position.X, value); }
         }
 
         /// <summary>
-        /// 
+        /// Get and set for the width of the game object hitbox
         /// </summary>
-        public int Width
+        public float Width
         {
-            get { return rect.Width; }
-            set { rect = new Rectangle(Rect.X, Rect.Y, value, Rect.Height); }
+            get { return Size.X; }
+            set { Size = new Vector2(value, Size.Y); }
         }
 
         /// <summary>
-        /// 
+        /// Get and set for the height of the game object hitbox
         /// </summary>
-        public int Height
+        public float Height
         {
-            get { return rect.Height; }
-            set { rect = new Rectangle(Rect.X, Rect.Y, Rect.Width, value); }
-        }
-
-        /// <summary>
-        /// Interacts with all parameters of rect
-        /// </summary>
-        public Rectangle Rect
-        {
-            get { return rect; }
-            set { rect = value; }
-        }
-        public BoundingShapes HitBox
-        {
-            get { return hitbox; }
-            set { hitbox = value; }
-        }
-
-        public bool Physics
-        {
-            get { return physicsObject; }
-            set { physicsObject = value; }
+            get { return Size.Y; }
+            set { Size = new Vector2(Size.X, value); }
         }
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// Generic GameObject without parameters
+        /// </summary>
         public GameObject()
         {
-            // TODO Update these fields (possibly have GameObject() take parameters)
-            rect = new Rectangle();
-            velX = 0.0;
-            velY = 0.0;
+            Position = new Vector2(0,0);
+        }
+
+        /// <summary>
+        /// Creates a generic GameObject with the provided Rectangle dimensions
+        /// </summary>
+        /// <param name="x">X dimension of the draw box</param>
+        /// <param name="y">Y dimension of the draw box</param>
+        /// <param name="width">Width of the draw box</param>
+        /// <param name="height">Height of the draw box</param>
+        public GameObject(int x, int y, int width, int height, QuadTreeNode node)
+        {
+            Position = new Vector2(x, y); 
+            Size = new Vector2(width, height);
+            this.node = node;
+            node.AddObject(this);
         }
         #endregion
 
         #region LoadTexture
         /// <summary>
-        /// 
+        /// Method used to load the texture in Game1.LoadContent()
         /// </summary>
         /// <param name="texture">Content.Load&lt;Texture2D&gt;("INSERTLOCATION")</param>
         public void LoadTexture(Texture2D texture)
         {
-            this.texture = texture;
+            this.Texture = texture;
         }
         #endregion
 
         #region Methods
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Move()
-        {
-            prev = rect;
-            step = 0;
-            X = (int)(X + velX);
-            Y = (int)(Y + velY);
-            if(hitbox != null)
-            {
-                hitbox.Location = this.Rect.Location;
-            }
-        }
-
-        public void Move(bool right)
-        {
-            prev = rect;
-            step = 0;
-            if (right)
-            {
-                X = (int)(X + velX);
-            }
-            else
-            {
-                X = (int)(X - velX);
-            }
-            Y = (int)(Y + velY);
-            /* check for collisions with the wall, if colliding, revert to previous state and set speed to 0 */
-        }
         
-        public void Step()
-        {
-            if(step < 15)
-            {
-                X = (int)(X + velX / 16);
-                Y = (int)(Y + velY / 16);
-                step++;
-            }
-
-        }
-        
-        public void StepBack()
-        {
-            X = (int)(X - velX / 16);
-            Y = (int)(Y - velY / 16);
-        }
-        public void Revert()
-        {
-            rect = prev;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Gravity()
-        {
-            velY += grav/60;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Collision(List<GameObject> temp)
-        {
-            for(int i = 0; i< temp.Count; i++)
-            {
-                if(this != temp[i] && !temp[i].noClip)
-                {
-                    if (this.rect.Intersects(temp[i].Rect))
-                    {
-                        //this.Revert();
-                        velY = 0;
-                    }
-                        
-                    
-                }
-            }
-        }
         #endregion
 
         #region Update
         /// <summary>
         /// 
         /// </summary>
-        virtual public void Update()
+        virtual public void Update(GameTime gm)
         {
-            if (this is Player temp)
-                temp.Update();
+            node = node.GetContainingQuad(this);
 
         }
         #endregion
 
         #region Draw
         /// <summary>
-        /// 
+        /// Draws the object to the screen based off rect's parameters
         /// </summary>
         /// <param name="sb"></param>
         virtual public void Draw(SpriteBatch sb)
         {
-            sb.Draw(texture, rect, Color.White);
+            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
         }
         #endregion
     }

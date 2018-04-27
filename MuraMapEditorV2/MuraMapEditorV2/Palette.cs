@@ -14,14 +14,13 @@ namespace MuraMapEditorV2
     {
         // Fields
         private PictureBox[] tileImages;
-        private Tileset tileset;
         private int selected;
         private PictureBox cursor;
 
         // Properties
         public TileData Selected
         {
-            get { return tileset.Tiles[selected]; }
+            get { return Tileset.Tiles[selected]; }
         }
 
         public Palette()
@@ -52,25 +51,24 @@ namespace MuraMapEditorV2
         /// Updates the palette with the new tileset
         /// </summary>
         /// <param name="tileset">The tileset to change the palette to</param>
-        public void Update(Tileset tileset)
+        public void Update()
         {
             // First remove old tiles ( the t is archaic)
             foreach (PictureBox t in tileImages)
             {
                 Controls.Remove(t);
             }
-
-            this.tileset = tileset;
+            
 
             // Initialize the pictureboxes representing the tiles
-            tileImages = new PictureBox[tileset.Tiles.Length];
+            tileImages = new PictureBox[Tileset.Tiles.Length];
 
-            for (int i = 0; i<tileset.Tiles.Length; i++)
+            for (int i = 0; i<Tileset.Tiles.Length; i++)
             {
                 PictureBox p = new PictureBox();
                 p.Location = new Point((i % 3) * 33 + 1, (i / 3) * 33 + 1);
                 p.Size = new Size(32, 32);
-                p.Image = tileset.Tiles[i][0];
+                p.Image = Tileset.Tiles[i][0];
                 tileImages[i] = p;
                 p.Click += new EventHandler(PicClick);
                 Controls.Add(p);
