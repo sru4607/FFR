@@ -111,6 +111,7 @@ namespace ActualGame
             allTextures.Add("Heart", Content.Load<Texture2D>("Heart"));
             allTextures.Add("Button", Content.Load<Texture2D>("Button"));
             allTextures.Add("Blank", Content.Load<Texture2D>("Blank"));
+            allTextures.Add("ParkaDude", Content.Load<Texture2D>("ParkaDude"));
 
             // Load tiles systemmatically
             // BrickWall
@@ -460,7 +461,7 @@ namespace ActualGame
             // Create the player in the first map & add it to the world
             player = new Player(128, 128, currentWorld.QuadTree);
             mainDisplay = new Display(GraphicsDevice, player);
-            player.Texture = allTextures["PenPen"];
+            player.Texture = allTextures["ParkaDude"];
             player.WalkTexture = allTextures["PenPenWalking"];
             World.Current = maps["Tutorial1"];
          //   tracks["Electown"].Start();
