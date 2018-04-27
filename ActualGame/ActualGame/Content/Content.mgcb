@@ -2408,7 +2408,5 @@
 /build:Mace.png
 
 #begin BossMap.map
-/importer:
-/processor:
-/build:BossMap.map
+/copy:BossMap.map
 

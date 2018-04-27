@@ -64,7 +64,7 @@ namespace ActualGame
         /// <param name="right">Whether the player starts facing right</param>
         public Player(int x, int y, QuadTreeNode node, bool right = true)
             // Defaults to a hitbox width of 64 and hitbox height of 128
-            : base(x, y, 64, 128, node, right)
+            : base(x, y, 128, 192, node, right)
         {
             state = PlayerState.Idle;
             maxHealth = 3;
@@ -214,13 +214,16 @@ namespace ActualGame
 
                             timeCounter -= Game1.secondsPerFrame;
                         }
-                        for(int i = 0; i<World.Current.AllObjects.Count; i++)
+                        if (currentFrame == 2)
                         {
-                            if(World.Current.AllObjects[i] is Enemy e)
+                            for (int i = 0; i < World.Current.AllObjects.Count; i++)
                             {
-                                if(AttackIntersects(e))
+                                if (World.Current.AllObjects[i] is Enemy e)
                                 {
-                                    e.TakeDamage(10);
+                                    if (AttackIntersects(e))
+                                    {
+                                        e.TakeDamage(10);
+                                    }
                                 }
                             }
                         }

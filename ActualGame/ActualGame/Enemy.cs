@@ -47,11 +47,11 @@ namespace ActualGame
         /// <param name="patrolType"></param>
         public Enemy(int x, int y, QuadTreeNode node, PatrolType patrolType)
             // Defaults to a width of 64 and a height of 128
-            : base(x, y, 64, 128, node)
+            : base(x, y, 32, 64, node)
         {
             // Initialize the AI pattern
             mainAi = new AI(this, patrolType);
-            
+            HP = 30;
             // Initialize hitbox parameters
             Position = new Vector2(X,Y);
             Size = new Vector2(64, 128);

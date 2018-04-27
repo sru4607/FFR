@@ -45,6 +45,7 @@
     <Compile Include="Boss.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="Character.cs" />
+    <Compile Include="Circle.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Display.cs" />

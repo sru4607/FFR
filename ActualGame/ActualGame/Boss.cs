@@ -13,9 +13,12 @@ namespace ActualGame
     {
         int maxHP;
         int theta;
-        Rectangle maceSource;
+        Circle maceSource;
         Rectangle bossSource;
         Rectangle chainSource;
+        Texture2D bossText;
+        Texture2D chainText;
+        Texture2D maceText;
 
         public Boss(Texture2D text, int x, int y, int width, int height)
         :base(x,y, new QuadTreeNode(x,y,width,height))
@@ -61,11 +64,12 @@ namespace ActualGame
         public void DrawBoss(SpriteBatch sb)
         {
             //Draw Chain
-
+            sb.Draw(chainText, chainSource, new Rectangle(0, 0, 256, 8), Color.White, theta, new Vector2(bossSource.X + 128, bossSource.Y + 128), SpriteEffects.None, 0f);
             //Draw Boss
-
+            sb.Draw(bossText, bossSource, Color.White);
 
             //Draw Mace
+            //sb.Draw(maceText, maceSource,new Rectangle(0,0,256,256), Color.White, theta ,new Vector2(bossSource.X + 128, bossSource.Y + 128),SpriteEffects.None, 0f);
         }
 
     }
