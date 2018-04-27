@@ -2401,9 +2401,6 @@
 /processorParam:TextureFormat=Color
 /build:Mace.png
 
-#begin BossMap.map
-/copy:BossMap.map
-
 #begin Actual2.map
 /copy:Actual2.map
 
@@ -2415,6 +2412,12 @@
 
 #begin Actual5.map
 /copy:Actual5.map
+
+#begin BossMap.map
+/copy:BossMap.map
+
+#begin Actual6.map
+/copy:Actual6.map
 
 #begin Actual1.map
 /copy:Actual1.map

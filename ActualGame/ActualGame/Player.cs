@@ -70,7 +70,7 @@ namespace ActualGame
             maxHealth = 3;
             hp = 3;
             mDamage = 1;
-
+            mBox.Width = (int)Size.X / 2;
             // Initialize animation parameters
             currentFrame = 0;
             secondsPerFrame = 1.0f / 30.0f;
@@ -253,6 +253,8 @@ namespace ActualGame
         #region Draw
         public override void Draw(SpriteBatch sb)
         {
+            // This draw statement is just to see the hitbox
+            //sb.Draw(Texture, mBox, Color.Blue);
             switch (state)
             {
                 case (PlayerState.Walk):
