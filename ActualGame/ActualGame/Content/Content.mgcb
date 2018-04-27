@@ -2407,3 +2407,8 @@
 /processorParam:TextureFormat=Color
 /build:Mace.png
 
+#begin BossMap.map
+/importer:
+/processor:
+/build:BossMap.map
+
