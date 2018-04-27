@@ -158,6 +158,9 @@ namespace ActualGame
             maps.Add("Tutorial2", new World(allTextures, "Tutorial2", "Content/Tutorial2.map"));
             maps.Add("Actual1", new World(allTextures, "Actual1", "Content/Actual1.map"));
             maps.Add("Actual2", new World(allTextures, "Actual2", "Content/Actual2.map"));
+            maps.Add("Actual3", new World(allTextures, "Actual3", "Content/Actual3.map"));
+            maps.Add("Actual4", new World(allTextures, "Actual4", "Content/Actual4.map"));
+            maps.Add("Actual5", new World(allTextures, "Actual5", "Content/Actual5.map"));
             maps.Add("BossMap", new World(allTextures, "BossMap", "Content/BossMap.map"));
 
             currentWorld = maps["Tutorial1"];
