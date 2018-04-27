@@ -2353,12 +2353,6 @@
 #begin Tutorial2.map
 /copy:Tutorial2.map
 
-#begin Actual1.map
-/copy:Actual1.map
-
-#begin Actual2.map
-/copy:Actual2.map
-
 #begin Blank.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2408,7 +2402,20 @@
 /build:Mace.png
 
 #begin BossMap.map
-/importer:
-/processor:
-/build:BossMap.map
+/copy:BossMap.map
+
+#begin Actual2.map
+/copy:Actual2.map
+
+#begin Actual3.map
+/copy:Actual3.map
+
+#begin Actual4.map
+/copy:Actual4.map
+
+#begin Actual5.map
+/copy:Actual5.map
+
+#begin Actual1.map
+/copy:Actual1.map
 

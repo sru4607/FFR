@@ -141,7 +141,7 @@ namespace ActualGame
         virtual public void Update(GameTime gm)
         {
             node = node.GetContainingQuad(this);
-
+            //this breaks in tall maps
         }
         #endregion
 
