@@ -113,6 +113,7 @@ namespace ActualGame
                     switch (patrolState)
                     {
                         case PatrolState.WalkLeft:
+                            patrolType = PatrolType.Moving;
                             // If the enemy is unable to walk to the left, update to PauseLeft
                             if(!AbleToMove())
                             {
@@ -131,8 +132,9 @@ namespace ActualGame
                             break;
 
                         case PatrolState.PauseLeft:
+                            patrolType = PatrolType.Standing;
                             // If the enemy has stood still for pauseLeft frames, walk right
-                            if(++frameCounter >= pauseLeft)
+                            if (++frameCounter >= pauseLeft)
                             {
                                 patrolState = PatrolState.WalkRight;
                                 facingRight = true;
@@ -140,6 +142,7 @@ namespace ActualGame
                             break;
 
                         case PatrolState.WalkRight:
+                            patrolType = PatrolType.Moving;
                             if (!AbleToMove())
                             {
                                 // If the enemy never pauses facing to the right, swap immediately to walking left
@@ -157,6 +160,7 @@ namespace ActualGame
                             break;
 
                         case PatrolState.PauseRight:
+                            patrolType = PatrolType.Standing;
                             // If the enemy has stood still for pauseRight frames, walk left
                             if (++frameCounter >= pauseRight)
                             {

@@ -129,10 +129,6 @@ namespace ActualGame
             
             KeyboardMovement();
             base.Update(gm);
-            if(kbState.IsKeyDown(Keys.Down))
-            {
-                HP=1;
-            }
             switch (state)
             {
                 case (PlayerState.Walk):

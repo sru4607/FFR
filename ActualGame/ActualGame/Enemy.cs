@@ -294,11 +294,11 @@ namespace ActualGame
                         case PatrolType.Moving:
                             if (mainAi.FacingRight)
                             {
-                                sb.Draw(texture, position, source, Color.Red, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
+                                sb.Draw(texture, position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
                             }
                             else
                             {
-                                sb.Draw(texture, position, source, Color.Red, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
+                                sb.Draw(texture, position, source, Color.White, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
                             }
                             break;
                         case PatrolType.Standing:
@@ -312,10 +312,10 @@ namespace ActualGame
                     break;
                 case EnemyState.Aggro:
                     if (mainAi.FacingRight)
-                        sb.Draw(texture, Position, source, Color.Red, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
+                        sb.Draw(texture, Position, source, Color.PaleVioletRed, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.None, 0);
                     // Draws to the screen with a horizontal flip if the AI is facing left
                     else
-                        sb.Draw(texture, Position, source, Color.Red, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
+                        sb.Draw(texture, Position, source, Color.PaleVioletRed, 0, Vector2.Zero, new Vector2(texture.Width / singleTextWidth / 4, texture.Height / singleTextHeight / 4), SpriteEffects.FlipHorizontally, 0);
                     break;
 
                 case EnemyState.Attack:

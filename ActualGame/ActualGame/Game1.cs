@@ -10,7 +10,7 @@ namespace ActualGame
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    enum MainGameState {Debug, Menu, Pause, InGame, GameOver, Options }
+    enum MainGameState {Debug, Menu, Pause, InGame, GameOver, Options, Boss }
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
@@ -36,6 +36,7 @@ namespace ActualGame
         MouseState currentMouse;
         Controls controls;
         SoundEffect laugh;
+        Boss temp;
         MainGameState returnFromOptions;
         bool changingOption;
         
@@ -69,7 +70,7 @@ namespace ActualGame
             //Initializes all of the controls
             controls = new Controls();
             changingOption = false;
-
+            
             // DO NOT WRITE CODE BELOW HERE
             // Base game logic
 
@@ -109,6 +110,7 @@ namespace ActualGame
             allTextures.Add("GameOverExit", Content.Load<Texture2D>("GameOverExit"));
             allTextures.Add("Heart", Content.Load<Texture2D>("Heart"));
             allTextures.Add("Button", Content.Load<Texture2D>("Button"));
+            allTextures.Add("Blank", Content.Load<Texture2D>("Blank"));
 
             // Load tiles systemmatically
             // BrickWall
@@ -166,6 +168,8 @@ namespace ActualGame
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
+
+            temp = new Boss(allTextures["Blank"]);
 
             SwitchToMainMenu();
 
@@ -228,7 +232,7 @@ namespace ActualGame
                         currentWorld.UpdateAll(gameTime);
 
                         // Switch to the game over screen if the player is dead or I say so
-                        if (player.IsDead || kbState.IsKeyDown(Keys.Delete))
+                        if (player.IsDead)
                             SwitchToGameOver();
 
                         //Pauses the game if the player presses the pause key
@@ -262,6 +266,28 @@ namespace ActualGame
                         UpdateMouseInButton();
                         break;
                     }
+                case (MainGameState.Boss):
+                    {
+                        if (currentWorld != World.Current)
+                            ChangeMap();
+
+                        //    currentTrack.Update();
+                        currentWorld.UpdateAll(gameTime);
+
+                        // Switch to the game over screen if the player is dead or I say so
+                        if (player.IsDead || kbState.IsKeyDown(Keys.Delete))
+                            SwitchToGameOver();
+
+                        //Pauses the game if the player presses the pause key
+                        if (kbState.IsKeyDown(Controls.Pause) && prevkbState.IsKeyUp(Controls.Pause))
+                            SwitchToPauseMenu();
+                        mainDisplay.Update();
+
+                        if (kbState.IsKeyDown(Keys.Space) && prevkbState.IsKeyUp(Keys.Space))
+                            currentWorld.CheckWarps(player);
+
+                        break;
+                    }
                 default:
                     {
                         break;
@@ -277,11 +303,11 @@ namespace ActualGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
                 {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.LightSlateGray);
             
             // TODO: Add your drawing code here
             //if in game follow the player
-            if (currentState == MainGameState.InGame || currentState == MainGameState.Pause)
+            if (currentState == MainGameState.InGame || currentState == MainGameState.Boss || currentState == MainGameState.Pause)
             {
                 Matrix temp = mainDisplay.MainCam.GetViewMatrix();
                 spriteBatch.Begin(transformMatrix: temp);
@@ -306,7 +332,6 @@ namespace ActualGame
                         //Draw all gui elements in game here
                         spriteBatch.Begin();
 
-
                         // Draw the player's health bar
                         Texture2D heart = allTextures["Heart"];
                         for (int i = 0; i<player.MaxHealth; i++)
@@ -318,6 +343,36 @@ namespace ActualGame
                             else
                             {
                                 spriteBatch.Draw(heart, new Rectangle(10+i * 70, 10, 64, 64), Color.Gray);
+                            }
+                        }
+                        spriteBatch.End();
+
+                        //All Elements in game must be above this line
+                        spriteBatch.Begin(transformMatrix: mainDisplay.MainCam.GetViewMatrix());
+
+                        break;
+                    }
+                case (MainGameState.Boss):
+                    {
+                        World.Current.Draw(spriteBatch);
+
+                        spriteBatch.End();
+
+                        //Draw all gui elements in game here
+                        spriteBatch.Begin();
+                        temp.DrawHealthBar(spriteBatch);
+
+                        // Draw the player's health bar
+                        Texture2D heart = allTextures["Heart"];
+                        for (int i = 0; i < player.MaxHealth; i++)
+                        {
+                            if (i < player.HP)
+                            {
+                                spriteBatch.Draw(heart, new Rectangle(10 + i * 70, 10, 64, 64), Color.White);
+                            }
+                            else
+                            {
+                                spriteBatch.Draw(heart, new Rectangle(10 + i * 70, 10, 64, 64), Color.Gray);
                             }
                         }
                         spriteBatch.End();
