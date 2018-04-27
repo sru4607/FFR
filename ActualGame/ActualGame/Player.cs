@@ -140,7 +140,7 @@ namespace ActualGame
                     // Animation for moving player
                     timeCounter += gm.ElapsedGameTime.TotalSeconds;
 
-                    if (timeCounter >= secondsPerFrame)
+                    if (OnGround() && timeCounter >= secondsPerFrame)
                     {
                         currentFrame++;
 
@@ -257,7 +257,7 @@ namespace ActualGame
                             timeCounter -= secondsPerFrame;
                         }
 
-                        if (currentFrame == 2)
+                        if (currentFrame >= 1)
                         {
                             for (int i = 0; i < World.Current.AllObjects.Count; i++)
                             {
@@ -270,7 +270,7 @@ namespace ActualGame
                                 }
                             }
                         }
-                        else if (currentFrame == 3)
+                        if (currentFrame == 3)
                         {
                             state = PlayerState.Idle;
                             currentFrame = 0;
