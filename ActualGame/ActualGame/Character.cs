@@ -52,7 +52,7 @@ namespace ActualGame
             hp = 100;
             // TODO: Verify whether the hitbox line of code is valid or if it belongs in GameObject 
             // Also, should it use 0, 0, 32, 64; or x, y, 32, 64?
-            mBox = new Rectangle((int)Position.X + (int)Size.X, (int)Position.Y + ((int)Size.Y / 4), (int)Size.X, (int)Size.Y / 2);
+            mBox = new Rectangle((int)Position.X + (int)Size.X, (int)Position.Y + ((int)Size.Y / 6), (int)Size.X, (int)Size.Y * 2 / 3);
             mDamage = 1;
             rDamage = 0;
             stunFrames = 0;
@@ -73,7 +73,7 @@ namespace ActualGame
         {
             this.node = node;
             hp = 1;
-            mBox = new Rectangle((int)Position.X + 32, (int)Position.Y, 32, 56);
+            mBox = new Rectangle((int)Position.X + (int)Size.X, (int)Position.Y + (int)Size.Y / 6, (int)Size.X, (int)Size.Y * 2 / 3);
 
             Position = new Vector2(X, Y);
             
@@ -160,7 +160,11 @@ namespace ActualGame
         public override void Update(GameTime gm)
             {
             if (right) { mBox.X = (int)Position.X + (int)Size.X; }
-            else { mBox.X = (int)Position.X - (int)Size.X; }
+            else
+            {
+                mBox.X = (int)Position.X - (int)Size.X;
+                if (this is Player) { mBox.X = (int)Position.X - ((int)Size.X / 2); }
+            }
             mBox.Y = (int)Position.Y + (int)Size.Y / 6;
                 base.Update(gm);
             }

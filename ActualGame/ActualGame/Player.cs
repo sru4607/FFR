@@ -70,10 +70,10 @@ namespace ActualGame
             maxHealth = 3;
             hp = 3;
             mDamage = 1;
-
+            mBox.Width = (int)Size.X / 2;
             // Initialize animation parameters
             currentFrame = 0;
-            secondsPerFrame = 1.0f / 30.0f;
+            secondsPerFrame = 1.0f / 4.0f;
         }
         #endregion
 
@@ -127,6 +127,8 @@ namespace ActualGame
         public override void Update(GameTime gm)
         {
             
+
+
             KeyboardMovement();
             base.Update(gm);
             switch (State)
@@ -138,11 +140,11 @@ namespace ActualGame
                     // Animation for moving player
                     timeCounter += gm.ElapsedGameTime.TotalSeconds;
 
-                    if (timeCounter >= secondsPerFrame)
+                    if (OnGround() && timeCounter >= secondsPerFrame)
                     {
                         currentFrame++;
 
-                        if (currentFrame == numWalkFrames)
+                        if (currentFrame >= 4)
                             currentFrame = 0;
 
                         timeCounter -= secondsPerFrame;
@@ -150,7 +152,9 @@ namespace ActualGame
 
                     if (kbState.IsKeyDown(Controls.Jump))
                         {
-                            State = PlayerState.Jump;
+                            state = PlayerState.Jump;
+                            currentFrame = 0;
+                            timeCounter = 0;
                         }
                         if (kbState.IsKeyDown(Controls.Right))
                             right = true;
@@ -158,46 +162,86 @@ namespace ActualGame
                             right = false;
                     if (kbState.IsKeyUp(Controls.Jump) && kbState.IsKeyUp(Controls.Left) && kbState.IsKeyUp(Controls.Right))
                         {
-                            State = PlayerState.Idle;
+                            state = PlayerState.Idle;
+                            currentFrame = 0;
+                            timeCounter = 0;
                         }
                         if (kbState.IsKeyDown(Keys.Z))
                         {
-                            State = PlayerState.MAttack;
+                            state = PlayerState.MAttack;
+                            currentFrame = 0;
+                            timeCounter = 0;
                         }
 
                         break;
                 }
                 case (PlayerState.Jump):
                 {
+                        timeCounter += gm.ElapsedGameTime.TotalSeconds;
+
+                        if (timeCounter >= secondsPerFrame)
+                        {
+                            currentFrame++;
+
+                            if (currentFrame >= 4)
+                                currentFrame = 3;
+
+                            timeCounter -= secondsPerFrame;
+                        }
+
                         if (OnGround())
                         {
-                            State = PlayerState.Idle;
+                            state = PlayerState.Idle;
+                            currentFrame = 0;
+                            timeCounter = 0;
                         }
                         if (kbState.IsKeyDown(Controls.Attack))
                         {
-                            State = PlayerState.MAttack;
+                            state = PlayerState.MAttack;
+                            currentFrame = 0;
+                            timeCounter = 0;
                         }
                     break;
                 }
                 case (PlayerState.Idle):
                 {
+                        timeCounter += gm.ElapsedGameTime.TotalSeconds;
+
+                        if (timeCounter >= secondsPerFrame)
+                        {
+                            currentFrame++;
+
+                            if (currentFrame >= 4)
+                                currentFrame = 0;
+
+                            timeCounter -= secondsPerFrame;
+                        }
+
                         if (kbState.IsKeyDown(Controls.Left))
                         {
-                            State = PlayerState.Walk;
+                            state = PlayerState.Walk;
+                            currentFrame = 0;
+                            timeCounter = 0;
                             right = false;
                         }
                         if (kbState.IsKeyDown(Controls.Right))
                         {
-                            State = PlayerState.Walk;
+                            state = PlayerState.Walk;
+                            currentFrame = 0;
+                            timeCounter = 0;
                             right = true;
                         }
                         if (kbState.IsKeyDown(Controls.Jump))
                         {
-                            State = PlayerState.Jump;
+                            state = PlayerState.Jump;
+                            currentFrame = 0;
+                            timeCounter = 0;
                         }
                     if (kbState.IsKeyDown(Controls.Attack))
                         {
-                            State = PlayerState.MAttack;
+                            state = PlayerState.MAttack;
+                            currentFrame = 0;
+                            timeCounter = 0;
                         }
                     break;
                 }
@@ -205,16 +249,15 @@ namespace ActualGame
                 {
                         this.MAttack();
 
-                        // setup for animations
                         timeCounter += gm.ElapsedGameTime.TotalSeconds;
-                        if (timeCounter >= Game1.secondsPerFrame)
+
+                        if (timeCounter >= secondsPerFrame)
                         {
                             currentFrame++;
-                            if (currentFrame >= 4) currentFrame = 1;
-
-                            timeCounter -= Game1.secondsPerFrame;
+                            timeCounter -= secondsPerFrame;
                         }
-                        if (currentFrame == 2)
+
+                        if (currentFrame >= 1)
                         {
                             for (int i = 0; i < World.Current.AllObjects.Count; i++)
                             {
@@ -227,12 +270,13 @@ namespace ActualGame
                                 }
                             }
                         }
-
-                        if (currentFrame == 3) // after finishing attack animation, go back to idle
+                        if (currentFrame == 3)
                         {
-                            State = PlayerState.Idle;
+                            state = PlayerState.Idle;
+                            currentFrame = 0;
+                            timeCounter = 0;
                         }
-                    break;
+                        break;
                 }
                 case (PlayerState.Crouch):
                 {
@@ -253,31 +297,44 @@ namespace ActualGame
         #region Draw
         public override void Draw(SpriteBatch sb)
         {
-            switch (State)
+            // This draw statement is just to see the hitbox
+            //sb.Draw(Texture, mBox, Color.Blue);
+            switch (state)
             {
                 case (PlayerState.Walk):
                 {
                     if (right)
                     {
-                       sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
+                       sb.Draw(Texture, position, new Rectangle(currentFrame * 64, 0, 64, 96), Color.White, 0, Vector2.Zero, new Vector2(Width / 64, Height / 96), SpriteEffects.None, 0);
                     }
                     else
                     {
-                        sb.Draw(walkTexture, position, new Rectangle(currentFrame * Texture.Width, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
+                        sb.Draw(Texture, position, new Rectangle(currentFrame * 64, 0, 64, 96), Color.White, 0, Vector2.Zero, new Vector2(Width / 64, Height / 96), SpriteEffects.FlipHorizontally, 0);
 
                     }
                         break;
                 }
                 case (PlayerState.Idle):
+                {
+                        if (right)
+                        {
+                            sb.Draw(Texture, Position, new Rectangle(currentFrame * 64, 97, 64, 96), Color.White, 0, Vector2.Zero, new Vector2(Width / 64, Height / 96), SpriteEffects.None, 0);
+                        }
+                        else
+                        {
+                            sb.Draw(Texture, Position, new Rectangle(currentFrame * 64, 97, 64, 96), Color.White, 0, Vector2.Zero, new Vector2(Width / 64, Height / 96), SpriteEffects.FlipHorizontally, 0);
+                        }
+                        break;
+                }
                 case PlayerState.Jump:
                 {
                         if (right)
                         {
-                            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
+                            sb.Draw(Texture, Position, new Rectangle(currentFrame * 64, 194, 64, 96), Color.White, 0, Vector2.Zero, new Vector2(Width / 64, Height / 96), SpriteEffects.None, 0);
                         }
                         else
                         {
-                            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
+                            sb.Draw(Texture, Position, new Rectangle(currentFrame * 64, 194, 64, 96), Color.White, 0, Vector2.Zero, new Vector2(Width / 64, Height / 96), SpriteEffects.FlipHorizontally, 0);
                         }
                             break;
                 }
@@ -286,11 +343,11 @@ namespace ActualGame
                         //sb.Draw(Texture, MBox, Color.Red); // Just remove this line to make mBox invisible
                         if (right)
                         {
-                            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.None, 0);
+                            sb.Draw(Texture, Position, new Rectangle(currentFrame*96, 291, 96, 96), Color.White, 0, Vector2.Zero, new Vector2((int)(Width*1.5) / 96, Height / 96), SpriteEffects.None, 0);
                         }
                         else
                         {
-                            sb.Draw(Texture, Position, new Rectangle(0, 0, Texture.Width, Texture.Height), Color.White, 0, Vector2.Zero, new Vector2(Width / Texture.Width, Height / Texture.Height), SpriteEffects.FlipHorizontally, 0);
+                            sb.Draw(Texture, new Vector2(Position.X-64, Position.Y), new Rectangle(currentFrame*96, 291, 96, 96), Color.White, 0, Vector2.Zero, new Vector2((int)(Width*1.5) / 96, Height / 96), SpriteEffects.FlipHorizontally, 0);
                         }
                         break;
                 }

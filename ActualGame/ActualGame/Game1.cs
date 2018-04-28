@@ -111,6 +111,7 @@ namespace ActualGame
             allTextures.Add("Heart", Content.Load<Texture2D>("Heart"));
             allTextures.Add("Button", Content.Load<Texture2D>("Button"));
             allTextures.Add("Blank", Content.Load<Texture2D>("Blank"));
+            allTextures.Add("ParkaDude", Content.Load<Texture2D>("ParkaDude"));
             allTextures.Add("Boss", Content.Load<Texture2D>("Boss"));
             allTextures.Add("Chain", Content.Load<Texture2D>("Chain"));
             allTextures.Add("Mace", Content.Load<Texture2D>("Mace"));
@@ -164,6 +165,7 @@ namespace ActualGame
             maps.Add("Actual3", new World(allTextures, "Actual3", "Content/Actual3.map"));
             maps.Add("Actual4", new World(allTextures, "Actual4", "Content/Actual4.map"));
             maps.Add("Actual5", new World(allTextures, "Actual5", "Content/Actual5.map"));
+            maps.Add("Actual6", new World(allTextures, "Actual6", "Content/Actual6.map"));
             maps.Add("BossMap", new World(allTextures, "BossMap", "Content/BossMap.map"));
 
             currentWorld = maps["Tutorial1"];
@@ -472,7 +474,7 @@ namespace ActualGame
             // Create the player in the first map & add it to the world
             player = new Player(128, 128, currentWorld.QuadTree);
             mainDisplay = new Display(GraphicsDevice, player);
-            player.Texture = allTextures["PenPen"];
+            player.Texture = allTextures["ParkaDude"];
             player.WalkTexture = allTextures["PenPenWalking"];
             World.Current = maps["Tutorial1"];
          //   tracks["Electown"].Start();
