@@ -10,14 +10,14 @@ namespace ActualGame
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    enum MainGameState {Debug, Menu, Pause, InGame, GameOver, Options, Boss }
+    public enum MainGameState {Debug, Menu, Pause, InGame, GameOver, Options, Boss, Victory }
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         // Enemy testEnemy; // Unused - kept for example documentation
         Display mainDisplay;
-        MainGameState currentState;
+        public static MainGameState CurrentState { get; set; }
         Dictionary<string, Texture2D> allTextures;
         Debug debugger;
         public static Dictionary<string, World> maps;
@@ -111,6 +111,9 @@ namespace ActualGame
             allTextures.Add("Heart", Content.Load<Texture2D>("Heart"));
             allTextures.Add("Button", Content.Load<Texture2D>("Button"));
             allTextures.Add("Blank", Content.Load<Texture2D>("Blank"));
+            allTextures.Add("Boss", Content.Load<Texture2D>("Boss"));
+            allTextures.Add("Chain", Content.Load<Texture2D>("Chain"));
+            allTextures.Add("Mace", Content.Load<Texture2D>("Mace"));
 
             // Load tiles systemmatically
             // BrickWall
@@ -173,7 +176,7 @@ namespace ActualGame
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
-
+            currentBoss = new Boss(allTextures["Blank"], allTextures["Boss"], allTextures["Chain"], allTextures["Mace"],(int)maps["BossMap"].WorldMaxX / 2 - 128, (int)maps["BossMap"].WorldMaxY / 2 - 128, 256, 256);
             SwitchToMainMenu();
 
             // NOTE: ElecTown is an arrangement of a track from Megaman Battle Network 4 by Capcom. Cannot be used in the main game
@@ -209,11 +212,12 @@ namespace ActualGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+
             prevkbState = kbState;
             kbState = Keyboard.GetState();
             mState = Mouse.GetState();
 
-            switch (currentState)
+            switch (CurrentState)
             {
                 case (MainGameState.Debug):
                     {
@@ -228,6 +232,10 @@ namespace ActualGame
                     }
                 case (MainGameState.InGame):
                     {
+                        if (World.Current == maps["BossMap"])
+                        {
+                            CurrentState = MainGameState.Boss;
+                        }
                         if (currentWorld != World.Current)
                             ChangeMap();
 
@@ -274,9 +282,11 @@ namespace ActualGame
                         if (currentWorld != World.Current)
                             ChangeMap();
 
+                        World.Current = maps["BossMap"];
+
                         //    currentTrack.Update();
                         currentWorld.UpdateAll(gameTime);
-
+                        currentBoss.UpdateBoss(gameTime);
                         // Switch to the game over screen if the player is dead or I say so
                         if (player.IsDead || kbState.IsKeyDown(Keys.Delete))
                             SwitchToGameOver();
@@ -310,7 +320,7 @@ namespace ActualGame
             
             // TODO: Add your drawing code here
             //if in game follow the player
-            if (currentState == MainGameState.InGame || currentState == MainGameState.Boss || currentState == MainGameState.Pause)
+            if (CurrentState == MainGameState.InGame || CurrentState == MainGameState.Boss || CurrentState == MainGameState.Pause)
             {
                 Matrix temp = mainDisplay.MainCam.GetViewMatrix();
                 spriteBatch.Begin(transformMatrix: temp);
@@ -319,7 +329,7 @@ namespace ActualGame
             else
                 spriteBatch.Begin();
             
-            switch(currentState)
+            switch(CurrentState)
             {
                 case (MainGameState.Debug):
                     {
@@ -357,8 +367,11 @@ namespace ActualGame
                     }
                 case (MainGameState.Boss):
                     {
+                        GraphicsDevice.Clear(Color.Black);
+                        World.Current = maps["BossMap"];
+                        currentBoss.DrawBoss(spriteBatch);
                         World.Current.Draw(spriteBatch);
-
+                        
                         spriteBatch.End();
 
                         //Draw all gui elements in game here
@@ -455,7 +468,7 @@ namespace ActualGame
         public void StartGame()
         {
             IsMouseVisible = false;
-            currentState = MainGameState.InGame;
+            CurrentState = MainGameState.InGame;
             // Create the player in the first map & add it to the world
             player = new Player(128, 128, currentWorld.QuadTree);
             mainDisplay = new Display(GraphicsDevice, player);
@@ -473,7 +486,7 @@ namespace ActualGame
         {
             Soundtrack.Stop();
             IsMouseVisible = true;
-            currentState = MainGameState.Menu;
+            CurrentState = MainGameState.Menu;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
             buttons = new Button[2];
@@ -490,7 +503,7 @@ namespace ActualGame
         public void SwitchToPauseMenu()
         {
             IsMouseVisible = true;
-            currentState = MainGameState.Pause;
+            CurrentState = MainGameState.Pause;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
             buttons = new Button[2];
@@ -509,7 +522,7 @@ namespace ActualGame
             Soundtrack.Stop();
             laugh.Play();
             IsMouseVisible = true;
-            currentState = MainGameState.GameOver;
+            CurrentState = MainGameState.GameOver;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
             Texture2D background = allTextures["GameOverBackground"];
@@ -530,10 +543,10 @@ namespace ActualGame
         /// </summary>
         public void SwitchToOptions()
         {
-            returnFromOptions = currentState;
-            currentState = MainGameState.Options;
+            returnFromOptions = CurrentState;
+            CurrentState = MainGameState.Options;
             IsMouseVisible = true;
-            currentState = MainGameState.Pause;
+            CurrentState = MainGameState.Pause;
             int height = GraphicsDevice.Viewport.Height;
             int width = GraphicsDevice.Viewport.Width;
             //Values need to be adjusted; they are currently not going to look as intended
@@ -612,7 +625,7 @@ namespace ActualGame
                 {
                     string buttonText = buttons[indexActiveButton].Name;
                     if (buttonText == "ExitButton")
-                        currentState = returnFromOptions;
+                        CurrentState = returnFromOptions;
                     else
                         changingOption = true;
                 }
@@ -628,7 +641,7 @@ namespace ActualGame
                         {
                             string buttonText = buttons[indexActiveButton].Name;
                             if (buttonText == "ExitButton")
-                                currentState = returnFromOptions;
+                                CurrentState = returnFromOptions;
                             else
                                 changingOption = true;
                         }
@@ -785,8 +798,8 @@ namespace ActualGame
                     indexActiveButton--;
             }
             //If the games is paused and the player presses the escape key, resumes the game (allowing them to easily toggle pause and unpause with escape)
-            else if (kbState.IsKeyDown(Controls.Pause) && prevkbState.IsKeyUp(Controls.Pause) && currentState == MainGameState.Pause)
-                currentState = MainGameState.InGame;
+            else if (kbState.IsKeyDown(Controls.Pause) && prevkbState.IsKeyUp(Controls.Pause) && CurrentState == MainGameState.Pause)
+                CurrentState = MainGameState.InGame;
             //Switches the game state when a certain button is pressed
             else if (kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
             {
@@ -794,7 +807,7 @@ namespace ActualGame
                 if (buttonText == "ResumeButton")
                 {
                     IsMouseVisible = false;
-                    currentState = MainGameState.InGame;
+                    CurrentState = MainGameState.InGame;
                 }
                 else if (buttonText == "MainMenuButton")
                     SwitchToMainMenu();
@@ -813,7 +826,7 @@ namespace ActualGame
                         if (buttonText == "ResumeButton")
                         {
                             IsMouseVisible = false;
-                            currentState = MainGameState.InGame;
+                            CurrentState = MainGameState.InGame;
                         }
                         else if (buttonText == "MainMenuButton")
                             SwitchToMainMenu();

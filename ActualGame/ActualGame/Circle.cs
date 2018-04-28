@@ -10,8 +10,8 @@ namespace ActualGame
     class Circle
     {
         public int Radius { get; set; }
-        public int X;
-        public int Y;
+        public int X { get; set; }
+        public int Y { get; set; }
 
         public Circle(int x, int y, int radius)
         {
@@ -57,7 +57,7 @@ namespace ActualGame
 
         public Rectangle ToRectangle()
         {
-            return new Rectangle();
+            return new Rectangle(X - 128, Y - 128, 256, 256);
         }
 
     }

@@ -18,7 +18,7 @@ namespace ActualGame
 
         //player references the static class Controls for each control
         #region Fields
-        PlayerState state;
+        public PlayerState State { get; set; }
         KeyboardState kbState;
         KeyboardState prevState;
         int maxHealth;
@@ -34,7 +34,7 @@ namespace ActualGame
         //return if dead
         public bool IsDead
         {
-            get { return state == PlayerState.Dead;}
+            get { return State == PlayerState.Dead;}
         }
         //only get MaxHealth
         public int MaxHealth
@@ -66,7 +66,7 @@ namespace ActualGame
             // Defaults to a hitbox width of 64 and hitbox height of 128
             : base(x, y, 128, 192, node, right)
         {
-            state = PlayerState.Idle;
+            State = PlayerState.Idle;
             maxHealth = 3;
             hp = 3;
             mDamage = 1;
@@ -95,17 +95,17 @@ namespace ActualGame
         {
             kbState = Keyboard.GetState();
 
-            if (kbState.IsKeyDown(Controls.Left) && kbState.IsKeyUp(Controls.Right) && (state == PlayerState.Walk || state == PlayerState.Jump))
+            if (kbState.IsKeyDown(Controls.Left) && kbState.IsKeyUp(Controls.Right) && (State == PlayerState.Walk || State == PlayerState.Jump))
             {
                 Movement = new Vector2(-5f, Movement.Y);
                 right = false;
             }
-            if (kbState.IsKeyDown(Controls.Right) && kbState.IsKeyUp(Controls.Left) && (state == PlayerState.Walk || state == PlayerState.Jump))
+            if (kbState.IsKeyDown(Controls.Right) && kbState.IsKeyUp(Controls.Left) && (State == PlayerState.Walk || State == PlayerState.Jump))
             {
                 Movement = new Vector2(5f, Movement.Y);
                 right = true;
             }
-            if (kbState.IsKeyDown(Controls.Jump) && OnGround() && state == PlayerState.Jump)
+            if (kbState.IsKeyDown(Controls.Jump) && OnGround() && State == PlayerState.Jump)
             { Movement = new Vector2(Movement.X, -30f); }
 
         }
@@ -113,7 +113,7 @@ namespace ActualGame
         //TODO: Method to call that should update the game to signal the Player has died
         public override void Die()
         {
-            state = PlayerState.Dead;
+            State = PlayerState.Dead;
         }
 
         //TODO: Method to stun the player for the amount of time chosen
@@ -129,7 +129,7 @@ namespace ActualGame
             
             KeyboardMovement();
             base.Update(gm);
-            switch (state)
+            switch (State)
             {
                 case (PlayerState.Walk):
                 {
@@ -150,7 +150,7 @@ namespace ActualGame
 
                     if (kbState.IsKeyDown(Controls.Jump))
                         {
-                            state = PlayerState.Jump;
+                            State = PlayerState.Jump;
                         }
                         if (kbState.IsKeyDown(Controls.Right))
                             right = true;
@@ -158,11 +158,11 @@ namespace ActualGame
                             right = false;
                     if (kbState.IsKeyUp(Controls.Jump) && kbState.IsKeyUp(Controls.Left) && kbState.IsKeyUp(Controls.Right))
                         {
-                            state = PlayerState.Idle;
+                            State = PlayerState.Idle;
                         }
                         if (kbState.IsKeyDown(Keys.Z))
                         {
-                            state = PlayerState.MAttack;
+                            State = PlayerState.MAttack;
                         }
 
                         break;
@@ -171,11 +171,11 @@ namespace ActualGame
                 {
                         if (OnGround())
                         {
-                            state = PlayerState.Idle;
+                            State = PlayerState.Idle;
                         }
                         if (kbState.IsKeyDown(Controls.Attack))
                         {
-                            state = PlayerState.MAttack;
+                            State = PlayerState.MAttack;
                         }
                     break;
                 }
@@ -183,21 +183,21 @@ namespace ActualGame
                 {
                         if (kbState.IsKeyDown(Controls.Left))
                         {
-                            state = PlayerState.Walk;
+                            State = PlayerState.Walk;
                             right = false;
                         }
                         if (kbState.IsKeyDown(Controls.Right))
                         {
-                            state = PlayerState.Walk;
+                            State = PlayerState.Walk;
                             right = true;
                         }
                         if (kbState.IsKeyDown(Controls.Jump))
                         {
-                            state = PlayerState.Jump;
+                            State = PlayerState.Jump;
                         }
                     if (kbState.IsKeyDown(Controls.Attack))
                         {
-                            state = PlayerState.MAttack;
+                            State = PlayerState.MAttack;
                         }
                     break;
                 }
@@ -230,7 +230,7 @@ namespace ActualGame
 
                         if (currentFrame == 3) // after finishing attack animation, go back to idle
                         {
-                            state = PlayerState.Idle;
+                            State = PlayerState.Idle;
                         }
                     break;
                 }
@@ -253,7 +253,7 @@ namespace ActualGame
         #region Draw
         public override void Draw(SpriteBatch sb)
         {
-            switch (state)
+            switch (State)
             {
                 case (PlayerState.Walk):
                 {

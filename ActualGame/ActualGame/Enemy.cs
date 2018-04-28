@@ -85,7 +85,7 @@ namespace ActualGame
         /// Creates an exact copy of this enemy in a new quad tree
         /// </summary>
         /// <returns></returns>
-        public Enemy Clone(Texture2D text, int hp, QuadTreeNode node = null)
+        public Enemy Clone(Texture2D text, int hp, QuadTreeNode node)
         {
             Enemy clone = new Enemy((int)X, (int)Y, node, mainAi.PatrolType);
             clone.hp = hp;
