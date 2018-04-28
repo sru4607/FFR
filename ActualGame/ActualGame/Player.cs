@@ -152,7 +152,7 @@ namespace ActualGame
 
                     if (kbState.IsKeyDown(Controls.Jump))
                         {
-                            state = PlayerState.Jump;
+                            State = PlayerState.Jump;
                             currentFrame = 0;
                             timeCounter = 0;
                         }
@@ -162,13 +162,13 @@ namespace ActualGame
                             right = false;
                     if (kbState.IsKeyUp(Controls.Jump) && kbState.IsKeyUp(Controls.Left) && kbState.IsKeyUp(Controls.Right))
                         {
-                            state = PlayerState.Idle;
+                            State = PlayerState.Idle;
                             currentFrame = 0;
                             timeCounter = 0;
                         }
                         if (kbState.IsKeyDown(Keys.Z))
                         {
-                            state = PlayerState.MAttack;
+                            State = PlayerState.MAttack;
                             currentFrame = 0;
                             timeCounter = 0;
                         }
@@ -191,13 +191,13 @@ namespace ActualGame
 
                         if (OnGround())
                         {
-                            state = PlayerState.Idle;
+                            State = PlayerState.Idle;
                             currentFrame = 0;
                             timeCounter = 0;
                         }
                         if (kbState.IsKeyDown(Controls.Attack))
                         {
-                            state = PlayerState.MAttack;
+                            State = PlayerState.MAttack;
                             currentFrame = 0;
                             timeCounter = 0;
                         }
@@ -219,27 +219,27 @@ namespace ActualGame
 
                         if (kbState.IsKeyDown(Controls.Left))
                         {
-                            state = PlayerState.Walk;
+                            State = PlayerState.Walk;
                             currentFrame = 0;
                             timeCounter = 0;
                             right = false;
                         }
                         if (kbState.IsKeyDown(Controls.Right))
                         {
-                            state = PlayerState.Walk;
+                            State = PlayerState.Walk;
                             currentFrame = 0;
                             timeCounter = 0;
                             right = true;
                         }
                         if (kbState.IsKeyDown(Controls.Jump))
                         {
-                            state = PlayerState.Jump;
+                            State = PlayerState.Jump;
                             currentFrame = 0;
                             timeCounter = 0;
                         }
                     if (kbState.IsKeyDown(Controls.Attack))
                         {
-                            state = PlayerState.MAttack;
+                            State = PlayerState.MAttack;
                             currentFrame = 0;
                             timeCounter = 0;
                         }
@@ -272,7 +272,7 @@ namespace ActualGame
                         }
                         if (currentFrame == 3)
                         {
-                            state = PlayerState.Idle;
+                            State = PlayerState.Idle;
                             currentFrame = 0;
                             timeCounter = 0;
                         }
@@ -299,7 +299,7 @@ namespace ActualGame
         {
             // This draw statement is just to see the hitbox
             //sb.Draw(Texture, mBox, Color.Blue);
-            switch (state)
+            switch (State)
             {
                 case (PlayerState.Walk):
                 {
