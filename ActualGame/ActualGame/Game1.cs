@@ -26,7 +26,6 @@ namespace ActualGame
         int indexActiveButton;
         KeyboardState kbState;
         KeyboardState prevkbState;
-        MouseState mState;
         public static Player player;
         //Dictionary<string, Soundtrack> tracks;
         //Soundtrack currentTrack;
@@ -219,7 +218,8 @@ namespace ActualGame
 
             prevkbState = kbState;
             kbState = Keyboard.GetState();
-            mState = Mouse.GetState();
+            prevMouse = currentMouse;
+            currentMouse = Mouse.GetState();
 
             switch (CurrentState)
             {
@@ -684,9 +684,6 @@ namespace ActualGame
                     else
                         changingOption = true;
                 }
-                //Menu Mouse Control
-                prevMouse = currentMouse;
-                currentMouse = Mouse.GetState();
                 for (int i = 0; i < buttons.Length; i++)
                 {
                     if (buttons[i].Contains(Mouse.GetState().Position))
@@ -750,8 +747,6 @@ namespace ActualGame
                 }
             }
             //Menu Mouse Control
-            prevMouse = currentMouse;
-            currentMouse = Mouse.GetState();
             for (int i = 0; i < buttons.Length; i++)
             {
                 if (buttons[i].Contains(Mouse.GetState().Position))
@@ -810,8 +805,6 @@ namespace ActualGame
                     Exit();
             }
             //Menu Mouse Control
-            prevMouse = currentMouse;
-            currentMouse = Mouse.GetState();
             for (int i = 0; i < buttons.Length; i++)
             {
                 if (buttons[i].Contains(Mouse.GetState().Position))
@@ -868,8 +861,6 @@ namespace ActualGame
                     SwitchToMainMenu();
             }
             //Menu Mouse Control
-            prevMouse = currentMouse;
-            currentMouse = Mouse.GetState();
             for (int i = 0; i < buttons.Length; i++)
             {
                 if (buttons[i].Contains(Mouse.GetState().Position))
@@ -900,7 +891,7 @@ namespace ActualGame
         {
             for(int c=0; c<buttons.Length; c++)
             {
-                if (buttons[c].Rectangle.Contains(mState.Position))
+                if (buttons[c].Rectangle.Contains(currentMouse.Position))
                 {
                     indexActiveButton = c;
                     break;
