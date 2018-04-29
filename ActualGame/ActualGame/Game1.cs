@@ -235,6 +235,10 @@ namespace ActualGame
                     }
                 case (MainGameState.InGame):
                     {
+                        if(currentBoss.Health != 1000)
+                        {
+                            currentBoss.HP = 1000;
+                        }
                         if (World.Current == maps["BossMap"])
                         {
                             CurrentState = MainGameState.Boss;
