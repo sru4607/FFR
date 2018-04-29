@@ -638,13 +638,11 @@ namespace ActualGame
             //Switches to main menu if enter key is pressed
             if(kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
             {
-                CurrentState = MainGameState.Menu;
                 SwitchToMainMenu();
             }
             //Switches to main menu if button is clicked with mouse
-            else if(currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released && buttons[0].Contains(Mouse.GetState().Position))
+            else if(currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released && buttons[0].Contains(currentMouse.Position))
             {
-                CurrentState = MainGameState.Menu;
                 SwitchToMainMenu();
             }
         }
