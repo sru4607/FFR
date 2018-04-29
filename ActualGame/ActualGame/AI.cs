@@ -212,7 +212,7 @@ namespace ActualGame
                     enemy.Movement = new Vector2(0f, enemy.Movement.Y);
                     break;
                 case EnemyState.Aggro:
-                    if(Math.Abs(Game1.player.X - enemy.X) < 150)
+                    if((!facingRight && Math.Abs(Game1.player.X - enemy.X) < 150) || (facingRight && Math.Abs(Game1.player.X - enemy.X) < 100))
                     {
                         enemy.State = EnemyState.Attack;
                         frameCounter = 0;
