@@ -116,6 +116,7 @@ namespace ActualGame
             allTextures.Add("Chain", Content.Load<Texture2D>("Chain"));
             allTextures.Add("Mace", Content.Load<Texture2D>("Mace"));
             allTextures.Add("Victory", Content.Load<Texture2D>("Victory"));
+            allTextures.Add("Background", Content.Load<Texture2D>("Background"));
 
             // Load tiles systemmatically
             // BrickWall
@@ -235,6 +236,10 @@ namespace ActualGame
                     }
                 case (MainGameState.InGame):
                     {
+                        if(currentBoss.Health != 1000)
+                        {
+                            currentBoss.HP = 1000;
+                        }
                         if (World.Current == maps["BossMap"])
                         {
                             CurrentState = MainGameState.Boss;
