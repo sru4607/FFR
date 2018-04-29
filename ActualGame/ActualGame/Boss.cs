@@ -68,10 +68,7 @@ namespace ActualGame
             {
                 Game1.player.TakeDamage(1);
             }
-            if(HP <= 0)
-            {
-                Game1.CurrentState = MainGameState.Victory;
-            }
+
 
 
             
@@ -86,6 +83,14 @@ namespace ActualGame
 
             //Draw Mace
             sb.Draw(maceText, maceSource.ToRectangle() ,new Rectangle(0,0,256,256), Color.White, 0f ,Vector2.Zero ,SpriteEffects.None, 0f);
+        }
+
+        public int Health
+        {
+            get
+            {
+                return HP;
+            }
         }
 
     }

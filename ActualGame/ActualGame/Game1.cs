@@ -302,6 +302,10 @@ namespace ActualGame
                         if (kbState.IsKeyDown(Keys.Space) && prevkbState.IsKeyUp(Keys.Space))
                             currentWorld.CheckWarps(player);
 
+                        if(currentBoss.Health <= 0)
+                        {
+                            SwitchToVictory();
+                        }
                         break;
                     }
                 case (MainGameState.Victory):
