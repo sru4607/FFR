@@ -115,6 +115,7 @@ namespace ActualGame
             allTextures.Add("Boss", Content.Load<Texture2D>("Boss"));
             allTextures.Add("Chain", Content.Load<Texture2D>("Chain"));
             allTextures.Add("Mace", Content.Load<Texture2D>("Mace"));
+            allTextures.Add("Victory", Content.Load<Texture2D>("Victory"));
 
             // Load tiles systemmatically
             // BrickWall
@@ -303,6 +304,11 @@ namespace ActualGame
 
                         break;
                     }
+                case (MainGameState.Victory):
+                    {
+                        VictoryLogic();
+                        break;
+                    }
                 default:
                     {
                         break;
@@ -444,6 +450,12 @@ namespace ActualGame
                         DrawGameOver(spriteBatch);
                         break;
                     }
+                case (MainGameState.Victory):
+                    {
+                        spriteBatch.Draw(allTextures["Victory"], new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                        DrawButtons();
+                        break;
+                    }
                 default:
                     {
                         break;
@@ -569,6 +581,21 @@ namespace ActualGame
         }
 
         /// <summary>
+        /// A helper method that initializes the victory state when called
+        /// </summary>
+        public void SwitchToVictory()
+        {
+            CurrentState = MainGameState.Victory;
+            IsMouseVisible = true;
+            int height = GraphicsDevice.Viewport.Height;
+            int width = GraphicsDevice.Viewport.Width;
+            buttons = new Button[1];
+            Texture2D exitButton = allTextures["ExitButton"];
+            buttons[0] = new Button(exitButton, "ExitButton", new Rectangle(width / 2 - exitButton.Width / 2, height * 6 / 10 - exitButton.Height / 2, exitButton.Width, exitButton.Height));
+            indexActiveButton = 0;
+        }
+
+        /// <summary>
         /// A helper method that draws the game over state
         /// </summary>
         public void DrawGameOver(SpriteBatch spriteBatch)
@@ -596,6 +623,25 @@ namespace ActualGame
                     spriteBatch.Draw(buttons[c].Texture, buttons[c].Rectangle, Color.White);
                 else
                     spriteBatch.Draw(buttons[c].Texture, buttons[c].Rectangle, Color.Gray);
+            }
+        }
+
+        /// <summary>
+        /// A helper method for the victory menu logic
+        /// </summary>
+        public void VictoryLogic()
+        {
+            //Switches to main menu if enter key is pressed
+            if(kbState.IsKeyDown(Keys.Enter) && prevkbState.IsKeyUp(Keys.Enter))
+            {
+                CurrentState = MainGameState.Menu;
+                SwitchToMainMenu();
+            }
+            //Switches to main menu if button is clicked with mouse
+            else if(currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released && buttons[0].Contains(Mouse.GetState().Position))
+            {
+                CurrentState = MainGameState.Menu;
+                SwitchToMainMenu();
             }
         }
 
