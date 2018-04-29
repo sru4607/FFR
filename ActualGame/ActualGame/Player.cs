@@ -251,10 +251,10 @@ namespace ActualGame
 
                         timeCounter += gm.ElapsedGameTime.TotalSeconds;
 
-                        if (timeCounter >= secondsPerFrame)
+                        if (timeCounter >= secondsPerFrame/2)
                         {
                             currentFrame++;
-                            timeCounter -= secondsPerFrame;
+                            timeCounter -= secondsPerFrame/2;
                         }
 
                         if (currentFrame >= 1)

@@ -15,7 +15,7 @@ namespace ActualGame
         //For reading & displaying tiles
 
         #region Fields
-        String name;
+        public String Name { get; private set; }
         int width;
         int height;
         Tile[,] tiles;
@@ -34,7 +34,7 @@ namespace ActualGame
         //Creates a world with name
         public World(Dictionary<string, Texture2D> allTextures = null, String name = "", String path = "")
         {
-            this.name = name;
+            this.Name = name;
             AllObjects = new List<GameObject>();
             initialEnemies = new List<Enemy>();
             warps = new List<Warp>();
@@ -73,7 +73,7 @@ namespace ActualGame
                     else
                         texture = allTextures[source + index];
 
-                    Tile t = new Tile(texture, depth);
+                    Tile t = new Tile(texture, allTextures["Background"], depth);
                     t.Position = new Vector2(i * 64, j * 64);
                     t.Size = new Vector2(64, 64);
                     tiles[i, j] = t;
