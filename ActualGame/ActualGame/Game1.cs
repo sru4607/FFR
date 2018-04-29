@@ -493,7 +493,8 @@ namespace ActualGame
             IsMouseVisible = false;
             CurrentState = MainGameState.InGame;
             // Create the player in the first map & add it to the world
-            player = new Player(128, 128, currentWorld.QuadTree);
+            Point spawn = new Point(2, 20);
+            player = new Player(spawn.X * 64, spawn.Y * 64, currentWorld.QuadTree);
             mainDisplay = new Display(GraphicsDevice, player);
             player.Texture = allTextures["ParkaDude"];
             player.WalkTexture = allTextures["PenPenWalking"];
