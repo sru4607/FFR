@@ -259,7 +259,7 @@ namespace ActualGame
                             SwitchToPauseMenu();
                         mainDisplay.Update();
 
-                        if (kbState.IsKeyDown(Keys.Space) && prevkbState.IsKeyUp(Keys.Space))
+                        if (kbState.IsKeyDown(Controls.Interact) && prevkbState.IsKeyUp(Controls.Interact))
                             currentWorld.CheckWarps(player);
                         
                         break;

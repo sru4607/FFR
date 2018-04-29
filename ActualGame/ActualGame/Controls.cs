@@ -21,6 +21,17 @@ namespace ActualGame
 
 
         #region Properties
+        
+        public static Keys Interact
+        {
+            get { return listOfControls["interact"]; }
+            set
+            {
+                if (CanChangeToKey(value, "interact"))
+                    listOfControls["interact"] = value;
+            }
+        }
+
         /// <summary>
         /// A property to get or set the key that will make the Player move left
         /// </summary>
@@ -96,7 +107,7 @@ namespace ActualGame
         /// <param name="jump">The key that makes the Player jump</param>
         /// <param name="attack">The key that makes the Player attack</param>
         /// <param name="pause">The key that makes the game pause</param>
-        public Controls(Keys left = Keys.Left, Keys right = Keys.Right, Keys jump = Keys.Up, Keys attack = Keys.Z, Keys pause = Keys.Escape)
+        public Controls(Keys left = Keys.Left, Keys right = Keys.Right, Keys jump = Keys.Space, Keys attack = Keys.Z, Keys pause = Keys.Escape, Keys interact = Keys.Up)
         {
             listOfControls = new Dictionary<string, Keys>();
             listOfControls.Add("left", left);
@@ -104,6 +115,7 @@ namespace ActualGame
             listOfControls.Add("jump", jump);
             listOfControls.Add("attack", attack);
             listOfControls.Add("pause", pause);
+            listOfControls.Add("interact", interact);
         }
         #endregion
 
